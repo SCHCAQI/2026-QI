@@ -1,9 +1,212 @@
-<html>
-<head></head>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBAR 보고 체계 및 매뉴얼</title>
+    <style>
+        :root {
+            --orange: #f39200;
+            --blue-light: #008eb7;
+            --blue-dark: #006a8d;
+            --bg-gray: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            padding-bottom: 30px;
+        }
+
+        /* 상단 우선순위 섹션 */
+        .priority-row {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .priority-card {
+            flex: 1;
+            text-align: center;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background: white;
+        }
+
+        .priority-header {
+            padding: 10px 5px;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .p-orange { background-color: var(--orange); }
+        .p-blue { background-color: var(--blue-light); }
+        .p-dark { background-color: var(--blue-dark); }
+
+        .priority-content {
+            padding: 15px 5px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        /* 공통 섹션 헤더 */
+        .section-title {
+            background-color: var(--blue-dark);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+
+        /* 처리 절차 */
+        .process-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .step {
+            background-color: #edf7ff;
+            padding: 15px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: var(--blue-dark);
+            font-size: 14px;
+            flex: 1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .arrow { color: var(--blue-light); font-weight: bold; padding: 0 5px; }
+
+        /* 매뉴얼 및 QR */
+        .manual-box {
+            margin: 10px 20px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .manual-text h4 { color: var(--blue-dark); margin-top: 0; }
+        .manual-text ol { padding-left: 20px; font-size: 14px; color: #555; }
+        .qr-placeholder {
+            width: 100px;
+            height: 100px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        /* SBAR 템플릿 */
+        .sbar-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 0 20px;
+        }
+
+        .sbar-col h5 { margin-bottom: 10px; font-size: 15px; }
+        .t-blue { color: var(--blue-dark); }
+        .t-orange { color: var(--orange); }
+
+        .sbar-item {
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            padding-left: 10px;
+            border-left: 3px solid #ddd;
+        }
+
+        .sbar-item strong { display: block; font-size: 13px; }
+
+    </style>
+</head>
 <body>
-  <div style="font-size:14px">
-  <h1><a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/2026%EB%85%84%20%EC%A7%84%EB%A3%8C%EC%A7%80%EC%9B%90%EA%B0%84%ED%98%B8%ED%8C%80%20QI%EA%B3%BC%EC%A0%9C%EA%B3%84%ED%9A%8D%EC%84%9C.%EC%A3%BC%EC%A0%9C4(%EB%B3%B4%EA%B3%A0%EC%B2%B4%EA%B3%84%20%ED%91%9C%EC%A4%80%ED%99%94).%ED%8F%AC%EC%8A%A4%ED%84%B0(A4).pptx">2026년 진료지원간호팀 QI과제계획서.주제4(보고체계 표준화).포스터(A4).pptx</a></h1>
-  <h1><a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/KakaoTalk_20260220_002334619.mp4">영상자료</a></h1>
-  </div>
+
+<div class="container">
+    <div class="priority-row">
+        <div class="priority-card">
+            <div class="priority-header p-orange">10분 이내</div>
+            <div class="priority-content">환자 안전 위험/<br>상태 급변</div>
+        </div>
+        <div class="priority-card">
+            <div class="priority-header p-blue">4시간 이내</div>
+            <div class="priority-content">악화 가능/<br>치료 지연 우려</div>
+        </div>
+        <div class="priority-card">
+            <div class="priority-header p-dark">24시간 이내</div>
+            <div class="priority-content">계획·정리 업무 /<br>위험 낮음</div>
+        </div>
+    </div>
+
+    <div class="section-title">처리 절차</div>
+    <div class="process-box">
+        <div class="step">요청 ( SBAR )</div>
+        <div class="arrow">▶</div>
+        <div class="step">수신확인 ( 1회 )</div>
+        <div class="arrow">▶</div>
+        <div class="step">처리자 완료공유 ( 1회 )</div>
+    </div>
+
+    <div class="section-title">매뉴얼</div>
+    <div class="manual-box">
+        <div class="manual-text">
+            <h4 style="margin-bottom:10px;">보고체계(과별) & 표준 SBAR 문장 확인</h4>
+            <ol>
+                <li>QR스캔 또는 NFC 태그</li>
+                <li>진료과 선택</li>
+                <li>보고 순서 확인</li>
+                <li>SBAR 문장으로 전달</li>
+            </ol>
+        </div>
+        <div class="qr-placeholder">
+            QR CODE<br>이미지 삽입
+        </div>
+    </div>
+
+    <div class="section-title">표준 보고 문장 ( SBAR )</div>
+    <div class="sbar-grid">
+        <div class="sbar-col">
+            <h5 class="t-blue">① 템플릿 ( 4줄 )</h5>
+            <div class="sbar-item"><strong>S(상황)</strong> 지금 ○○ 문제로 연락 드립니다.</div>
+            <div class="sbar-item"><strong>B(배경)</strong> 환자 ○○/현재 치료는 ○○입니다.</div>
+            <div class="sbar-item"><strong>A(평가)</strong> 현재 ○○이며 악화 우려가 있습니다.</div>
+            <div class="sbar-item"><strong>R(요청)</strong> ○○ 확인 및 ○○ 지시 부탁드립니다.</div>
+        </div>
+        <div class="sbar-col">
+            <h5 class="t-orange">② 즉시 예시 ( 10분 이내 )</h5>
+            <div class="sbar-item"><strong>S</strong> SpO₂ 88%, 호흡곤란으로 연락 드립니다.</div>
+            <div class="sbar-item"><strong>B</strong> 폐렴 치료 중, O₂ 5L 적용 중입니다.</div>
+            <div class="sbar-item"><strong>A</strong> 적용에도 88% 지속, 호흡수 증가합니다.</div>
+            <div class="sbar-item"><strong>R</strong> 즉시 확인 및 산소조정/ABG 지시 부탁드립니다.</div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
