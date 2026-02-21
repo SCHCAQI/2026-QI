@@ -55,7 +55,6 @@
             margin: 0 auto;
         }
 
-        /* 헤더 레이아웃 */
         .header-profile {
             padding: 30px 20px 20px;
             display: flex;
@@ -97,7 +96,6 @@
             color: var(--text-sub);
         }
 
-        /* 테마 스위치 버튼 */
         .theme-toggle {
             cursor: pointer;
             width: 40px;
@@ -112,7 +110,6 @@
             transition: all 0.2s;
         }
 
-        /* 리스트 스타일 */
         .section-label {
             padding: 20px 20px 8px;
             font-size: 13px;
@@ -146,29 +143,12 @@
 
         summary::-webkit-details-marker { display: none; }
 
-        .menu-icon {
-            margin-right: 16px;
-            display: flex;
-            align-items: center;
-        }
+        .menu-icon { margin-right: 16px; display: flex; align-items: center; }
+        .menu-text { flex: 1; font-size: 17px; font-weight: 400; }
+        .menu-arrow { font-size: 18px; color: var(--arrow-color); transition: transform 0.3s; }
 
-        .menu-text {
-            flex: 1;
-            font-size: 17px;
-            font-weight: 400;
-        }
+        details[open] .menu-arrow { transform: rotate(180deg); }
 
-        .menu-arrow {
-            font-size: 18px;
-            color: var(--arrow-color);
-            transition: transform 0.3s;
-        }
-
-        details[open] .menu-arrow {
-            transform: rotate(180deg);
-        }
-
-        /* 상세 컨텐츠 */
         .details-content {
             background-color: var(--item-bg);
             padding: 16px 20px 16px 60px;
@@ -185,34 +165,22 @@
         }
 
         .sbar-line:last-child { margin-bottom: 0; }
-
-        .sbar-label {
-            display: inline-block;
-            width: 100px;
-            flex-shrink: 0;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .sbar-txt { 
-            color: var(--text-main); 
-            opacity: 0.9;
-            flex: 1;
-        }
+        .sbar-label { display: inline-block; width: 100px; flex-shrink: 0; font-weight: 700; color: var(--text-main); }
+        .sbar-txt { color: var(--text-main); opacity: 0.9; flex: 1; }
     </style>
 </head>
-<body> <div class="container">
+<body>
+
+<div class="container">
     <div class="header-profile">
         <div class="profile-left">
-            <div class="profile-thumb">
-                <span class="material-icons">groups</span>
-            </div>
+            <div class="profile-thumb"><span class="material-icons">groups</span></div>
             <div class="profile-info">
                 <h1>PA협업 가이드</h1>
                 <p>표준화된 보고 체계</p>
             </div>
         </div>
-        <div class="theme-toggle" onclick="toggleTheme()" title="테마 변경">
+        <div class="theme-toggle" onclick="toggleTheme()">
             <span class="material-icons" id="theme-icon">dark_mode</span>
         </div>
     </div>
@@ -242,8 +210,6 @@
                 <div class="sbar-line"><span class="sbar-label">URO</span><span class="sbar-txt">비뇨의학과 가이드</span></div>
                 <div class="sbar-line"><span class="sbar-label">ENT</span><span class="sbar-txt">이비인후과 가이드</span></div>
                 <div class="sbar-line"><span class="sbar-label">CS</span><span class="sbar-txt">흉부외과 가이드</span></div>
-                <div class="sbar-line"><span class="sbar-label">MC</span><span class="sbar-txt">내과계 가이드</span></div>
-                <div class="sbar-line"><span class="sbar-label">MH</span><span class="sbar-txt">정신건강의학과 가이드</span></div>
             </div>
         </details>
         
@@ -277,17 +243,35 @@
 </div>
 
 <script>
+    // 페이지 로드 시 실행
+    document.addEventListener("DOMContentLoaded", () => {
+        const savedTheme = localStorage.getItem("sbar_theme");
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+
+        // 저장된 테마가 다크모드라면 적용
+        if (savedTheme === "dark") {
+            body.classList.add("dark-mode");
+            icon.innerText = 'light_mode';
+        } else {
+            body.classList.remove("dark-mode");
+            icon.innerText = 'dark_mode';
+        }
+    });
+
+    // 테마 토글 및 저장
     function toggleTheme() {
         const body = document.body;
         const icon = document.getElementById('theme-icon');
         
         body.classList.toggle('dark-mode');
         
-        // 아이콘 변경 로직 (라이트 모드 기본이므로 반대로 작동)
         if (body.classList.contains('dark-mode')) {
-            icon.innerText = 'light_mode'; // 다크 모드일 때 보여줄 아이콘
+            icon.innerText = 'light_mode';
+            localStorage.setItem("sbar_theme", "dark");
         } else {
-            icon.innerText = 'dark_mode';  // 라이트 모드일 때 보여줄 아이콘
+            icon.innerText = 'dark_mode';
+            localStorage.setItem("sbar_theme", "light");
         }
     }
 </script>
