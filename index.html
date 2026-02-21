@@ -53,7 +53,7 @@
 
         .theme-toggle { cursor: pointer; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: var(--item-bg); border: 1px solid var(--border-color); color: var(--text-main); }
 
-        .section-label { padding: 25px 20px 8px; font-size: 13px; color: var(--text-sub); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+        .section-label { padding: 25px 20px 8px; font-size: 15px; color: var(--text-sub); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
 
         .list-wrap { border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
         details { background-color: var(--bg-color); }
@@ -61,7 +61,7 @@
         summary { list-style: none; padding: 16px 20px; display: flex; align-items: center; cursor: pointer; outline: none; }
         summary::-webkit-details-marker { display: none; }
         .menu-icon { margin-right: 16px; display: flex; align-items: center; }
-        .menu-text { flex: 1; font-size: 17px; }
+        .menu-text { flex: 1; font-size: 18px; font-weight:bold;}
         .menu-arrow { font-size: 18px; color: var(--arrow-color); transition: transform 0.3s; }
         details[open] .menu-arrow { transform: rotate(180deg); }
 
@@ -69,6 +69,7 @@
         .sbar-line { margin-bottom: 12px; font-size: 15px; line-height: 1.5; display: flex; }
         .sbar-label { width: 100px; flex-shrink: 0; font-weight: 700; color: var(--text-main); }
         .sbar-txt { color: var(--text-main); opacity: 0.9; flex: 1; }
+        .sbar-txt-important { color: var(--text-main); opacity: 0.9; flex: 1; font-weight:bold; color:red;}
 
         /* 문구 가이드 스타일 */
         .template-guide { padding: 0 10px 15px 10px; }
@@ -77,7 +78,7 @@
             border-radius: 12px; 
             padding: 16px; 
             border: 1px solid var(--border-color);
-            font-size: 14px;
+            font-size: 18px;
             line-height: 1.6;
         }
         .guide-title { font-weight: 700; color: var(--accent-blue); margin: 15px 0 8px 0; display: block; }
@@ -95,7 +96,7 @@
             white-space: pre-wrap;
             word-break: break-all;
             flex: 1;
-            font-size: 13px;
+            font-size: 15px;
         }
         .copy-btn {
             background: var(--bg-color);
@@ -111,10 +112,13 @@
         .copy-btn:active { transform: scale(0.9); }
         .copy-btn.copied { color: var(--accent-green); border-color: var(--accent-green); }
 
-        .highlight { color: var(--accent-orange); font-weight: 600; }
-        .desc { color: var(--text-sub); font-size: 13px; margin-bottom: 4px; }
+        .highlight { color: blac; font-weight: 600; }
+        .desc { color: black; font-size: 15px; margin-bottom: 4px; }
 
         a { color: var(--accent-blue); text-decoration: none; font-weight: 600; }
+        
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 14px; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 100; }
+        #toast.show { opacity: 1; }
     </style>
 </head>
 <body>
@@ -145,6 +149,7 @@
                 <div class="sbar-line"><span class="sbar-label">10분(긴급)</span><span class="sbar-txt">환자 안전 위기 → 선(先) 유선 연락 후 사후 기록</span></div>
                 <div class="sbar-line"><span class="sbar-label">4시간(우선)</span><span class="sbar-txt">당일 내 처리 필요 → 4시간 내 ACK(예정시간) 또는 진행상태 공유 / 초과 시 CALL 1회(사유코드 기록)</span></div>
                 <div class="sbar-line"><span class="sbar-label">12시간(루틴)</span><span class="sbar-txt">일반 업무 → 근무시간 기준 12시간 내 순차 처리 / 초과 시 CALL 1회</span></div>
+                <div class="sbar-line"><span class="sbar-txt-important">CALL 기준: 10/4/12 또는 ACK 예정시간 초과 시 전화 1회 후 [CALL] 기록</span></div>
             </div>
         </details>
 
@@ -164,27 +169,27 @@
                         <button class="copy-btn" onclick="copyText('c1', this)"><span class="material-icons">content_copy</span></button>
                     </div>
 
-                    <span class="guide-title">1-2. 표준 루프 (REQ?ACK/CALL?DONE)</span>
+                    <span class="guide-title">1-2. 표준 루프 (REQ-ACK/CALL-DONE)</span>
                     
-                    <div class="highlight">[REQ] 요청 (병동 → PA)</div>
+                    <div class="desc">[REQ] 요청 (병동 → PA)</div>
                     <div class="code-container">
                         <code class="code-block" id="c2">[REQ] {ID} / S:__ B:__ A:__ R:__ / 10·4·12</code>
                         <button class="copy-btn" onclick="copyText('c2', this)"><span class="material-icons">content_copy</span></button>
                     </div>
 
-                    <div class="highlight">[ACK] 수신 (PA → 병동)</div>
+                    <div class="desc">[ACK] 수신 (PA → 병동)</div>
                     <div class="code-container">
                         <code class="code-block" id="c3">[ACK] {ID} / {확인자} / 확인 / 예정 HH:MM</code>
                         <button class="copy-btn" onclick="copyText('c3', this)"><span class="material-icons">content_copy</span></button>
                     </div>
 
-                    <div class="highlight">[CALL] 지연 보호</div>
+                    <div class="desc">[CALL] 지연 보호</div>
                     <div class="code-container">
                         <code class="code-block" id="c4">[CALL] {ID} / {사유코드} / 다음확인 HH:MM</code>
                         <button class="copy-btn" onclick="copyText('c4', this)"><span class="material-icons">content_copy</span></button>
                     </div>
 
-                    <div class="highlight">[DONE] 종결 (PA → 병동)</div>
+                    <div class="desc">[DONE] 종결 (PA → 병동)</div>
                     <div class="code-container">
                         <code class="code-block" id="c5">[DONE] {ID} / {조치자} / 조치:__ / 현재:__ / 재보고:__</code>
                         <button class="copy-btn" onclick="copyText('c5', this)"><span class="material-icons">content_copy</span></button>
@@ -242,41 +247,38 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const savedTheme = localStorage.getItem("sbar_theme");
-        if (savedTheme === "dark") {
-            document.body.classList.add("dark-mode");
-            document.getElementById('theme-icon').innerText = 'light_mode';
-        }
-    });
+<div id="toast">복사되었습니다!</div>
 
-    function toggleTheme() {
-        const body = document.body;
-        const icon = document.getElementById('theme-icon');
-        body.classList.toggle('dark-mode');
-        if (body.classList.contains('dark-mode')) {
-            icon.innerText = 'light_mode';
-            localStorage.setItem("sbar_theme", "dark");
-        } else {
-            icon.innerText = 'dark_mode';
-            localStorage.setItem("sbar_theme", "light");
-        }
+<script>
+    const body = document.body;
+    const themeIcon = document.getElementById('theme-icon');
+    const toast = document.getElementById('toast');
+
+    // 초기 테마 설정
+    if (localStorage.getItem("sbar_theme") === "dark") {
+        body.classList.add("dark-mode");
+        themeIcon.innerText = 'light_mode';
     }
 
-    // 복사 기능 함수
+    function toggleTheme() {
+        const isDark = body.classList.toggle('dark-mode');
+        themeIcon.innerText = isDark ? 'light_mode' : 'dark_mode';
+        localStorage.setItem("sbar_theme", isDark ? "dark" : "light");
+    }
+
     function copyText(id, btn) {
         const text = document.getElementById(id).innerText;
         navigator.clipboard.writeText(text).then(() => {
             const icon = btn.querySelector('.material-icons');
-            const originalIcon = icon.innerText;
-            
             icon.innerText = 'done';
             btn.classList.add('copied');
             
+            toast.classList.add('show');
+            
             setTimeout(() => {
-                icon.innerText = originalIcon;
+                icon.innerText = 'content_copy';
                 btn.classList.remove('copied');
+                toast.classList.remove('show');
             }, 1500);
         });
     }
