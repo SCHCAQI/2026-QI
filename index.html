@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SBAR 보고 매뉴얼</title>
+    <title>SBAR 보고 매뉴얼 (Light)</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root {
-            --bg-black: #000000;
-            --item-bg: #121212;
-            --text-main: #ffffff;
+            --bg-white: #ffffff;
+            --item-bg: #f9f9f9; /* 상세 영역 연한 회색 */
+            --text-main: #191919;
             --text-sub: #8e8e93;
-            --accent-blue: #3586ff;
-            --accent-orange: #ff9f0a;
-            --accent-green: #30d158;
-            --accent-purple: #bf5af2;
-            --border-color: #1c1c1e;
+            --accent-blue: #007aff;
+            --accent-orange: #ff9500;
+            --accent-green: #34c759;
+            --accent-purple: #af52de;
+            --border-color: #f2f2f7; /* 아주 연한 구분선 */
         }
 
         body {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-black);
+            background-color: var(--bg-white);
             color: var(--text-main);
             margin: 0;
             padding: 0;
@@ -28,7 +28,8 @@
         }
         
         a {
-          color: var(--text-main);
+          color: var(--accent-blue);
+          text-decoration: none;
         }
 
         .container {
@@ -37,6 +38,7 @@
             margin: 0 auto;
         }
 
+        /* 프로필 섹션 */
         .header-profile {
             padding: 30px 20px 20px;
             display: flex;
@@ -47,7 +49,7 @@
         .profile-thumb {
             width: 56px;
             height: 56px;
-            background: #2c2c2e;
+            background: #f2f2f7;
             border-radius: 22px;
             display: flex;
             align-items: center;
@@ -56,13 +58,14 @@
 
         .profile-thumb .material-icons {
             font-size: 35px;
-            color: #8e8e93;
+            color: #aeaeb2;
         }
 
         .profile-info h1 {
             margin: 0;
-            font-size: 35px;
+            font-size: 24px; /* 모바일 가독성을 위해 적정 크기로 조정 */
             font-weight: 600;
+            color: var(--text-main);
         }
 
         .profile-info p {
@@ -71,24 +74,27 @@
             color: var(--text-sub);
         }
 
+        /* 섹션 구분 타이틀 */
         .section-label {
             padding: 20px 20px 8px;
             font-size: 13px;
             color: var(--text-sub);
             text-transform: uppercase;
+            background-color: var(--bg-white);
         }
 
+        /* 리스트 컨테이너 */
         .list-wrap {
-            border-top: 0.5px solid var(--border-color);
-            border-bottom: 0.5px solid var(--border-color);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
         }
 
         details {
-            background-color: var(--bg-black);
+            background-color: var(--bg-white);
         }
 
         details + details {
-            border-top: 0.5px solid var(--border-color);
+            border-top: 1px solid var(--border-color);
         }
 
         summary {
@@ -112,11 +118,12 @@
             flex: 1;
             font-size: 17px;
             font-weight: 400;
+            color: var(--text-main);
         }
 
         .menu-arrow {
             font-size: 18px;
-            color: #444;
+            color: #c7c7cc;
             transition: transform 0.3s;
         }
 
@@ -124,11 +131,11 @@
             transform: rotate(180deg);
         }
 
+        /* 상세 내용 영역 */
         .details-content {
             background-color: var(--item-bg);
             padding: 16px 20px 16px 60px;
-            border-top: 0.5px solid var(--border-color);
-            color: #ffffff; 
+            border-top: 1px solid var(--border-color);
         }
 
         .sbar-line {
@@ -146,15 +153,13 @@
             width: 100px;
             flex-shrink: 0;
             font-weight: 700;
-            color: #ffffff; 
+            color: var(--text-main); /* 라벨 블랙 계열 */
         }
 
         .sbar-txt { 
-            color: #ffffff; 
+            color: #3a3a3c; /* 텍스트 진한 그레이 */
             flex: 1;
         }
-        
-        
     </style>
 </head>
 <body>
@@ -218,7 +223,12 @@
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
             <div class="details-content">
-                <div class="sbar-line"><span class="sbar-label"><a href="https://form.naver.com/response/u4R2VwCy0DhFZLY02plRmg">3월 설문</a></span></div>
+                <div class="sbar-line">
+                    <span class="sbar-label">
+                        <a href="https://form.naver.com/response/u4R2VwCy0DhFZLY02plRmg" target="_blank">3월 설문</a>
+                    </span>
+                    <span class="sbar-txt">PA 협업 체계 사전 설문 참여</span>
+                </div>
             </div>
         </details>
     </div>
