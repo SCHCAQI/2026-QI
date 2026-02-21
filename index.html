@@ -3,220 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SBAR 다크 모드 보고서</title>
+    <title>SBAR 보고 매뉴얼</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root {
             --bg-black: #000000;
-            --item-bg: #191919;
+            --item-bg: #121212;
             --text-main: #ffffff;
-            --text-sub: #8e8e8e;
-            --accent-blue: #4a90e2;
-            --accent-orange: #f39200;
-            --border-color: #2c2c2e;
+            --text-sub: #8e8e93;
+            --accent-blue: #3586ff;
+            --accent-orange: #ff9f0a;
+            --accent-green: #30d158;
+            --accent-purple: #bf5af2;
+            --border-color: #1c1c1e;
         }
 
         body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-black);
             color: var(--text-main);
             margin: 0;
-            padding: 20px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        /* 섹션 타이틀 스타일 */
-        .section-header {
-            padding: 15px 20px 8px 20px;
-            font-size: 13px;
-            color: var(--text-sub);
-            font-weight: 500;
-        }
-
-        /* 리스트 그룹 */
-        .list-group {
-            background-color: var(--bg-black);
-            border-top: 0.5px solid var(--border-color);
-            border-bottom: 0.5px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-
-        /* 드롭다운(details) 스타일 */
-        details {
-            border-bottom: 0.5px solid var(--border-color);
-        }
-
-        details:last-child {
-            border-bottom: none;
-        }
-
-        summary {
-            list-style: none;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        summary:active {
-            background-color: #2c2c2e;
-        }
-
-        summary::-webkit-details-marker { display: none; }
-
-        .icon {
-            width: 30px;
-            font-size: 18px;
-            margin-right: 10px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .title-text {
-            flex: 1;
-            font-size: 16px;
-        }
-
-        .arrow {
-            color: var(--text-sub);
-            font-size: 12px;
-            transition: transform 0.3s;
-        }
-
-        details[open] .arrow {
-            transform: rotate(180deg);
-        }
-
-        /* 드롭다운 내부 컨텐츠 */
-        .content {
-            background-color: var(--item-bg);
-            padding: 15px 20px 15px 60px; /* 아이콘 위치만큼 왼쪽 여백 */
-            font-size: 14px;
-            line-height: 1.8;
-        }
-
-        .sbar-row {
-            margin-bottom: 12px;
-        }
-
-        .sbar-row:last-child { margin-bottom: 0; }
-
-        .label {
-            display: inline-block;
-            width: 45px;
-            font-weight: bold;
-            color: var(--accent-blue);
-        }
-
-        .label.orange { color: var(--accent-orange); }
-
-        .desc { color: #d1d1d6; }
-
-        /* 상단 프로필 스타일 (이미지 느낌 반영) */
-        .profile-area {
-            padding: 20px;
+        .header-profile {
+            padding: 30px 20px 20px;
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        .profile-img {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #444, #222);
-            border-radius: 18px;
+        .profile-thumb {
+            width: 56px;
+            height: 56px;
+            background: #2c2c2e;
+            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
         }
 
-        .profile-info h2 {
+        .profile-thumb .material-icons {
+            font-size: 30px;
+            color: #8e8e93;
+        }
+
+        .profile-info h1 {
             margin: 0;
-            font-size: 18px;
-            letter-spacing: -0.5px;
+            font-size: 24px;
+            font-weight: 600;
         }
 
         .profile-info p {
             margin: 4px 0 0 0;
-            font-size: 13px;
+            font-size: 15px;
             color: var(--text-sub);
         }
 
+        .section-label {
+            padding: 20px 20px 8px;
+            font-size: 13px;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        .list-wrap {
+            border-top: 0.5px solid var(--border-color);
+            border-bottom: 0.5px solid var(--border-color);
+        }
+
+        details {
+            background-color: var(--bg-black);
+        }
+
+        details + details {
+            border-top: 0.5px solid var(--border-color);
+        }
+
+        summary {
+            list-style: none;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            outline: none;
+        }
+
+        summary::-webkit-details-marker { display: none; }
+
+        .menu-icon {
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-text {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 400;
+        }
+
+        .menu-arrow {
+            font-size: 18px;
+            color: #444;
+            transition: transform 0.3s;
+        }
+
+        details[open] .menu-arrow {
+            transform: rotate(180deg);
+        }
+
+        .details-content {
+            background-color: var(--item-bg);
+            padding: 16px 20px 16px 60px;
+            border-top: 0.5px solid var(--border-color);
+            color: #ffffff; 
+        }
+
+        .sbar-line {
+            margin-bottom: 12px;
+            font-size: 15px;
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .sbar-line:last-child { margin-bottom: 0; }
+
+        .sbar-label {
+            display: inline-block;
+            width: 100px;
+            flex-shrink: 0;
+            font-weight: 700;
+            color: #ffffff; 
+        }
+
+        .sbar-txt { 
+            color: #ffffff; 
+            flex: 1;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="profile-area">
-        <div class="profile-img">📋</div>
+    <div class="header-profile">
+        <div class="profile-thumb">
+            <span class="material-icons">groups</span>
+        </div>
         <div class="profile-info">
-            <h2>표준 보고 체계 (SBAR)</h2>
-            <p>정확한 정보 전달을 위한 가이드</p>
+            <h1>PA협업 가이드</h1>
+            <p>표준화된 보고 체계</p>
         </div>
     </div>
 
-    <div class="section-header">보고 템플릿 및 예시</div>
-    <div class="list-group">
-        <details>
+    <div class="section-label">핵심 가이드라인</div>
+    <div class="list-wrap">
+        <details open>
             <summary>
-                <div class="icon">📄</div>
-                <div class="title-text">SBAR 표준 템플릿</div>
-                <div class="arrow">▼</div>
+                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-blue)">rule</span></div>
+                <div class="menu-text">협업 규칙 / 템플릿</div>
+                <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
-            <div class="content">
-                <div class="sbar-row"><span class="label">S</span><span class="desc">지금 ○○ 문제로 연락 드립니다.</span></div>
-                <div class="sbar-row"><span class="label">B</span><span class="desc">환자 ○○/현재 치료는 ○○입니다.</span></div>
-                <div class="sbar-row"><span class="label">A</span><span class="desc">현재 ○○이며 악화 우려가 있습니다.</span></div>
-                <div class="sbar-row"><span class="label">R</span><span class="desc">○○ 확인 및 ○○ 지시 부탁드립니다.</span></div>
+            <div class="details-content">
+                <div class="sbar-line"><span class="sbar-label">10분 이내</span><span class="sbar-txt">환자 안전 위험 / 상태 급변</span></div>
+                <div class="sbar-line"><span class="sbar-label">4시간 이내</span><span class="sbar-txt">악화 가능 / 치료지연 우려</span></div>
+                <div class="sbar-line"><span class="sbar-label">24시간 이내</span><span class="sbar-txt">계획 정리업무 / 위험 낮음</span></div>
             </div>
         </details>
 
-        <details>
+        <details open>
             <summary>
-                <div class="icon" style="color: var(--accent-orange);">🚨</div>
-                <div class="title-text">즉시 보고 예시 (10분 이내)</div>
-                <div class="arrow">▼</div>
+                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-green)">badge</span></div>
+                <div class="menu-text">과별 SBAR 카드</div>
+                <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
-            <div class="content">
-                <div class="sbar-row"><span class="label orange">S</span><span class="desc">SpO₂ 88%, 호흡곤란 발생</span></div>
-                <div class="sbar-row"><span class="label orange">B</span><span class="desc">폐렴 치료 중, O₂ 5L 적용 중</span></div>
-                <div class="sbar-row"><span class="label orange">A</span><span class="desc">산소 공급에도 수치 저하 및 빈호흡</span></div>
-                <div class="sbar-row"><span class="label orange">R</span><span class="desc">즉시 확인 및 ABGA 지시 요청</span></div>
+            <div class="details-content">
+                <div class="sbar-line"><span class="sbar-label">URO</span><span class="sbar-txt">비뇨의학과 가이드</span></div>
+                <div class="sbar-line"><span class="sbar-label">ENT</span><span class="sbar-txt">이비인후과 가이드</span></div>
+                <div class="sbar-line"><span class="sbar-label">CS</span><span class="sbar-txt">흉부외과 가이드</span></div>
+                <div class="sbar-line"><span class="sbar-label">MC</span><span class="sbar-txt">내과계 가이드</span></div>
+                <div class="sbar-line"><span class="sbar-label">MH</span><span class="sbar-txt">정신건강의학과 가이드</span></div>
             </div>
         </details>
-    </div>
-
-    <div class="section-header">처리 절차</div>
-    <div class="list-group">
-        <details>
+        
+        <details open>
             <summary>
-                <div class="icon">🔄</div>
-                <div class="title-text">보고 후 프로세스</div>
-                <div class="arrow">▼</div>
+                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-orange)">play_circle_filled</span></div>
+                <div class="menu-text">3분 Vlog</div>
+                <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
-            <div class="content">
-                <div class="sbar-row">1. <b>요청:</b> SBAR 문구에 맞춰 전달</div>
-                <div class="sbar-row">2. <b>수신확인:</b> 상대방 복창 확인 (1회)</div>
-                <div class="sbar-row">3. <b>완료공유:</b> 조치 후 결과 공유</div>
+            <div class="details-content">
+                <div class="sbar-line"><span class="sbar-label">시스템 가동</span><span class="sbar-txt">1회차 가이드 및 업데이트 목록</span></div>
             </div>
         </details>
-    </div>
 
-    <div class="section-header">설정 및 매뉴얼</div>
-    <div class="list-group">
-        <summary style="border-bottom: none;">
-            <div class="icon">🔍</div>
-            <div class="title-text">과별 보고체계 상세 확인 (QR)</div>
-            <div class="arrow">▶</div>
-        </summary>
+        <details open>
+            <summary>
+                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-purple)">rate_review</span></div>
+                <div class="menu-text">설문</div>
+                <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
+            </summary>
+            <div class="details-content">
+                <div class="sbar-line"><span class="sbar-label">3월 설문</span><span class="sbar-txt">PA 협업 체계 사전 설문 참여</span></div>
+            </div>
+        </details>
     </div>
 </div>
 
