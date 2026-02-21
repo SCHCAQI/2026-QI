@@ -71,29 +71,48 @@
         .sbar-txt { color: var(--text-main); opacity: 0.9; flex: 1; }
 
         /* 문구 가이드 스타일 */
-        .template-guide { padding: 15px 20px; }
+        .template-guide { padding: 0 10px 15px 10px; }
         .guide-card { 
             background: var(--item-bg); 
-            border-radius: 16px; 
-            padding: 20px; 
+            border-radius: 12px; 
+            padding: 16px; 
             border: 1px solid var(--border-color);
             font-size: 14px;
             line-height: 1.6;
         }
-        .guide-title { font-weight: 700; color: var(--accent-blue); margin-bottom: 8px; display: block; }
-        .guide-sub { font-weight: 700; margin: 15px 0 5px 0; display: block; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; }
+        .guide-title { font-weight: 700; color: var(--accent-blue); margin: 15px 0 8px 0; display: block; }
+        .guide-title:first-child { margin-top: 0; }
+        .guide-sub { font-weight: 700; margin: 20px 0 10px 0; display: block; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; }
+        
+        /* 복사 영역 레이아웃 */
+        .code-container { position: relative; margin: 8px 0; display: flex; align-items: center; gap: 8px; }
         .code-block { 
             background: var(--code-bg); 
-            padding: 10px; 
+            padding: 12px; 
             border-radius: 8px; 
             font-family: 'Courier New', monospace; 
-            margin: 8px 0;
             display: block;
             white-space: pre-wrap;
             word-break: break-all;
+            flex: 1;
+            font-size: 13px;
         }
+        .copy-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            width: 38px; height: 38px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            color: var(--text-sub);
+            transition: all 0.2s;
+        }
+        .copy-btn:active { transform: scale(0.9); }
+        .copy-btn.copied { color: var(--accent-green); border-color: var(--accent-green); }
+
         .highlight { color: var(--accent-orange); font-weight: 600; }
-        .desc { color: var(--text-sub); font-size: 13px; }
+        .desc { color: var(--text-sub); font-size: 13px; margin-bottom: 4px; }
 
         a { color: var(--accent-blue); text-decoration: none; font-weight: 600; }
     </style>
@@ -131,7 +150,7 @@
 
         <details open>
             <summary>
-                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-blue)">rule</span></div>
+                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-blue)">assignment</span></div>
                 <div class="menu-text">템플릿</div>
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
@@ -140,35 +159,61 @@
                 <div class="guide-card">
                     <span class="guide-title">1-1. Case ID (공통 고정)</span>
                     <div class="desc">형식: [병실]-[등록번호]-[성함]-[교수]-[월일]-[시간]</div>
-                    <code class="code-block">1311-12345678-홍길동-KJS-0302-1540</code>
-        
+                    <div class="code-container">
+                        <code class="code-block" id="c1">1311-12345678-홍길동-KJS-0302-1540</code>
+                        <button class="copy-btn" onclick="copyText('c1', this)"><span class="material-icons">content_copy</span></button>
+                    </div>
+
                     <span class="guide-title">1-2. 표준 루프 (REQ?ACK/CALL?DONE)</span>
+                    
                     <div class="highlight">[REQ] 요청 (병동 → PA)</div>
-                    <code class="code-block">[REQ] {ID} / S:__ B:__ A:__ R:__ / 10·4·12</code>
+                    <div class="code-container">
+                        <code class="code-block" id="c2">[REQ] {ID} / S:__ B:__ A:__ R:__ / 10·4·12</code>
+                        <button class="copy-btn" onclick="copyText('c2', this)"><span class="material-icons">content_copy</span></button>
+                    </div>
+
                     <div class="highlight">[ACK] 수신 (PA → 병동)</div>
-                    <code class="code-block">[ACK] {ID} / {확인자} / 확인 / 예정 HH:MM</code>
-                    <div class="highlight">[CALL] 지연 보호 (전화 1회 후 10초 기록)</div>
-                    <code class="code-block">[CALL] {ID} / {사유코드} / 다음확인 HH:MM</code>
-                    <div class="desc">사유: 수술, 시술, 회진, 인계, 담당부재, 정보부족, 인력부족, 기타</div>
+                    <div class="code-container">
+                        <code class="code-block" id="c3">[ACK] {ID} / {확인자} / 확인 / 예정 HH:MM</code>
+                        <button class="copy-btn" onclick="copyText('c3', this)"><span class="material-icons">content_copy</span></button>
+                    </div>
+
+                    <div class="highlight">[CALL] 지연 보호</div>
+                    <div class="code-container">
+                        <code class="code-block" id="c4">[CALL] {ID} / {사유코드} / 다음확인 HH:MM</code>
+                        <button class="copy-btn" onclick="copyText('c4', this)"><span class="material-icons">content_copy</span></button>
+                    </div>
+
                     <div class="highlight">[DONE] 종결 (PA → 병동)</div>
-                    <code class="code-block">[DONE] {ID} / {조치자} / 조치:__ / 현재:__ / 재보고:__</code>
-        
+                    <div class="code-container">
+                        <code class="code-block" id="c5">[DONE] {ID} / {조치자} / 조치:__ / 현재:__ / 재보고:__</code>
+                        <button class="copy-btn" onclick="copyText('c5', this)"><span class="material-icons">content_copy</span></button>
+                    </div>
+
                     <span class="guide-title">1-3. 예정처리 (16:30 권장)</span>
-                    <code class="code-block">[예정처리] {ID} / {사유코드} / 조치예정 HH:MM / 업데이트 HH:MM</code>
-        
-                    <span class="guide-title">1-4. 라이트 루프 (정보성 보고용)</span>
-                    <div class="desc">ACK 생략, 12시간 내 DONE 확인</div>
-                    <code class="code-block">[REQ] (보고) {ID} / {입원·검사·자가약} / 핵심 1줄 / 12
-        [DONE] {ID} / {확인자} / 확인완료(추가조치없음)</code>
-        
+                    <div class="code-container">
+                        <code class="code-block" id="c6">[예정처리] {ID} / {사유코드} / 조치예정 HH:MM / 업데이트 HH:MM</code>
+                        <button class="copy-btn" onclick="copyText('c6', this)"><span class="material-icons">content_copy</span></button>
+                    </div>
+
+                    <span class="guide-title">1-4. 라이트 루프 (정보성)</span>
+                    <div class="desc">ACK 생략</div>
+                    <div class="code-container">
+                        <code class="code-block" id="c7">[REQ] (보고) {ID} / {입원·검사·자가약} / 핵심 1줄 / 12</code>
+                        <button class="copy-btn" onclick="copyText('c7', this)"><span class="material-icons">content_copy</span></button>
+                    </div>
+                    <div class="code-container">
+                        <code class="code-block" id="c8">[DONE] {ID} / {확인자} / 확인완료(추가조치없음)</code>
+                        <button class="copy-btn" onclick="copyText('c8', this)"><span class="material-icons">content_copy</span></button>
+                    </div>
+
                     <span class="guide-sub">1-5. 예외 전환</span>
-                    <div class="desc">검사/자가약 액션 필요 시 <span class="highlight">REQ→ACK→DONE</span>으로 즉시 전환</div>
+                    <div class="desc">액션 필요 시 <span class="highlight">REQ→ACK→DONE</span> 전환</div>
                 </div>
             </div>
-            
         </details>
 
-        <details open>
+        <details>
             <summary>
                 <div class="menu-icon"><span class="material-icons" style="color:var(--accent-green)">badge</span></div>
                 <div class="menu-text">과별 SBAR 카드</div>
@@ -181,18 +226,7 @@
             </div>
         </details>
         
-        <details open>
-            <summary>
-                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-orange)">play_circle_filled</span></div>
-                <div class="menu-text">3분 Vlog</div>
-                <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
-            </summary>
-            <div class="details-content">
-                <div class="sbar-line"><span class="sbar-label">시스템 가동</span><span class="sbar-txt">1회차 가이드 및 업데이트 목록</span></div>
-            </div>
-        </details>
-
-        <details open>
+        <details>
             <summary>
                 <div class="menu-icon"><span class="material-icons" style="color:var(--accent-purple)">rate_review</span></div>
                 <div class="menu-text">설문</div>
@@ -200,9 +234,7 @@
             </summary>
             <div class="details-content">
                 <div class="sbar-line">
-                    <span class="sbar-label">
-                        <a href="https://form.naver.com/response/u4R2VwCy0DhFZLY02plRmg" target="_blank">3월 설문</a>
-                    </span>
+                    <span class="sbar-label"><a href="https://form.naver.com/response/u4R2VwCy0DhFZLY02plRmg" target="_blank">3월 설문</a></span>
                     <span class="sbar-txt">PA 협업 체계 사전 설문 참여</span>
                 </div>
             </div>
@@ -211,29 +243,18 @@
 </div>
 
 <script>
-    // 페이지 로드 시 실행
     document.addEventListener("DOMContentLoaded", () => {
         const savedTheme = localStorage.getItem("sbar_theme");
-        const body = document.body;
-        const icon = document.getElementById('theme-icon');
-
-        // 저장된 테마가 다크모드라면 적용
         if (savedTheme === "dark") {
-            body.classList.add("dark-mode");
-            icon.innerText = 'light_mode';
-        } else {
-            body.classList.remove("dark-mode");
-            icon.innerText = 'dark_mode';
+            document.body.classList.add("dark-mode");
+            document.getElementById('theme-icon').innerText = 'light_mode';
         }
     });
 
-    // 테마 토글 및 저장
     function toggleTheme() {
         const body = document.body;
         const icon = document.getElementById('theme-icon');
-        
         body.classList.toggle('dark-mode');
-        
         if (body.classList.contains('dark-mode')) {
             icon.innerText = 'light_mode';
             localStorage.setItem("sbar_theme", "dark");
@@ -241,6 +262,23 @@
             icon.innerText = 'dark_mode';
             localStorage.setItem("sbar_theme", "light");
         }
+    }
+
+    // 복사 기능 함수
+    function copyText(id, btn) {
+        const text = document.getElementById(id).innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            const icon = btn.querySelector('.material-icons');
+            const originalIcon = icon.innerText;
+            
+            icon.innerText = 'done';
+            btn.classList.add('copied');
+            
+            setTimeout(() => {
+                icon.innerText = originalIcon;
+                btn.classList.remove('copied');
+            }, 1500);
+        });
     }
 </script>
 
