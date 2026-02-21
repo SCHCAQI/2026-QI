@@ -3,33 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SBAR 보고 매뉴얼 (Light)</title>
+    <title>SBAR 보고 매뉴얼</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
+        /* [기본 테마: 라이트 모드] */
         :root {
-            --bg-white: #ffffff;
-            --item-bg: #f9f9f9; /* 상세 영역 연한 회색 */
+            --bg-color: #ffffff;
+            --item-bg: #f9f9f9;
             --text-main: #191919;
             --text-sub: #8e8e93;
+            --border-color: #f2f2f7;
             --accent-blue: #007aff;
             --accent-orange: #ff9500;
             --accent-green: #34c759;
             --accent-purple: #af52de;
-            --border-color: #f2f2f7; /* 아주 연한 구분선 */
+            --thumb-bg: #f2f2f7;
+            --arrow-color: #c7c7cc;
+        }
+
+        /* [다크 모드 설정] */
+        body.dark-mode {
+            --bg-color: #000000;
+            --item-bg: #121212;
+            --text-main: #ffffff;
+            --text-sub: #8e8e93;
+            --border-color: #1c1c1e;
+            --accent-blue: #3586ff;
+            --thumb-bg: #2c2c2e;
+            --arrow-color: #444444;
         }
 
         body {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-white);
+            background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
             padding: 0;
+            transition: background-color 0.2s ease, color 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
         
         a {
-          color: var(--accent-blue);
-          text-decoration: none;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
         }
 
         .container {
@@ -38,9 +55,15 @@
             margin: 0 auto;
         }
 
-        /* 프로필 섹션 */
+        /* 헤더 레이아웃 */
         .header-profile {
             padding: 30px 20px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .profile-left {
             display: flex;
             align-items: center;
             gap: 15px;
@@ -49,11 +72,12 @@
         .profile-thumb {
             width: 56px;
             height: 56px;
-            background: #f2f2f7;
+            background: var(--thumb-bg);
             border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background-color 0.2s;
         }
 
         .profile-thumb .material-icons {
@@ -63,9 +87,8 @@
 
         .profile-info h1 {
             margin: 0;
-            font-size: 24px; /* 모바일 가독성을 위해 적정 크기로 조정 */
+            font-size: 24px;
             font-weight: 600;
-            color: var(--text-main);
         }
 
         .profile-info p {
@@ -74,23 +97,38 @@
             color: var(--text-sub);
         }
 
-        /* 섹션 구분 타이틀 */
+        /* 테마 스위치 버튼 */
+        .theme-toggle {
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--item-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        /* 리스트 스타일 */
         .section-label {
             padding: 20px 20px 8px;
             font-size: 13px;
             color: var(--text-sub);
             text-transform: uppercase;
-            background-color: var(--bg-white);
+            font-weight: 600;
         }
 
-        /* 리스트 컨테이너 */
         .list-wrap {
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
         }
 
         details {
-            background-color: var(--bg-white);
+            background-color: var(--bg-color);
+            transition: background-color 0.2s;
         }
 
         details + details {
@@ -118,12 +156,11 @@
             flex: 1;
             font-size: 17px;
             font-weight: 400;
-            color: var(--text-main);
         }
 
         .menu-arrow {
             font-size: 18px;
-            color: #c7c7cc;
+            color: var(--arrow-color);
             transition: transform 0.3s;
         }
 
@@ -131,11 +168,12 @@
             transform: rotate(180deg);
         }
 
-        /* 상세 내용 영역 */
+        /* 상세 컨텐츠 */
         .details-content {
             background-color: var(--item-bg);
             padding: 16px 20px 16px 60px;
             border-top: 1px solid var(--border-color);
+            transition: background-color 0.2s;
         }
 
         .sbar-line {
@@ -153,25 +191,29 @@
             width: 100px;
             flex-shrink: 0;
             font-weight: 700;
-            color: var(--text-main); /* 라벨 블랙 계열 */
+            color: var(--text-main);
         }
 
         .sbar-txt { 
-            color: #3a3a3c; /* 텍스트 진한 그레이 */
+            color: var(--text-main); 
+            opacity: 0.9;
             flex: 1;
         }
     </style>
 </head>
-<body>
-
-<div class="container">
+<body> <div class="container">
     <div class="header-profile">
-        <div class="profile-thumb">
-            <span class="material-icons">groups</span>
+        <div class="profile-left">
+            <div class="profile-thumb">
+                <span class="material-icons">groups</span>
+            </div>
+            <div class="profile-info">
+                <h1>PA협업 가이드</h1>
+                <p>표준화된 보고 체계</p>
+            </div>
         </div>
-        <div class="profile-info">
-            <h1>PA협업 가이드</h1>
-            <p>표준화된 보고 체계</p>
+        <div class="theme-toggle" onclick="toggleTheme()" title="테마 변경">
+            <span class="material-icons" id="theme-icon">dark_mode</span>
         </div>
     </div>
 
@@ -233,6 +275,22 @@
         </details>
     </div>
 </div>
+
+<script>
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+        
+        body.classList.toggle('dark-mode');
+        
+        // 아이콘 변경 로직 (라이트 모드 기본이므로 반대로 작동)
+        if (body.classList.contains('dark-mode')) {
+            icon.innerText = 'light_mode'; // 다크 모드일 때 보여줄 아이콘
+        } else {
+            icon.innerText = 'dark_mode';  // 라이트 모드일 때 보여줄 아이콘
+        }
+    }
+</script>
 
 </body>
 </html>
