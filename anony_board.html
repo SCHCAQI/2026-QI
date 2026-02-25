@@ -152,7 +152,8 @@
 
             const updateHistory = () => {
                 const state = { viewMode: viewMode.value, page: currentPage.value };
-                history.pushState(state, '');
+                // 새로운 이력을 쌓는 대신, 현재의 히스토리 엔트리를 교체하여 중복 방지
+                history.replaceState(state, ''); 
             };
 
             const fetchPosts = async () => {
