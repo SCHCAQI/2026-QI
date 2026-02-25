@@ -119,7 +119,7 @@
 
     <div v-if="viewMode === 'detail'" class="modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 150; overflow-y: auto;">
         <div class="modal-header" style="padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white;">
-            <button @click="handleBack" style="font-size: 17px; background:none; border:none; color: var(--primary); cursor:pointer;">← 목록</button>
+            <button @click="viewMode = 'list'" style="font-size: 17px; background:none; border:none; color: var(--primary); cursor:pointer;">목록으로 돌아가기</button>
             <div v-if="form.author === myId">
                 <button @click="viewMode = 'edit'" style="font-size: 17px; background:none; border:none; margin-right:12px; color: #666; cursor:pointer;">수정</button>
                 <button @click="deletePost" style="color:#ff5a5f; font-size: 17px; background:none; border:none; cursor:pointer;">삭제</button>
