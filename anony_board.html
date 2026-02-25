@@ -71,7 +71,7 @@
         </div>
         
         <div style="display: flex; align-items: center;">
-            <button @click="toggleTheme" class="theme-btn">{{ isDarkMode ? '??' : '??' }}</button>
+            <button @click="toggleTheme" class="theme-btn">{{ isDarkMode ? 'LIGHT' : 'DARK' }}</button>
             <button v-if="viewMode !== 'list'" @click="handleBack" style="background:none; border:none; color:var(--primary); font-weight:bold; font-size:16px; cursor:pointer;">뒤로</button>
         </div>
     </header>
