@@ -2,149 +2,195 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>WeValue ( 우리가치 ) - 익명게시판</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeValue - 우리가치 익명게시판</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
-        body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; background: #f4f7f6; }
-        .post-form, .search-bar { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        input, textarea { width: 100%; margin: 5px 0; padding: 8px; box-sizing: border-box; }
-        .post-card { background: white; padding: 15px; margin-bottom: 10px; border-left: 5px solid #42b983; position: relative; }
-        .post-meta { font-size: 0.8em; color: #666; }
-        button { cursor: pointer; background: #42b983; color: white; border: none; padding: 8px 15px; border-radius: 4px; }
-        button:disabled { background: #ccc; cursor: not-allowed; }
-        .btn-del { background: #ff5252; margin-left: 5px; }
-        /* 로딩 오버레이 스타일 */
-        .loading-overlay {
-            position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.7);
-            color: white; padding: 10px 20px; border-radius: 20px; z-index: 1000;
-        }
+        :root { --primary: #37acc9; --bg: #f8f9fa; --text: #222; --border: #eee; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 80px; }
+        header { background: white; padding: 15px; border-bottom: 1px solid var(--border); sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* 목록 스타일 */
+        .list-item { background: white; padding: 20px; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .list-item:active { background: #f0f0f0; }
+        .list-item .author-info { font-size: 12px; color: #888; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+        .list-item .title { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
+        .list-item .content-preview { font-size: 14px; color: #666; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        /* 상세/작성 팝업 */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 20; overflow-y: auto; }
+        .modal-header { padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+        .modal-body { padding: 20px; }
+        
+        /* 버튼/입력창 */
+        input, textarea { width: 100%; border: 1px solid var(--border); padding: 12px; margin-bottom: 10px; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
+        .write-btn { position: fixed; bottom: 20px; right: 20px; background: #ff5a5f; color: white; border: none; padding: 15px 25px; border-radius: 30px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .paging-bar { padding: 20px; text-align: center; background: white; }
+        .paging-bar button { background: none; border: 1px solid var(--border); padding: 5px 15px; margin: 0 5px; border-radius: 5px; }
+
+        .loading-bar { position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: var(--primary); z-index: 100; transition: width 0.3s; }
     </style>
 </head>
 <body>
 <div id="app">
-    <div v-if="isLoading" class="loading-overlay">요청 처리 중...</div>
+    <div v-if="isLoading" class="loading-bar" style="width: 100%;"></div>
 
-    <h2>익명 게시판-v2</h2>
+    <header>
+        <h2 style="margin:0; font-size: 18px;">{{ viewMode === 'list' ? '전체글' : (viewMode === 'write' ? '글쓰기' : '상세보기') }}</h2>
+        <button v-if="viewMode !== 'list'" @click="viewMode = 'list'" style="background:none; border:none; color: #888;">닫기</button>
+    </header>
 
-    <div class="post-form">
-        <input v-model="newPost.author" placeholder="아이디" :disabled="isLoading">
-        <input v-model="newPost.password" type="password" placeholder="비밀번호 (수정/삭제용)" :disabled="isLoading">
-        <input v-model="newPost.title" placeholder="제목" :disabled="isLoading">
-        <textarea v-model="newPost.content" placeholder="내용" :disabled="isLoading"></textarea>
-        <button @click="createPost" :disabled="isLoading">
-            {{ isLoading ? '전송 중...' : '글쓰기' }}
-        </button>
+    <div v-if="viewMode === 'list'">
+        <div class="search-bar" style="padding:10px; background:white;">
+            <input v-model="searchQuery" placeholder="검색어를 입력하세요" style="margin:0;">
+        </div>
+        
+        <div v-for="post in paginatedPosts" :key="post.ID" class="list-item" @click="openDetail(post)">
+            <div class="author-info">
+                <span style="color:var(--primary)">??</span> {{ post.Author }} · {{ formatDate(post.Date) }}
+            </div>
+            <div class="title">{{ post.Title }}</div>
+            <div class="content-preview">{{ post.Content }}</div>
+        </div>
+
+        <div class="paging-bar">
+            <button :disabled="currentPage === 1" @click="currentPage--">이전</button>
+            <span>{{ currentPage }} / {{ totalPages || 1 }}</span>
+            <button :disabled="currentPage >= totalPages" @click="currentPage++">다음</button>
+        </div>
+        
+        <button class="write-btn" @click="viewMode = 'write'">+ 글쓰기</button>
     </div>
 
-    <div class="search-bar">
-        <input v-model="searchQuery" placeholder="검색어 입력 (제목, 본문, 아이디)">
-        <button @click="myPostsOnly = !myPostsOnly">
-            {{ myPostsOnly ? '전체 보기' : '내 글만 보기' }}
-        </button>
+    <div v-if="viewMode === 'write' || viewMode === 'edit'" class="modal">
+        <div class="modal-header">
+            <button @click="viewMode = 'list'">취소</button>
+            <strong>{{ viewMode === 'write' ? '새 글 쓰기' : '글 수정' }}</strong>
+            <button @click="viewMode === 'write' ? savePost() : updatePost()" style="color:var(--primary); font-weight:bold;">완료</button>
+        </div>
+        <div class="modal-body">
+            <input v-model="form.author" placeholder="아이디" :disabled="viewMode === 'edit'">
+            <input v-model="form.password" type="password" placeholder="비밀번호 (필수)">
+            <input v-model="form.title" placeholder="제목">
+            <textarea v-model="form.content" rows="15" placeholder="내용을 입력하세요"></textarea>
+        </div>
     </div>
 
-    <div v-for="post in filteredPosts" :key="post.ID" class="post-card">
-        <h3>{{ post.Title }}</h3>
-        <p>{{ post.Content }}</p>
-        <div class="post-meta">
-            작성자: {{ post.Author }} | 작성일: {{ new Date(post.Date).toLocaleString() }}
-            <button class="btn-del" @click="deletePost(post.ID)" :disabled="isLoading">삭제</button>
+    <div v-if="viewMode === 'detail'" class="modal">
+        <div class="modal-header">
+            <button @click="viewMode = 'list'">← 목록</button>
+            <div v-if="form.author === myId">
+                <button @click="viewMode = 'edit'">수정</button>
+                <button @click="deletePost" style="color:red;">삭제</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="author-info" style="font-size:14px; margin-bottom:20px;">
+                <b style="color:var(--primary)">{{ form.author }}</b> · {{ formatDate(form.date) }}
+            </div>
+            <h2 style="margin-bottom:20px;">{{ form.title }}</h2>
+            <p style="white-space: pre-wrap; line-height: 1.8; font-size: 16px;">{{ form.content }}</p>
         </div>
     </div>
 </div>
 
 <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycby0Y2trjJGVx-K000NemLYfKlFvAQSaCJ9rMFJCVMe9tx2N-zJkGyE-T1trPxffAdJ3/exec';
-
     const { createApp, ref, computed, onMounted } = Vue;
 
     createApp({
         setup() {
             const posts = ref([]);
+            const viewMode = ref('list'); // list, write, detail, edit
+            const isLoading = ref(false);
             const searchQuery = ref('');
-            const myPostsOnly = ref(false);
-            const isLoading = ref(false); // 로딩 상태 추가
+            const currentPage = ref(1);
             const myId = ref(localStorage.getItem('myAnonId') || '');
-            const newPost = ref({ author: myId.value, title: '', content: '', password: '' });
+            
+            const form = ref({ id: '', author: myId.value, title: '', content: '', password: '', date: '' });
 
             const fetchPosts = async () => {
                 isLoading.value = true;
-                try {
-                    const res = await axios.get(`${API_URL}?action=read`);
-                    posts.value = res.data;
-                } catch (error) {
-                    console.error("데이터 로드 실패", error);
-                } finally {
-                    isLoading.value = false;
-                }
+                const res = await axios.get(`${API_URL}?action=read`);
+                posts.value = res.data;
+                isLoading.value = false;
             };
 
-            const createPost = async () => {
-                if(!newPost.value.author || !newPost.value.password) return alert("아이디와 비번을 입력하세요");
-                
-                isLoading.value = true;
-                const params = new URLSearchParams();
-                params.append('action', 'create');
-                params.append('author', newPost.value.author);
-                params.append('title', newPost.value.title);
-                params.append('content', newPost.value.content);
-                params.append('password', newPost.value.password);
-                
-                try {
-                    await axios.post(API_URL, params, {
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-                    });
-                    localStorage.setItem('myAnonId', newPost.value.author);
-                    newPost.value.title = '';
-                    newPost.value.content = '';
-                    await fetchPosts();
-                } catch (error) {
-                    alert("전송 에러가 발생했습니다.");
-                } finally {
-                    isLoading.value = false;
-                }
+            const openDetail = (post) => {
+                form.value = { id: post.ID, author: post.Author, title: post.Title, content: post.Content, date: post.Date, password: '' };
+                viewMode.value = 'detail';
             };
 
-            const deletePost = async (id) => {
-                const password = prompt("비밀번호를 입력하세요");
-                if (!password) return;
-
+            const savePost = async () => {
+                if(!form.value.password || !form.value.title) return alert("내용을 채워주세요.");
                 isLoading.value = true;
-                const params = new URLSearchParams();
-                params.append('action', 'delete');
-                params.append('id', id);
-                params.append('password', password);
+                const p = new URLSearchParams();
+                p.append('action', 'create');
+                p.append('author', form.value.author);
+                p.append('password', form.value.password);
+                p.append('title', form.value.title);
+                p.append('content', form.value.content);
+                
+                await axios.post(API_URL, p);
+                localStorage.setItem('myAnonId', form.value.author);
+                myId.value = form.value.author;
+                viewMode.value = 'list';
+                fetchPosts();
+            };
 
-                try {
-                    const res = await axios.post(API_URL, params);
-                    alert(res.data);
-                    await fetchPosts();
-                } catch (error) {
-                    alert("삭제 중 에러가 발생했습니다.");
-                } finally {
-                    isLoading.value = false;
-                }
+            const updatePost = async () => {
+                const p = new URLSearchParams();
+                p.append('action', 'update');
+                p.append('id', form.value.id);
+                p.append('password', form.value.password);
+                p.append('title', form.value.title);
+                p.append('content', form.value.content);
+                
+                isLoading.value = true;
+                const res = await axios.post(API_URL, p);
+                if(res.data === 'Updated') {
+                    viewMode.value = 'list';
+                    fetchPosts();
+                } else { alert("비밀번호가 틀렸습니다."); isLoading.value = false; }
+            };
+
+            const deletePost = async () => {
+                if(!confirm("정말 삭제하시겠습니까?")) return;
+                const pw = prompt("비밀번호를 입력하세요.");
+                if(!pw) return;
+
+                const p = new URLSearchParams();
+                p.append('action', 'delete');
+                p.append('id', form.value.id);
+                p.append('password', pw);
+                
+                const res = await axios.post(API_URL, p);
+                alert(res.data);
+                if(res.data === 'Deleted') { viewMode.value = 'list'; fetchPosts(); }
             };
 
             const filteredPosts = computed(() => {
-                return posts.value.filter(p => {
-                    const title = String(p.Title || "");
-                    const content = String(p.Content || "");
-                    const author = String(p.Author || "");
-                    const query = searchQuery.value.toLowerCase();
-                    
-                    const matchSearch = title.toLowerCase().includes(query) || 
-                                        content.toLowerCase().includes(query) || 
-                                        author.toLowerCase().includes(query);
-                    const matchMine = myPostsOnly.value ? author === myId.value : true;
-                    return matchSearch && matchMine;
-                });
+                return posts.value.filter(p => 
+                    String(p.Title).toLowerCase().includes(searchQuery.value.toLowerCase()) || 
+                    String(p.Content).toLowerCase().includes(searchQuery.value.toLowerCase())
+                );
             });
 
-            onMounted(fetchPosts);
+            const paginatedPosts = computed(() => {
+                const start = (currentPage.value - 1) * 10;
+                return filteredPosts.value.slice(start, start + 10);
+            });
 
-            return { posts, newPost, searchQuery, myPostsOnly, isLoading, createPost, deletePost, filteredPosts };
+            const totalPages = computed(() => Math.ceil(filteredPosts.value.length / 10));
+
+            const formatDate = (dateStr) => {
+                const d = new Date(dateStr);
+                return `${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}`;
+            };
+
+            onMounted(fetchPosts);
+            return { posts, viewMode, isLoading, searchQuery, form, myId, currentPage, totalPages, paginatedPosts, openDetail, savePost, updatePost, deletePost, formatDate };
         }
     }).mount('#app');
 </script>
