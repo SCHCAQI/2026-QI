@@ -7,13 +7,12 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
-        /* 테마 컬러를 보라색(#8a2be2)으로 통일 */
         :root { 
             --primary: #8a2be2; 
             --bg: #f8f9fa; 
             --text: #222; 
             --border: #eee; 
-            --accent: #8a2be2; /* 추가 버튼 색상도 보라색으로 변경 */
+            --accent: #8a2be2; 
         }
         
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 80px; font-size: 17px; } 
@@ -22,7 +21,7 @@
         
         .header-logo { 
             width: 56px; height: 56px; vertical-align: middle; margin-right: 8px; object-fit: contain;
-            mix-blend-mode: multiply; /* 이미지의 흰 배경을 투명하게 처리 */
+            mix-blend-mode: multiply;
         }
         
         .brand-name { font-size: 30px; font-weight: bold; vertical-align: middle; cursor: pointer; color: var(--primary); }
@@ -35,12 +34,11 @@
         
         .version-tag { font-family: monospace; font-size: 13px; color: #aaa; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; vertical-align: middle; }
         
-        /* 추가 버튼(FAB) 스타일 수정 */
         .write-fab { 
             position: fixed; bottom: 30px; right: 25px; width: 65px; height: 65px; 
             background: var(--accent); color: white; border: none; border-radius: 50%; 
             font-size: 35px; font-weight: 300; display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 6px 16px rgba(138, 43, 226, 0.3); /* 보라색 그림자 */
+            box-shadow: 0 6px 16px rgba(138, 43, 226, 0.3); 
             cursor: pointer; z-index: 100; transition: transform 0.2s; 
         }
         .write-fab:active { transform: scale(0.9); }
@@ -71,7 +69,7 @@
                 <span class="brand-name">우리가치톡(WeValue)</span>
             </div>
             <div style="font-size: 14px; color: #666; margin-top: 2px; padding-left: 64px;">
-                <span class="version-tag" style="margin-left: 8px;">v20260225.10</span>
+                <span class="version-tag" style="margin-left: 8px;">v20260225.11</span>
             </div>
             <div style="font-size: 14px; color: #666; margin-top: 2px; padding-left: 64px;">
                 {{ viewMode === 'list' ? '전체글 목록' : (viewMode === 'write' ? '새 글 작성' : (viewMode === 'edit' ? '글 수정' : '상세보기')) }}
@@ -144,6 +142,14 @@
             const myId = ref(localStorage.getItem('myAnonId') || '');
             const form = ref({ id: '', author: myId.value, title: '', content: '', password: '', date: '' });
 
+            // 새로고침 방지 핸들러
+            const preventRefresh = (e) => {
+                if (viewMode.value === 'write' || viewMode.value === 'edit') {
+                    e.preventDefault();
+                    e.returnValue = ''; // 브라우저 표준 경고창 표시
+                }
+            };
+
             const updateHistory = () => {
                 const state = { viewMode: viewMode.value, page: currentPage.value };
                 history.pushState(state, '');
@@ -160,10 +166,19 @@
             };
 
             onMounted(() => {
+                // 브라우저 새로고침/닫기 이벤트 리스너 등록
+                window.addEventListener('beforeunload', preventRefresh);
+                
                 history.replaceState({ viewMode: 'list', page: 1 }, '');
                 fetchPosts();
                 window.onpopstate = (event) => {
                     if (event.state) {
+                        // 뒤로가기 시에도 작성 중이면 확인
+                        if ((viewMode.value === 'write' || viewMode.value === 'edit') && 
+                            !confirm("작성 중인 내용이 사라질 수 있습니다. 이동하시겠습니까?")) {
+                            history.pushState(event.state, ''); // 현재 상태 유지
+                            return;
+                        }
                         viewMode.value = event.state.viewMode;
                         if (currentPage.value !== event.state.page) {
                             currentPage.value = event.state.page;
@@ -193,13 +208,21 @@
 
             const goHome = () => {
                 if(viewMode.value === 'list' && currentPage.value === 1) return;
+                // 이동 전 확인
+                if ((viewMode.value === 'write' || viewMode.value === 'edit') && 
+                    !confirm("작성 중인 내용이 사라질 수 있습니다. 홈으로 이동하시겠습니까?")) return;
+                
                 viewMode.value = 'list';
                 currentPage.value = 1;
                 updateHistory();
                 fetchPosts();
             };
 
-            const handleBack = () => history.back();
+            const handleBack = () => {
+                if ((viewMode.value === 'write' || viewMode.value === 'edit') && 
+                    !confirm("작성 중인 내용이 사라질 수 있습니다. 나가시겠습니까?")) return;
+                history.back();
+            };
 
             const savePost = async () => {
                 if(!form.value.password || !form.value.title) return alert("비밀번호와 제목은 필수입니다.");
@@ -214,6 +237,7 @@
                     await axios.post(API_URL, p);
                     localStorage.setItem('myAnonId', form.value.author);
                     myId.value = form.value.author;
+                    // 저장 성공 후에는 경고 없이 리스트로 이동하기 위해 모드 변경
                     viewMode.value = 'list';
                     currentPage.value = 1;
                     await fetchPosts();
