@@ -147,7 +147,9 @@
             const totalPages = ref(1);
             const myId = ref(localStorage.getItem('myAnonId') || '');
             const form = ref({ id: '', author: myId.value, title: '', content: '', password: '', date: '' });
-
+        
+            // ?? 이 부분이 누락되어 조회가 안 되었던 것입니다!
+            const CACHE_KEY = 'wevalue_posts_cache';
             // 새로고침 방지 핸들러
             const preventRefresh = (e) => {
                 if (viewMode.value === 'write' || viewMode.value === 'edit') {
