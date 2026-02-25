@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         :root { --primary: #37acc9; --bg: #f8f9fa; --text: #222; --border: #eee; }
-        /* 전체 기본 폰트 사이즈 상향 (기존 14px~16px -> +3px) */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 80px; font-size: 17px; } 
         
         header { background: white; padding: 15px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
@@ -16,37 +15,58 @@
         /* 목록 스타일 */
         .list-item { background: white; padding: 20px; border-bottom: 1px solid var(--border); cursor: pointer; }
         .list-item:active { background: #f0f0f0; }
-        .list-item .author-info { font-size: 15px; color: #888; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; } /* 12px -> 15px */
-        .list-item .title { font-size: 19px; font-weight: bold; margin-bottom: 5px; } /* 16px -> 19px */
-        .list-item .content-preview { font-size: 17px; color: #666; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } /* 14px -> 17px */
+        .list-item .author-info { font-size: 15px; color: #888; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+        .list-item .title { font-size: 19px; font-weight: bold; margin-bottom: 5px; }
+        .list-item .content-preview { font-size: 17px; color: #666; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         
         /* 모달 및 헤더 텍스트 */
-        .modal-header strong { font-size: 19px; } /* 16px -> 19px */
-        header h2 { font-size: 21px !important; } /* 18px -> 21px */
-        .version-tag { font-family: monospace; font-size: 13px; color: #aaa; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; vertical-align: middle; } /* 10px -> 13px */
+        .modal-header strong { font-size: 19px; }
+        header h2 { font-size: 21px !important; }
+        .version-tag { font-family: monospace; font-size: 13px; color: #aaa; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; vertical-align: middle; }
         
         /* 입력창 및 버튼 */
-        input, textarea { width: 100%; border: 1px solid var(--border); padding: 12px; margin-bottom: 10px; border-radius: 8px; font-size: 18px; box-sizing: border-box; } /* 15px -> 18px */
-        .write-btn { position: fixed; bottom: 20px; right: 20px; background: #ff5a5f; color: white; border: none; padding: 18px 28px; border-radius: 35px; font-weight: bold; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        input, textarea { width: 100%; border: 1px solid var(--border); padding: 12px; margin-bottom: 10px; border-radius: 8px; font-size: 18px; box-sizing: border-box; }
+        .write-btn { position: fixed; bottom: 20px; right: 20px; background: #ff5a5f; color: white; border: none; padding: 18px 28px; border-radius: 35px; font-weight: bold; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 5; }
         .paging-bar { padding: 20px; text-align: center; background: white; font-size: 18px; }
         .paging-bar button { background: none; border: 1px solid var(--border); padding: 8px 18px; margin: 0 5px; border-radius: 5px; font-size: 16px; }
 
         /* 상세보기 텍스트 */
-        .detail-author { font-size: 17px; margin-bottom: 20px; } /* 14px -> 17px */
-        .detail-title { font-size: 23px; margin-bottom: 20px; } /* 20px -> 23px */
-        .detail-content { font-size: 19px; line-height: 1.8; white-space: pre-wrap; } /* 16px -> 19px */
+        .detail-author { font-size: 17px; margin-bottom: 20px; }
+        .detail-title { font-size: 23px; margin-bottom: 20px; }
+        .detail-content { font-size: 19px; line-height: 1.8; white-space: pre-wrap; }
 
-        .loading-bar { position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: var(--primary); z-index: 100; transition: width 0.3s; }
+        /* 로딩 스피너 디자인 */
+        .loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 1000;
+        }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
 <div id="app">
-    <div v-if="isLoading" class="loading-bar" style="width: 100%;"></div>
+    <div v-if="isLoading" class="loading-overlay">
+        <div class="spinner"></div>
+        <div style="font-weight: bold; color: var(--primary);">데이터 처리 중...</div>
+    </div>
 
     <header>
         <div>
             <span style="font-size: 21px; font-weight: bold;">WeValue</span>
-            <span class="version-tag">v20260225.02</span>
+            <span class="version-tag">v20260225.03</span>
             <div style="font-size: 15px; color: #666; margin-top: 2px;">
                 {{ viewMode === 'list' ? '전체글 목록' : (viewMode === 'write' ? '새 게시글 작성' : '게시글 상세보기') }}
             </div>
@@ -61,7 +81,7 @@
         
         <div v-for="post in paginatedPosts" :key="post.ID" class="list-item" @click="openDetail(post)">
             <div class="author-info">
-                <span style="color:var(--primary)">작성일</span> {{ post.Author }} · {{ formatDate(post.Date) }}
+                <span style="color:var(--primary)">??</span> {{ post.Author }} · {{ formatDate(post.Date) }}
             </div>
             <div class="title">{{ post.Title }}</div>
             <div class="content-preview">{{ post.Content }}</div>
@@ -109,7 +129,6 @@
 </div>
 
 <script>
-    // 스크립트 로직은 이전과 동일 (API_URL 등 유지)
     const API_URL = 'https://script.google.com/macros/s/AKfycby0Y2trjJGVx-K000NemLYfKlFvAQSaCJ9rMFJCVMe9tx2N-zJkGyE-T1trPxffAdJ3/exec';
     const { createApp, ref, computed, onMounted } = Vue;
 
@@ -146,40 +165,45 @@
                 p.append('password', form.value.password);
                 p.append('title', form.value.title);
                 p.append('content', form.value.content);
-                await axios.post(API_URL, p);
-                localStorage.setItem('myAnonId', form.value.author);
-                myId.value = form.value.author;
-                viewMode.value = 'list';
-                fetchPosts();
+                try {
+                    await axios.post(API_URL, p);
+                    localStorage.setItem('myAnonId', form.value.author);
+                    myId.value = form.value.author;
+                    viewMode.value = 'list';
+                    await fetchPosts();
+                } catch(e) { alert("저장 실패"); isLoading.value = false; }
             };
 
             const updatePost = async () => {
+                isLoading.value = true;
                 const p = new URLSearchParams();
                 p.append('action', 'update');
                 p.append('id', form.value.id);
                 p.append('password', form.value.password);
                 p.append('title', form.value.title);
                 p.append('content', form.value.content);
-                isLoading.value = true;
-                const res = await axios.post(API_URL, p);
-                if(res.data === 'Updated') {
-                    viewMode.value = 'list';
-                    fetchPosts();
-                } else { alert("비밀번호가 틀렸습니다."); isLoading.value = false; }
+                try {
+                    const res = await axios.post(API_URL, p);
+                    if(res.data === 'Updated') {
+                        viewMode.value = 'list';
+                        await fetchPosts();
+                    } else { alert("비밀번호 불일치"); isLoading.value = false; }
+                } catch(e) { alert("수정 실패"); isLoading.value = false; }
             };
 
             const deletePost = async () => {
-                if(!confirm("삭제하시겠습니까?")) return;
                 const pw = prompt("비밀번호 입력");
                 if(!pw) return;
+                isLoading.value = true;
                 const p = new URLSearchParams();
                 p.append('action', 'delete');
                 p.append('id', form.value.id);
                 p.append('password', pw);
-                isLoading.value = true;
-                const res = await axios.post(API_URL, p);
-                if(res.data === 'Deleted') { viewMode.value = 'list'; fetchPosts(); }
-                else { alert(res.data); isLoading.value = false; }
+                try {
+                    const res = await axios.post(API_URL, p);
+                    if(res.data === 'Deleted') { viewMode.value = 'list'; await fetchPosts(); }
+                    else { alert(res.data); isLoading.value = false; }
+                } catch(e) { alert("삭제 실패"); isLoading.value = false; }
             };
 
             const filteredPosts = computed(() => {
