@@ -95,10 +95,18 @@
 
             const filteredPosts = computed(() => {
                 return posts.value.filter(p => {
-                    const matchSearch = p.Title.includes(searchQuery.value) || 
-                                        p.Content.includes(searchQuery.value) || 
-                                        p.Author.includes(searchQuery.value);
-                    const matchMine = myPostsOnly.value ? p.Author === myId.value : true;
+                    // 데이터가 비어있거나 타입이 다를 경우를 대비해 String으로 감싸줍니다.
+                    const title = String(p.Title || "");
+                    const content = String(p.Content || "");
+                    const author = String(p.Author || "");
+                    const query = searchQuery.value.toLowerCase();
+            
+                    const matchSearch = title.toLowerCase().includes(query) || 
+                                        content.toLowerCase().includes(query) || 
+                                        author.toLowerCase().includes(query);
+                                        
+                    const matchMine = myPostsOnly.value ? author === myId.value : true;
+                    
                     return matchSearch && matchMine;
                 });
             });
