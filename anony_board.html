@@ -1,60 +1,112 @@
-const ss = SpreadsheetApp.getActiveSpreadsheet();
-const sheet = ss.getSheets()[0];
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>WeValue ( 우리가치 ) - 익명게시판</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; background: #f4f7f6; }
+        .post-form, .search-bar { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input, textarea { width: 100%; margin: 5px 0; padding: 8px; box-sizing: border-box; }
+        .post-card { background: white; padding: 15px; margin-bottom: 10px; border-left: 5px solid #42b983; }
+        .post-meta { font-size: 0.8em; color: #666; }
+        button { cursor: pointer; background: #42b983; color: white; border: none; padding: 8px 15px; border-radius: 4px; }
+        .btn-del { background: #ff5252; margin-left: 5px; }
+    </style>
+</head>
+<body>
+<div id="app">
+    <h2>익명 게시판</h2>
 
-// GET 요청: 목록 불러오기
-function doGet(e) {
-  // 방어 코드: 실행 버튼 클릭 시 에러 방지
-  if (!e || !e.parameter) {
-    return ContentService.createTextOutput("웹 앱 주소로 접속하세요.");
-  }
+    <div class="post-form">
+        <input v-model="newPost.author" placeholder="아이디">
+        <input v-model="newPost.password" type="password" placeholder="비밀번호 (수정/삭제용)">
+        <input v-model="newPost.title" placeholder="제목">
+        <textarea v-model="newPost.content" placeholder="내용"></textarea>
+        <button @click="createPost">글쓰기</button>
+    </div>
 
-  const action = e.parameter.action;
-  const data = sheet.getDataRange().getValues();
-  const headers = data.shift();
-  
-  if (action === 'read') {
-    const rows = data.map(row => {
-      let obj = {};
-      headers.forEach((h, i) => { 
-        if(h !== 'Password') obj[h] = row[i]; 
-      });
-      return obj;
-    }).reverse();
-    return ContentService.createTextOutput(JSON.stringify(rows))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
+    <div class="search-bar">
+        <input v-model="searchQuery" placeholder="검색어 입력 (제목, 본문, 아이디)">
+        <button @click="myPostsOnly = !myPostsOnly">
+            {{ myPostsOnly ? '전체 보기' : '내 글만 보기' }}
+        </button>
+    </div>
 
-// POST 요청: 글쓰기 및 삭제
-function doPost(e) {
-  // URLSearchParams 방식으로 보낼 경우 e.parameter에 데이터가 담깁니다.
-  const params = e.parameter;
-  const action = params.action;
+    <div v-for="post in filteredPosts" :key="post.ID" class="post-card">
+        <h3>{{ post.Title }}</h3>
+        <p>{{ post.Content }}</p>
+        <div class="post-meta">
+            작성자: {{ post.Author }} | 작성일: {{ new Date(post.Date).toLocaleString() }}
+            <button class="btn-del" @click="deletePost(post.ID)">삭제</button>
+        </div>
+    </div>
+</div>
 
-  if (action === 'create') {
-    sheet.appendRow([
-      Date.now(), 
-      params.title, 
-      params.content, 
-      params.author, 
-      params.password, 
-      new Date()
-    ]);
-    return ContentService.createTextOutput("Success")
-      .setMimeType(ContentService.MimeType.TEXT);
-  }
-  
-  if (action === 'delete') {
-    const data = sheet.getDataRange().getValues();
-    for (let i = 1; i < data.length; i++) {
-      // data[i][0]은 ID, data[i][4]는 Password
-      if (data[i][0] == params.id && data[i][4] == params.password) {
-        sheet.deleteRow(i + 1);
-        return ContentService.createTextOutput("Deleted")
-          .setMimeType(ContentService.MimeType.TEXT);
-      }
-    }
-    return ContentService.createTextOutput("Fail: Wrong Password")
-      .setMimeType(ContentService.MimeType.TEXT);
-  }
-}
+<script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycby0Y2trjJGVx-K000NemLYfKlFvAQSaCJ9rMFJCVMe9tx2N-zJkGyE-T1trPxffAdJ3/exec'; // 배포한 GAS URL을 여기에 입력하세요
+
+    const { createApp, ref, computed, onMounted } = Vue;
+
+    createApp({
+        setup() {
+            const posts = ref([]);
+            const searchQuery = ref('');
+            const myPostsOnly = ref(false);
+            const myId = ref(localStorage.getItem('myAnonId') || '');
+            const newPost = ref({ author: myId.value, title: '', content: '', password: '' });
+
+            const fetchPosts = async () => {
+                const res = await axios.get(`${API_URL}?action=read`);
+                posts.value = res.data;
+            };
+
+            const createPost = async () => {
+                if(!newPost.value.author || !newPost.value.password) return alert("아이디와 비번을 입력하세요");
+                
+                // JSON 대신 URLSearchParams 사용 (GAS와 호환성이 더 좋음)
+                const params = new URLSearchParams();
+                params.append('action', 'create');
+                params.append('author', newPost.value.author);
+                params.append('title', newPost.value.title);
+                params.append('content', newPost.value.content);
+                params.append('password', newPost.value.password);
+            
+                try {
+                    // axios 호출 시 Content-Type 설정
+                    await axios.post(API_URL, params, {
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                    });
+                    fetchPosts();
+                } catch (error) {
+                    console.error("에러 발생:", error);
+                }
+            };
+
+            const deletePost = async (id) => {
+                const password = prompt("비밀번호를 입력하세요");
+                if (!password) return;
+                const res = await axios.post(API_URL, { action: 'delete', id, password });
+                alert(res.data);
+                fetchPosts();
+            };
+
+            const filteredPosts = computed(() => {
+                return posts.value.filter(p => {
+                    const matchSearch = p.Title.includes(searchQuery.value) || 
+                                        p.Content.includes(searchQuery.value) || 
+                                        p.Author.includes(searchQuery.value);
+                    const matchMine = myPostsOnly.value ? p.Author === myId.value : true;
+                    return matchSearch && matchMine;
+                });
+            });
+
+            onMounted(fetchPosts);
+
+            return { posts, newPost, searchQuery, myPostsOnly, createPost, deletePost, filteredPosts };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
