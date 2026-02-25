@@ -66,7 +66,7 @@
     <header>
         <div>
             <span style="font-size: 21px; font-weight: bold;">WeValue</span>
-            <span class="version-tag">v20260225.03</span>
+            <span class="version-tag">v20260225.04</span>
             <div style="font-size: 15px; color: #666; margin-top: 2px;">
                 {{ viewMode === 'list' ? '전체글 목록' : (viewMode === 'write' ? '새 게시글 작성' : '게시글 상세보기') }}
             </div>
@@ -137,19 +137,38 @@
             const posts = ref([]);
             const viewMode = ref('list');
             const isLoading = ref(false);
-            const searchQuery = ref('');
+            const searchQuery = ref('');// 주요 변경 및 추가된 로직 부분
             const currentPage = ref(1);
+            const totalPages = ref(1);
             const myId = ref(localStorage.getItem('myAnonId') || '');
             const form = ref({ id: '', author: myId.value, title: '', content: '', password: '', date: '' });
-
+            
             const fetchPosts = async () => {
                 isLoading.value = true;
                 try {
-                    const res = await axios.get(`${API_URL}?action=read`);
-                    posts.value = res.data;
-                } catch(e) { console.error(e); }
-                finally { isLoading.value = false; }
+                    // 페이지 번호를 파라미터로 전달
+                    const res = await axios.get(`${API_URL}?action=read&page=${currentPage.value}`);
+                    
+                    // 서버에서 받아온 posts와 totalPages 반영
+                    posts.value = res.data.posts;
+                    totalPages.value = res.data.totalPages;
+                    
+                    // 검색어가 있을 경우 서버 페이징과 충돌할 수 있으므로 안내
+                    if(searchQuery.value) {
+                        console.log("서버 페이징 모드에서는 현재 페이지 내에서만 검색됩니다.");
+                    }
+                } catch(e) { 
+                    console.error(e); 
+                } finally { 
+                    isLoading.value = false; 
+                    window.scrollTo(0,0); // 페이지 이동 시 상단으로 스크롤
+                }
             };
+            
+            // 페이지 변경 감시 (페이지 번호가 바뀌면 자동으로 데이터를 새로 불러옴)
+            watch(currentPage, () => {
+                fetchPosts();
+            });
 
             const openDetail = (post) => {
                 form.value = { id: post.ID, author: post.Author, title: post.Title, content: post.Content, date: post.Date, password: '' };
