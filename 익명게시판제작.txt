@@ -1,1 +1,12 @@
 익명게시판 제작
+
+
+
+GAS 배포
+배포가 업데이트되었습니다.
+버전 1(2026. 2. 25., PM 8:21)
+배포 ID
+AKfycby0Y2trjJGVx-K000NemLYfKlFvAQSaCJ9rMFJCVMe9tx2N-zJkGyE-T1trPxffAdJ3
+웹 앱
+URL
+https://script.google.com/macros/s/AKfycby0Y2trjJGVx-K000NemLYfKlFvAQSaCJ9rMFJCVMe9tx2N-zJkGyE-T1trPxffAdJ3/exec

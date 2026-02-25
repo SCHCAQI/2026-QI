@@ -45,7 +45,7 @@
 </div>
 
 <script>
-    const API_URL = 'YOUR_GAS_WEB_APP_URL'; // 배포한 GAS URL을 여기에 입력하세요
+    const API_URL = 'https://script.google.com/macros/s/AKfycby0Y2trjJGVx-K000NemLYfKlFvAQSaCJ9rMFJCVMe9tx2N-zJkGyE-T1trPxffAdJ3/exec'; // 배포한 GAS URL을 여기에 입력하세요
 
     const { createApp, ref, computed, onMounted } = Vue;
 
@@ -64,10 +64,24 @@
 
             const createPost = async () => {
                 if(!newPost.value.author || !newPost.value.password) return alert("아이디와 비번을 입력하세요");
-                localStorage.setItem('myAnonId', newPost.value.author); // 아이디 기억
-                await axios.post(API_URL, { action: 'create', ...newPost.value });
-                newPost.value = { author: newPost.value.author, title: '', content: '', password: '' };
-                fetchPosts();
+                
+                // JSON 대신 URLSearchParams 사용 (GAS와 호환성이 더 좋음)
+                const params = new URLSearchParams();
+                params.append('action', 'create');
+                params.append('author', newPost.value.author);
+                params.append('title', newPost.value.title);
+                params.append('content', newPost.value.content);
+                params.append('password', newPost.value.password);
+            
+                try {
+                    // axios 호출 시 Content-Type 설정
+                    await axios.post(API_URL, params, {
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                    });
+                    fetchPosts();
+                } catch (error) {
+                    console.error("에러 발생:", error);
+                }
             };
 
             const deletePost = async (id) => {
