@@ -10,8 +10,8 @@
         :root { --primary: #37acc9; --bg: #f8f9fa; --text: #222; --border: #eee; --accent: #ff5a5f; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 80px; font-size: 17px; } 
         header { background: white; padding: 15px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
-        .header-logo { width: 28px; height: 28px; vertical-align: middle; margin-right: 8px; object-fit: contain; }
-        .brand-name { font-size: 21px; font-weight: bold; vertical-align: middle; cursor: pointer; }
+        .header-logo { width: 50px; height: 28px; vertical-align: middle; margin-right: 8px; object-fit: contain; }
+        .brand-name { font-size: 30px; font-weight: bold; vertical-align: middle; cursor: pointer; }
         .list-item { background: white; padding: 20px; border-bottom: 1px solid var(--border); cursor: pointer; }
         .list-item:active { background: #f0f0f0; }
         .list-item .author-info { font-size: 15px; color: #888; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
@@ -41,7 +41,7 @@
             <div style="display: flex; align-items: center;">
                 <img src="wevalue.png" alt="Logo" class="header-logo">
                 <span class="brand-name">WeValue</span>
-                <span class="version-tag" style="margin-left: 8px;">v20260225.09</span>
+                <span class="version-tag" style="margin-left: 8px;">v20260225.10</span>
             </div>
             <div style="font-size: 14px; color: #666; margin-top: 2px; padding-left: 36px;">
                 {{ viewMode === 'list' ? '전체글 목록' : (viewMode === 'write' ? '새 글 작성' : (viewMode === 'edit' ? '글 수정' : '상세보기')) }}
