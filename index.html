@@ -47,7 +47,7 @@
         .header-profile { padding: 30px 20px 20px; display: flex; align-items: center; justify-content: space-between; }
         .header-logo { 
             width: 80px; height: 80px; vertical-align: middle; margin-right: 8px; object-fit: contain;
-            mix-blend-mode: multiply; /* 이미지의 흰 배경을 투명하게 처리 */
+            mix-blend-mode: multiply;
         }
         .profile-left { display: flex; align-items: center; gap: 15px; }
         .profile-thumb { width: 56px; height: 56px; background: var(--thumb-bg); border-radius: 22px; display: flex; align-items: center; justify-content: center; }
@@ -73,52 +73,7 @@
         .sbar-line { margin-bottom: 12px; font-size: 15px; line-height: 1.5; display: flex; }
         .sbar-label { width: 100px; flex-shrink: 0; font-weight: 700; color: var(--text-main); }
         .sbar-txt { color: var(--text-main); opacity: 0.9; flex: 1; }
-        .sbar-txt-important { color: var(--text-main); opacity: 0.9; flex: 1; font-weight:bold; color:red;}
-
-        /* 문구 가이드 스타일 */
-        .template-guide { padding: 0 10px 15px 10px; }
-        .guide-card { 
-            background: var(--item-bg); 
-            border-radius: 12px; 
-            padding: 16px; 
-            border: 1px solid var(--border-color);
-            font-size: 18px;
-            line-height: 1.6;
-        }
-        .guide-title { font-weight: 700; color: var(--accent-blue); margin: 15px 0 8px 0; display: block; }
-        .guide-title:first-child { margin-top: 0; }
-        .guide-sub { font-weight: 700; margin: 20px 0 10px 0; display: block; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; }
         
-        /* 복사 영역 레이아웃 */
-        .code-container { position: relative; margin: 8px 0; display: flex; align-items: center; gap: 8px; }
-        .code-block { 
-            background: var(--code-bg); 
-            padding: 12px; 
-            border-radius: 8px; 
-            font-family: 'Courier New', monospace; 
-            display: block;
-            white-space: pre-wrap;
-            word-break: break-all;
-            flex: 1;
-            font-size: 15px;
-        }
-        .copy-btn {
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            width: 38px; height: 38px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
-            color: var(--text-sub);
-            transition: all 0.2s;
-        }
-        .copy-btn:active { transform: scale(0.9); }
-        .copy-btn.copied { color: var(--accent-green); border-color: var(--accent-green); }
-
-        .highlight { color: blac; font-weight: 600; }
-        .desc { color: black; font-size: 15px; margin-bottom: 4px; }
-
         a { color: var(--accent-blue); text-decoration: none; font-weight: 600; }
         
         #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 14px; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 100; }
@@ -145,7 +100,7 @@
     <div class="list-wrap">
         <details>
             <summary>
-                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-blue)">rule</span></div>
+                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-blue)">forum</span></div>
                 <div class="menu-text">소통의 광장</div>
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
@@ -158,46 +113,45 @@
 
         <details>
             <summary>
-                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-blue)">assignment</span></div>
+                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-orange)">menu_book</span></div>
                 <div class="menu-text">업무의 기준</div>
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
-            
             <div class="details-content">
-                <div class="sbar-line"><span class="sbar-txt">협업 규칙(10/4/12):긴급도별 응답 시간 안내 가이드</span></div>
-                <div class="sbar-line"><span class="sbar-txt">SBAR 템플릿:상황별(통지, 처방 요청, 동의서 등) 표준 보고 양식 파일 다운로드</span></div>
-                <div class="sbar-line"><span class="sbar-txt">사유코드 매뉴얼:[근무종료/익일인계] 등 표준 사유코드 사용법</span></div>
+                <div class="sbar-line"><span class="sbar-txt">협업 규칙(10/4/12): 긴급도별 응답 시간 안내 가이드</span></div>
+                <div class="sbar-line"><span class="sbar-txt">SBAR 템플릿: 상황별 표준 보고 양식 파일 다운로드</span></div>
+                <div class="sbar-line"><span class="sbar-txt">사유코드 매뉴얼: [근무종료/익일인계] 등 표준 사유코드 사용법</span></div>
             </div>
         </details>
 
         <details>
             <summary>
-                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-green)">badge</span></div>
+                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-green)">school</span></div>
                 <div class="menu-text">배움의 창구(Education)</div>
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
             <div class="details-content">
-                <div class="sbar-line"><span class="sbar-txt">온데마드 교육 요청:병동 간호사가 처치/기기 교육을 신청하는 폼</span></div>
-                <div class="sbar-line"><span class="sbar-txt">3분 Vlog 게시판:교육 위원들이 제작한 핵심 실무 교육 영상 모음</span></div>
-                <div class="sbar-line"><span class="sbar-txt">최신 지침서:진료과별(CS, MC, URO, ENT, MH) 최신 업무 매뉴얼 PDF</span></div>
+                <div class="sbar-line"><span class="sbar-txt">온데마드 교육 요청: 처치/기기 교육 신청 폼</span></div>
+                <div class="sbar-line"><span class="sbar-txt">3분 Vlog 게시판: 핵심 실무 교육 영상 모음</span></div>
+                <div class="sbar-line"><span class="sbar-txt">최신 지침서: 진료과별 최신 업무 매뉴얼 PDF</span></div>
             </div>
         </details>
         
-
         <details>
             <summary>
-                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-green)">badge</span></div>
+                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-blue)">leaderboard</span></div>
                 <div class="menu-text">투명한 지표(Dashboard)</div>
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
             <div class="details-content">
-                <div class="sbar-line"><span class="sbar-txt">실시간 KPI 현황:루프 준수율, 만족도 점수 등을 시각화하여 공유 (월 1회 업데이트).</span></div>
-                <div class="sbar-line"><span class="sbar-txt">간담회 소식지:4, 7, 9월 진행된 간담회 결과 보고서 및 회의록 게시.</span></div>
+                <div class="sbar-line"><span class="sbar-txt">실시간 KPI 현황: 루프 준수율, 만족도 점수 시각화 공유</span></div>
+                <div class="sbar-line"><span class="sbar-txt">간담회 소식지: 간담회 결과 보고서 및 회의록 게시</span></div>
             </div>
         </details>
+
         <details>
             <summary>
-                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-purple)">rate_review</span></div>
+                <div class="menu-icon"><span class="material-icons" style="color:var(--accent-purple)">quiz</span></div>
                 <div class="menu-text">설문</div>
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
@@ -218,7 +172,6 @@
     const themeIcon = document.getElementById('theme-icon');
     const toast = document.getElementById('toast');
 
-    // 초기 테마 설정
     if (localStorage.getItem("sbar_theme") === "dark") {
         body.classList.add("dark-mode");
         themeIcon.innerText = 'light_mode';
@@ -228,23 +181,6 @@
         const isDark = body.classList.toggle('dark-mode');
         themeIcon.innerText = isDark ? 'light_mode' : 'dark_mode';
         localStorage.setItem("sbar_theme", isDark ? "dark" : "light");
-    }
-
-    function copyText(id, btn) {
-        const text = document.getElementById(id).innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            const icon = btn.querySelector('.material-icons');
-            icon.innerText = 'done';
-            btn.classList.add('copied');
-            
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                icon.innerText = 'content_copy';
-                btn.classList.remove('copied');
-                toast.classList.remove('show');
-            }, 1500);
-        });
     }
 </script>
 
