@@ -5,92 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeValue - 우리가치 익명게시판</title>
     <link rel="icon" href="wevalue_w.png" type="image/png">
-    <link rel="shortcut icon" href="wevalue_w.png">    
-    <link rel="apple-touch-icon" href="wevalue_w.png">    
-    <link rel="icon" sizes="192x192" href="wevalue_w.png">
-    <link rel="icon" sizes="512x512" href="wevalue_w.png">    
-    <meta name="msapplication-TileImage" content="wevalue_w.png">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
+        /* 기본 라이트모드 변수 */
         :root { 
             --primary: #8a2be2; 
             --bg: #f8f9fa; 
+            --header-bg: #ffffff;
+            --card-bg: #ffffff;
             --text: #222; 
+            --text-light: #666;
             --border: #eee; 
             --accent: #8a2be2; 
+            --input-bg: #ffffff;
+        }
+
+        /* 다크모드 변수 정의 */
+        [data-theme='dark'] {
+            --bg: #121212;
+            --header-bg: #1e1e1e;
+            --card-bg: #1e1e1e;
+            --text: #e0e0e0;
+            --text-light: #aaa;
+            --border: #333;
+            --input-bg: #2a2a2a;
         }
         
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 80px; font-size: 17px; } 
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 80px; font-size: 17px; transition: background 0.3s, color 0.3s; } 
         
-        header { background: white; padding: 15px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
+        header { background: var(--header-bg); padding: 15px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
         
         .header-logo { 
-            width: 56px; height: 56px; vertical-align: middle; margin-right: 8px; object-fit: contain;
-            mix-blend-mode: multiply;
+            width: 50px; height: 50px; vertical-align: middle; margin-right: 8px; object-fit: contain;
+            /* 다크모드에서 로고가 너무 밝으면 대비 조절 */
+            filter: drop-shadow(0 0 2px rgba(0,0,0,0.1));
         }
         
-        .brand-name { font-size: 30px; font-weight: bold; vertical-align: middle; cursor: pointer; color: var(--primary); }
+        .brand-name { font-size: 24px; font-weight: bold; vertical-align: middle; cursor: pointer; color: var(--primary); }
         
-        .list-item { background: white; padding: 20px; border-bottom: 1px solid var(--border); cursor: pointer; }
-        .list-item:active { background: #f0f0f0; }
-        .list-item .author-info { font-size: 15px; color: #888; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
-        .list-item .title { font-size: 19px; font-weight: bold; margin-bottom: 5px; }
-        .list-item .content-preview { font-size: 17px; color: #666; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .list-item { background: var(--card-bg); padding: 20px; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .list-item:active { background: var(--border); }
+        .list-item .author-info { font-size: 15px; color: var(--text-light); margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+        .list-item .title { font-size: 19px; font-weight: bold; margin-bottom: 5px; color: var(--text); }
+        .list-item .content-preview { font-size: 17px; color: var(--text-light); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         
-        .version-tag { font-family: monospace; font-size: 13px; color: #aaa; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; vertical-align: middle; }
+        .version-tag { font-family: monospace; font-size: 12px; color: var(--text-light); background: var(--bg); padding: 2px 6px; border-radius: 4px; }
         
         .write-fab { 
-            position: fixed; bottom: 30px; right: 25px; width: 65px; height: 65px; 
+            position: fixed; bottom: 30px; right: 25px; width: 60px; height: 60px; 
             background: var(--accent); color: white; border: none; border-radius: 50%; 
-            font-size: 35px; font-weight: 300; display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 6px 16px rgba(138, 43, 226, 0.3); 
+            font-size: 30px; display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 4px 12px rgba(138, 43, 226, 0.4); 
             cursor: pointer; z-index: 100; transition: transform 0.2s; 
         }
         .write-fab:active { transform: scale(0.9); }
         
-        .paging-bar { padding: 20px; text-align: center; background: white; font-size: 18px; border-top: 1px solid var(--border); }
-        .paging-bar button { background: none; border: 1px solid var(--border); padding: 8px 18px; margin: 0 5px; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        .paging-bar { padding: 20px; text-align: center; background: var(--card-bg); font-size: 18px; border-top: 1px solid var(--border); color: var(--text); }
+        .paging-bar button { background: var(--bg); border: 1px solid var(--border); padding: 8px 18px; margin: 0 5px; border-radius: 5px; font-size: 16px; cursor: pointer; color: var(--text); }
         .paging-bar button:disabled { opacity: 0.3; cursor: default; }
         
-        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.7); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; }
-        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(2px); }
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
         
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        input, textarea { width: 100%; border: 1px solid var(--border); padding: 12px; margin-bottom: 10px; border-radius: 8px; font-size: 18px; box-sizing: border-box; outline: none; }
+        
+        input, textarea { width: 100%; border: 1px solid var(--border); padding: 12px; margin-bottom: 10px; border-radius: 8px; font-size: 17px; box-sizing: border-box; outline: none; background: var(--input-bg); color: var(--text); }
         input:focus, textarea:focus { border-color: var(--primary); }
+
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--card-bg); z-index: 150; overflow-y: auto; }
+        .theme-toggle { background: none; border: none; font-size: 20px; cursor: pointer; padding: 5px; }
     </style>
 </head>
 <body>
 <div id="app">
     <div v-if="isLoading" class="loading-overlay">
         <div class="spinner"></div>
-        <div style="font-weight: bold; color: var(--primary);">처리 중...</div>
+        <div style="font-weight: bold; color: white;">처리 중...</div>
     </div>
     
     <header>
-        <div @click="goHome" style="cursor:pointer;">
+        <div @click="goHome" style="cursor:pointer; flex: 1;">
             <div style="display: flex; align-items: center;">
                 <img src="wevalue_w.png" alt="Logo" class="header-logo">
-                <span class="brand-name">우리가치톡(WeValue)</span>
+                <span class="brand-name">우리가치톡</span>
             </div>
-            <div style="font-size: 14px; color: #666; margin-top: 2px; padding-left: 64px;">
-                <span class="version-tag" style="margin-left: 8px;">v20260225.11</span>
-            </div>
-            <div style="font-size: 14px; color: #666; margin-top: 2px; padding-left: 64px;">
-                {{ viewMode === 'list' ? '전체글 목록' : (viewMode === 'write' ? '새 글 작성' : (viewMode === 'edit' ? '글 수정' : '상세보기')) }}
+            <div style="font-size: 12px; color: var(--text-light); margin-top: 2px; padding-left: 58px;">
+                <span class="version-tag">v20260225.12</span>
+                <span style="margin-left: 8px;">{{ viewMode === 'list' ? '전체글' : '상세보기' }}</span>
             </div>
         </div>
-        <button v-if="viewMode !== 'list'" @click="handleBack" style="background:none; border:none; color: var(--primary); font-weight: bold; font-size: 17px; cursor:pointer;">뒤로</button>
+        
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button @click="toggleTheme" class="theme-toggle" :title="isDarkMode ? '라이트모드로' : '다크모드로'">
+                {{ isDarkMode ? '??' : '??' }}
+            </button>
+            <button v-if="viewMode !== 'list'" @click="handleBack" style="background:none; border:none; color: var(--primary); font-weight: bold; font-size: 17px; cursor:pointer;">뒤로</button>
+        </div>
     </header>
     
     <div v-if="viewMode === 'list'">
-        <div class="search-bar" style="padding:10px; background:white;">
-            <input v-model="searchQuery" placeholder="현재 페이지에서 검색..." style="margin:0;">
+        <div style="padding:10px; background:var(--card-bg);">
+            <input v-model="searchQuery" placeholder="검색어를 입력하세요..." style="margin:0;">
         </div>
         <div v-for="post in filteredPosts" :key="post.ID" class="list-item" @click="openDetail(post)">
             <div class="author-info">
-                <span style="color:var(--primary)">??</span> {{ post.Author }} · {{ formatDate(post.Date) }}
+                <span style="color:var(--primary)">#</span> {{ post.Author }} · {{ formatDate(post.Date) }}
             </div>
             <div class="title">{{ post.Title }}</div>
             <div class="content-preview">{{ post.Content }}</div>
@@ -103,13 +123,13 @@
         <button class="write-fab" @click="openWrite">+</button>
     </div>
 
-    <div v-if="viewMode === 'write' || viewMode === 'edit'" class="modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 150; overflow-y: auto;">
-        <div class="modal-header" style="padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white;">
-            <button @click="handleBack" style="font-size: 17px; background:none; border:none; color: #666; cursor:pointer;">취소</button>
-            <strong>{{ viewMode === 'write' ? '새 글 쓰기' : '글 수정' }}</strong>
+    <div v-if="viewMode === 'write' || viewMode === 'edit'" class="modal">
+        <div style="padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--card-bg);">
+            <button @click="handleBack" style="font-size: 17px; background:none; border:none; color: var(--text-light); cursor:pointer;">취소</button>
+            <strong style="color: var(--text)">{{ viewMode === 'write' ? '새 글 쓰기' : '글 수정' }}</strong>
             <button @click="viewMode === 'write' ? savePost() : updatePost()" style="color:var(--primary); font-weight:bold; font-size: 17px; background:none; border:none; cursor:pointer;">완료</button>
         </div>
-        <div class="modal-body" style="padding: 20px;">
+        <div style="padding: 20px;">
             <input v-model="form.author" placeholder="닉네임" :disabled="viewMode === 'edit'">
             <input v-model="form.password" type="password" placeholder="비밀번호 (필수)">
             <input v-model="form.title" placeholder="제목">
@@ -117,24 +137,25 @@
         </div>
     </div>
 
-    <div v-if="viewMode === 'detail'" class="modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 150; overflow-y: auto;">
-        <div class="modal-header" style="padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white;">
-            <button @click="viewMode = 'list'" style="font-size: 17px; background:none; border:none; color: var(--primary); cursor:pointer;">목록으로 돌아가기</button>
+    <div v-if="viewMode === 'detail'" class="modal">
+        <div style="padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--card-bg);">
+            <button @click="viewMode = 'list'" style="font-size: 17px; background:none; border:none; color: var(--primary); cursor:pointer;">목록</button>
             <div v-if="form.author === myId">
-                <button @click="viewMode = 'edit'" style="font-size: 17px; background:none; border:none; margin-right:12px; color: #666; cursor:pointer;">수정</button>
+                <button @click="viewMode = 'edit'" style="font-size: 17px; background:none; border:none; margin-right:12px; color: var(--text-light); cursor:pointer;">수정</button>
                 <button @click="deletePost" style="color:#ff5a5f; font-size: 17px; background:none; border:none; cursor:pointer;">삭제</button>
             </div>
         </div>
-        <div class="modal-body" style="padding: 25px;">
-            <div style="font-size: 17px; margin-bottom: 15px; color: #888;"><b>{{ form.author }}</b> · {{ formatDate(form.date) }}</div>
-            <h2 style="font-size: 26px; margin-bottom: 25px; line-height: 1.3;">{{ form.title }}</h2>
-            <p style="font-size: 19px; line-height: 1.8; white-space: pre-wrap;">{{ form.content }}</p>
+        <div style="padding: 25px;">
+            <div style="font-size: 16px; margin-bottom: 15px; color: var(--text-light);"><b>{{ form.author }}</b> · {{ formatDate(form.date) }}</div>
+            <h2 style="font-size: 24px; margin-bottom: 25px; line-height: 1.3; color: var(--text)">{{ form.title }}</h2>
+            <p style="font-size: 18px; line-height: 1.8; white-space: pre-wrap; color: var(--text)">{{ form.content }}</p>
         </div>
     </div>
 </div>
 
 <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycby0Y2trjJGVx-K000NemLYfKlFvAQSaCJ9rMFJCVMe9tx2N-zJkGyE-T1trPxffAdJ3/exec';
+    const CACHE_KEY = 'wevalue_posts_cache';
     const { createApp, ref, computed, onMounted } = Vue;
 
     createApp({
@@ -145,116 +166,79 @@
             const searchQuery = ref('');
             const currentPage = ref(1);
             const totalPages = ref(1);
+            const isDarkMode = ref(false);
             const myId = ref(localStorage.getItem('myAnonId') || '');
             const form = ref({ id: '', author: myId.value, title: '', content: '', password: '', date: '' });
-        
-            // ?? 이 부분이 누락되어 조회가 안 되었던 것입니다!
-            const CACHE_KEY = 'wevalue_posts_cache';
-            // 새로고침 방지 핸들러
-            const preventRefresh = (e) => {
-                if (viewMode.value === 'write' || viewMode.value === 'edit') {
-                    e.preventDefault();
-                    e.returnValue = ''; // 브라우저 표준 경고창 표시
-                }
-            };
 
-            const updateHistory = () => {
-                const state = { viewMode: viewMode.value, page: currentPage.value };
-                // 새로운 이력을 쌓는 대신, 현재의 히스토리 엔트리를 교체하여 중복 방지
-                history.replaceState(state, ''); 
+            // 테마 토글 함수
+            const toggleTheme = () => {
+                isDarkMode.value = !isDarkMode.value;
+                const theme = isDarkMode.value ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('wevalue_theme', theme);
             };
 
             const fetchPosts = async (useCache = true) => {
-                    // 1. 캐시 데이터 우선 로드 (사용자가 기다리지 않게 함)
-                    if (useCache && currentPage.value === 1) {
-                        const cached = localStorage.getItem(CACHE_KEY);
-                        if (cached) {
-                            posts.value = JSON.parse(cached);
-                            // 캐시가 있더라도 백그라운드에서 최신 데이터를 가져오기 위해 isLoading은 유지
-                        }
-                    }
-            
-                    isLoading.value = true;
-                    try {
-                        const res = await axios.get(`${API_URL}?action=read&page=${currentPage.value}`);
-                        const newPosts = res.data.posts || [];
-                        posts.value = newPosts;
-                        totalPages.value = res.data.totalPages || 1;
-            
-                        // 2. 받아온 데이터를 로컬에 저장 (다음 접속 시 활용)
-                        if (currentPage.value === 1) {
-                            localStorage.setItem(CACHE_KEY, JSON.stringify(newPosts));
-                        }
-                    } catch(e) { 
-                        console.error("데이터 로드 실패:", e); 
-                    } finally { 
-                        isLoading.value = false; 
-                        window.scrollTo(0,0); 
-                    }
-                };
+                if (useCache && currentPage.value === 1) {
+                    const cached = localStorage.getItem(CACHE_KEY);
+                    if (cached) posts.value = JSON.parse(cached);
+                }
+                isLoading.value = true;
+                try {
+                    const res = await axios.get(`${API_URL}?action=read&page=${currentPage.value}`);
+                    posts.value = res.data.posts || [];
+                    totalPages.value = res.data.totalPages || 1;
+                    if (currentPage.value === 1) localStorage.setItem(CACHE_KEY, JSON.stringify(posts.value));
+                } catch(e) { console.error(e); } finally { isLoading.value = false; window.scrollTo(0,0); }
+            };
 
             onMounted(() => {
-                // 브라우저 새로고침/닫기 이벤트 리스너 등록
-                window.addEventListener('beforeunload', preventRefresh);
+                // 저장된 테마 불러오기 또는 시스템 설정 확인
+                const savedTheme = localStorage.getItem('wevalue_theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 
+                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    isDarkMode.value = true;
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+
                 history.replaceState({ viewMode: 'list', page: 1 }, '');
                 fetchPosts();
+                
                 window.onpopstate = (event) => {
                     if (event.state) {
-                        // 뒤로가기 시에도 작성 중이면 확인
-                        if ((viewMode.value === 'write' || viewMode.value === 'edit') && 
-                            !confirm("작성 중인 내용이 사라질 수 있습니다. 이동하시겠습니까?")) {
-                            history.pushState(event.state, ''); // 현재 상태 유지
-                            return;
-                        }
                         viewMode.value = event.state.viewMode;
-                        if (currentPage.value !== event.state.page) {
-                            currentPage.value = event.state.page;
-                            fetchPosts();
-                        }
+                        currentPage.value = event.state.page;
                     }
                 };
             });
 
             const changePage = (p) => {
                 currentPage.value = p;
-                updateHistory();
+                history.replaceState({ viewMode: 'list', page: p }, '');
                 fetchPosts();
             };
 
             const openWrite = () => {
                 form.value = { id: '', author: myId.value, title: '', content: '', password: '', date: '' };
                 viewMode.value = 'write';
-                updateHistory();
             };
 
             const openDetail = (post) => {
                 form.value = { id: post.ID, author: post.Author, title: post.Title, content: post.Content, date: post.Date, password: '' };
                 viewMode.value = 'detail';
-                updateHistory();
             };
 
             const goHome = () => {
-                if(viewMode.value === 'list' && currentPage.value === 1) return;
-                // 이동 전 확인
-                if ((viewMode.value === 'write' || viewMode.value === 'edit') && 
-                    !confirm("작성 중인 내용이 사라질 수 있습니다. 홈으로 이동하시겠습니까?")) return;
-                
                 viewMode.value = 'list';
                 currentPage.value = 1;
-                updateHistory();
                 fetchPosts();
             };
 
-            const handleBack = () => {
-                if ((viewMode.value === 'write' || viewMode.value === 'edit') && 
-                    !confirm("작성 중인 내용이 사라질 수 있습니다. 나가시겠습니까?")) return;
-                history.back();
-            };
+            const handleBack = () => history.back();
 
-            // 글 저장 후에는 캐시를 무시하고 새로고침해야 함
             const savePost = async () => {
-                if(!form.value.password || !form.value.title) return alert("비밀번호와 제목은 필수입니다.");
+                if(!form.value.password || !form.value.title) return alert("필수 항목 입력!");
                 isLoading.value = true;
                 const p = new URLSearchParams();
                 p.append('action', 'create');
@@ -266,15 +250,9 @@
                     await axios.post(API_URL, p);
                     localStorage.setItem('myAnonId', form.value.author);
                     myId.value = form.value.author;
-                    
                     viewMode.value = 'list';
-                    currentPage.value = 1;
-                    // 저장 후에는 캐시 없이(false) 최신 목록을 강제로 가져옴
-                    await fetchPosts(false); 
-                } catch(e) { 
-                    alert("저장 실패"); 
-                    isLoading.value = false; 
-                }
+                    fetchPosts(false);
+                } catch(e) { alert("실패"); isLoading.value = false; }
             };
 
             const updatePost = async () => {
@@ -287,15 +265,13 @@
                 p.append('content', form.value.content);
                 try {
                     const res = await axios.post(API_URL, p);
-                    if(res.data === 'Updated') { 
-                        viewMode.value = 'list'; 
-                        await fetchPosts(); 
-                    } else { alert("비밀번호가 일치하지 않습니다."); isLoading.value = false; }
-                } catch(e) { alert("수정 실패"); isLoading.value = false; }
+                    if(res.data === 'Updated') { viewMode.value = 'list'; fetchPosts(); }
+                    else { alert("비밀번호 불일치"); isLoading.value = false; }
+                } catch(e) { alert("실패"); isLoading.value = false; }
             };
 
             const deletePost = async () => {
-                const pw = prompt("삭제를 위해 비밀번호를 입력하세요.");
+                const pw = prompt("비밀번호 입력");
                 if(!pw) return;
                 isLoading.value = true;
                 const p = new URLSearchParams();
@@ -304,11 +280,9 @@
                 p.append('password', pw);
                 try {
                     const res = await axios.post(API_URL, p);
-                    if(res.data === 'Deleted') { 
-                        viewMode.value = 'list'; 
-                        await fetchPosts(); 
-                    } else { alert("비밀번호 불일치 또는 이미 삭제된 글입니다."); isLoading.value = false; }
-                } catch(e) { alert("삭제 실패"); isLoading.value = false; }
+                    if(res.data === 'Deleted') { viewMode.value = 'list'; fetchPosts(); }
+                    else { alert("실패"); isLoading.value = false; }
+                } catch(e) { alert("실패"); isLoading.value = false; }
             };
 
             const formatDate = (dateStr) => {
@@ -322,7 +296,11 @@
                 return posts.value.filter(p => String(p.Title).toLowerCase().includes(q) || String(p.Content).toLowerCase().includes(q));
             });
 
-            return { posts, viewMode, isLoading, searchQuery, form, myId, currentPage, totalPages, filteredPosts, openDetail, openWrite, changePage, handleBack, goHome, savePost, updatePost, deletePost, formatDate };
+            return { 
+                posts, viewMode, isLoading, searchQuery, form, myId, currentPage, totalPages, 
+                filteredPosts, isDarkMode, toggleTheme, openDetail, openWrite, changePage, 
+                handleBack, goHome, savePost, updatePost, deletePost, formatDate 
+            };
         }
     }).mount('#app');
 </script>
