@@ -8,46 +8,33 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         :root { --primary: #37acc9; --bg: #f8f9fa; --text: #222; --border: #eee; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 80px; }
-        header { 
-                background: white; 
-                padding: 12px 15px; 
-                border-bottom: 1px solid var(--border); 
-                position: sticky; 
-                top: 0; 
-                z-index: 10; 
-                display: flex; 
-                justify-content: space-between; 
-                align-items: center; 
-            }
-            .version-tag {
-                font-family: monospace;
-                font-size: 10px;
-                color: #aaa;
-                background: #f0f0f0;
-                padding: 2px 6px;
-                border-radius: 4px;
-                margin-left: 5px;
-                vertical-align: middle;
-            }
+        /* 전체 기본 폰트 사이즈 상향 (기존 14px~16px -> +3px) */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 80px; font-size: 17px; } 
+        
+        header { background: white; padding: 15px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
         
         /* 목록 스타일 */
         .list-item { background: white; padding: 20px; border-bottom: 1px solid var(--border); cursor: pointer; }
         .list-item:active { background: #f0f0f0; }
-        .list-item .author-info { font-size: 12px; color: #888; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
-        .list-item .title { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
-        .list-item .content-preview { font-size: 14px; color: #666; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .list-item .author-info { font-size: 15px; color: #888; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; } /* 12px -> 15px */
+        .list-item .title { font-size: 19px; font-weight: bold; margin-bottom: 5px; } /* 16px -> 19px */
+        .list-item .content-preview { font-size: 17px; color: #666; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } /* 14px -> 17px */
         
-        /* 상세/작성 팝업 */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 20; overflow-y: auto; }
-        .modal-header { padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
-        .modal-body { padding: 20px; }
+        /* 모달 및 헤더 텍스트 */
+        .modal-header strong { font-size: 19px; } /* 16px -> 19px */
+        header h2 { font-size: 21px !important; } /* 18px -> 21px */
+        .version-tag { font-family: monospace; font-size: 13px; color: #aaa; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; vertical-align: middle; } /* 10px -> 13px */
         
-        /* 버튼/입력창 */
-        input, textarea { width: 100%; border: 1px solid var(--border); padding: 12px; margin-bottom: 10px; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
-        .write-btn { position: fixed; bottom: 20px; right: 20px; background: #ff5a5f; color: white; border: none; padding: 15px 25px; border-radius: 30px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .paging-bar { padding: 20px; text-align: center; background: white; }
-        .paging-bar button { background: none; border: 1px solid var(--border); padding: 5px 15px; margin: 0 5px; border-radius: 5px; }
+        /* 입력창 및 버튼 */
+        input, textarea { width: 100%; border: 1px solid var(--border); padding: 12px; margin-bottom: 10px; border-radius: 8px; font-size: 18px; box-sizing: border-box; } /* 15px -> 18px */
+        .write-btn { position: fixed; bottom: 20px; right: 20px; background: #ff5a5f; color: white; border: none; padding: 18px 28px; border-radius: 35px; font-weight: bold; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .paging-bar { padding: 20px; text-align: center; background: white; font-size: 18px; }
+        .paging-bar button { background: none; border: 1px solid var(--border); padding: 8px 18px; margin: 0 5px; border-radius: 5px; font-size: 16px; }
+
+        /* 상세보기 텍스트 */
+        .detail-author { font-size: 17px; margin-bottom: 20px; } /* 14px -> 17px */
+        .detail-title { font-size: 23px; margin-bottom: 20px; } /* 20px -> 23px */
+        .detail-content { font-size: 19px; line-height: 1.8; white-space: pre-wrap; } /* 16px -> 19px */
 
         .loading-bar { position: fixed; top: 0; left: 0; width: 100%; height: 3px; background: var(--primary); z-index: 100; transition: width 0.3s; }
     </style>
@@ -55,16 +42,16 @@
 <body>
 <div id="app">
     <div v-if="isLoading" class="loading-bar" style="width: 100%;"></div>
-    
+
     <header>
         <div>
-            <span style="font-size: 18px; font-weight: bold;">WeValue</span>
-            <span class="version-tag">v20260225.01</span>
-            <div style="font-size: 12px; color: #666; margin-top: 2px;">
+            <span style="font-size: 21px; font-weight: bold;">WeValue</span>
+            <span class="version-tag">v20260225.02</span>
+            <div style="font-size: 15px; color: #666; margin-top: 2px;">
                 {{ viewMode === 'list' ? '전체글 목록' : (viewMode === 'write' ? '새 게시글 작성' : '게시글 상세보기') }}
             </div>
         </div>
-        <button v-if="viewMode !== 'list'" @click="viewMode = 'list'" style="background:none; border:none; color: var(--primary); font-weight: bold;">닫기</button>
+        <button v-if="viewMode !== 'list'" @click="viewMode = 'list'" style="background:none; border:none; color: var(--primary); font-weight: bold; font-size: 17px;">닫기</button>
     </header>
 
     <div v-if="viewMode === 'list'">
@@ -74,7 +61,7 @@
         
         <div v-for="post in paginatedPosts" :key="post.ID" class="list-item" @click="openDetail(post)">
             <div class="author-info">
-                <span style="color:var(--primary)">??</span> {{ post.Author }} · {{ formatDate(post.Date) }}
+                <span style="color:var(--primary)">작성일</span> {{ post.Author }} · {{ formatDate(post.Date) }}
             </div>
             <div class="title">{{ post.Title }}</div>
             <div class="content-preview">{{ post.Content }}</div>
@@ -89,58 +76,60 @@
         <button class="write-btn" @click="viewMode = 'write'">+ 글쓰기</button>
     </div>
 
-    <div v-if="viewMode === 'write' || viewMode === 'edit'" class="modal">
-        <div class="modal-header">
-            <button @click="viewMode = 'list'">취소</button>
+    <div v-if="viewMode === 'write' || viewMode === 'edit'" class="modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 20; overflow-y: auto;">
+        <div class="modal-header" style="padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+            <button @click="viewMode = 'list'" style="font-size: 17px; background:none; border:none;">취소</button>
             <strong>{{ viewMode === 'write' ? '새 글 쓰기' : '글 수정' }}</strong>
-            <button @click="viewMode === 'write' ? savePost() : updatePost()" style="color:var(--primary); font-weight:bold;">완료</button>
+            <button @click="viewMode === 'write' ? savePost() : updatePost()" style="color:var(--primary); font-weight:bold; font-size: 17px; background:none; border:none;">완료</button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="padding: 20px;">
             <input v-model="form.author" placeholder="아이디" :disabled="viewMode === 'edit'">
             <input v-model="form.password" type="password" placeholder="비밀번호 (필수)">
             <input v-model="form.title" placeholder="제목">
-            <textarea v-model="form.content" rows="15" placeholder="내용을 입력하세요"></textarea>
+            <textarea v-model="form.content" rows="12" placeholder="내용을 입력하세요"></textarea>
         </div>
     </div>
 
-    <div v-if="viewMode === 'detail'" class="modal">
-        <div class="modal-header">
-            <button @click="viewMode = 'list'">← 목록</button>
+    <div v-if="viewMode === 'detail'" class="modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 20; overflow-y: auto;">
+        <div class="modal-header" style="padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+            <button @click="viewMode = 'list'" style="font-size: 17px; background:none; border:none;">← 목록</button>
             <div v-if="form.author === myId">
-                <button @click="viewMode = 'edit'">수정</button>
-                <button @click="deletePost" style="color:red;">삭제</button>
+                <button @click="viewMode = 'edit'" style="font-size: 17px; background:none; border:none; margin-right:10px;">수정</button>
+                <button @click="deletePost" style="color:red; font-size: 17px; background:none; border:none;">삭제</button>
             </div>
         </div>
-        <div class="modal-body">
-            <div class="author-info" style="font-size:14px; margin-bottom:20px;">
+        <div class="modal-body" style="padding: 20px;">
+            <div class="detail-author">
                 <b style="color:var(--primary)">{{ form.author }}</b> · {{ formatDate(form.date) }}
             </div>
-            <h2 style="margin-bottom:20px;">{{ form.title }}</h2>
-            <p style="white-space: pre-wrap; line-height: 1.8; font-size: 16px;">{{ form.content }}</p>
+            <h2 class="detail-title">{{ form.title }}</h2>
+            <p class="detail-content">{{ form.content }}</p>
         </div>
     </div>
 </div>
 
 <script>
+    // 스크립트 로직은 이전과 동일 (API_URL 등 유지)
     const API_URL = 'https://script.google.com/macros/s/AKfycby0Y2trjJGVx-K000NemLYfKlFvAQSaCJ9rMFJCVMe9tx2N-zJkGyE-T1trPxffAdJ3/exec';
     const { createApp, ref, computed, onMounted } = Vue;
 
     createApp({
         setup() {
             const posts = ref([]);
-            const viewMode = ref('list'); // list, write, detail, edit
+            const viewMode = ref('list');
             const isLoading = ref(false);
             const searchQuery = ref('');
             const currentPage = ref(1);
             const myId = ref(localStorage.getItem('myAnonId') || '');
-            
             const form = ref({ id: '', author: myId.value, title: '', content: '', password: '', date: '' });
 
             const fetchPosts = async () => {
                 isLoading.value = true;
-                const res = await axios.get(`${API_URL}?action=read`);
-                posts.value = res.data;
-                isLoading.value = false;
+                try {
+                    const res = await axios.get(`${API_URL}?action=read`);
+                    posts.value = res.data;
+                } catch(e) { console.error(e); }
+                finally { isLoading.value = false; }
             };
 
             const openDetail = (post) => {
@@ -149,7 +138,7 @@
             };
 
             const savePost = async () => {
-                if(!form.value.password || !form.value.title) return alert("내용을 채워주세요.");
+                if(!form.value.password || !form.value.title) return alert("필수 항목을 입력하세요.");
                 isLoading.value = true;
                 const p = new URLSearchParams();
                 p.append('action', 'create');
@@ -157,7 +146,6 @@
                 p.append('password', form.value.password);
                 p.append('title', form.value.title);
                 p.append('content', form.value.content);
-                
                 await axios.post(API_URL, p);
                 localStorage.setItem('myAnonId', form.value.author);
                 myId.value = form.value.author;
@@ -172,7 +160,6 @@
                 p.append('password', form.value.password);
                 p.append('title', form.value.title);
                 p.append('content', form.value.content);
-                
                 isLoading.value = true;
                 const res = await axios.post(API_URL, p);
                 if(res.data === 'Updated') {
@@ -182,18 +169,17 @@
             };
 
             const deletePost = async () => {
-                if(!confirm("정말 삭제하시겠습니까?")) return;
-                const pw = prompt("비밀번호를 입력하세요.");
+                if(!confirm("삭제하시겠습니까?")) return;
+                const pw = prompt("비밀번호 입력");
                 if(!pw) return;
-
                 const p = new URLSearchParams();
                 p.append('action', 'delete');
                 p.append('id', form.value.id);
                 p.append('password', pw);
-                
+                isLoading.value = true;
                 const res = await axios.post(API_URL, p);
-                alert(res.data);
                 if(res.data === 'Deleted') { viewMode.value = 'list'; fetchPosts(); }
+                else { alert(res.data); isLoading.value = false; }
             };
 
             const filteredPosts = computed(() => {
@@ -212,7 +198,7 @@
 
             const formatDate = (dateStr) => {
                 const d = new Date(dateStr);
-                return `${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}`;
+                return `${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
             };
 
             onMounted(fetchPosts);
