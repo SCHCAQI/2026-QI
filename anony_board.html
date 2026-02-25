@@ -9,22 +9,32 @@
         body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; background: #f4f7f6; }
         .post-form, .search-bar { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         input, textarea { width: 100%; margin: 5px 0; padding: 8px; box-sizing: border-box; }
-        .post-card { background: white; padding: 15px; margin-bottom: 10px; border-left: 5px solid #42b983; }
+        .post-card { background: white; padding: 15px; margin-bottom: 10px; border-left: 5px solid #42b983; position: relative; }
         .post-meta { font-size: 0.8em; color: #666; }
         button { cursor: pointer; background: #42b983; color: white; border: none; padding: 8px 15px; border-radius: 4px; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
         .btn-del { background: #ff5252; margin-left: 5px; }
+        /* 로딩 오버레이 스타일 */
+        .loading-overlay {
+            position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.7);
+            color: white; padding: 10px 20px; border-radius: 20px; z-index: 1000;
+        }
     </style>
 </head>
 <body>
 <div id="app">
+    <div v-if="isLoading" class="loading-overlay">요청 처리 중...</div>
+
     <h2>익명 게시판-v2</h2>
 
     <div class="post-form">
-        <input v-model="newPost.author" placeholder="아이디">
-        <input v-model="newPost.password" type="password" placeholder="비밀번호 (수정/삭제용)">
-        <input v-model="newPost.title" placeholder="제목">
-        <textarea v-model="newPost.content" placeholder="내용"></textarea>
-        <button @click="createPost">글쓰기</button>
+        <input v-model="newPost.author" placeholder="아이디" :disabled="isLoading">
+        <input v-model="newPost.password" type="password" placeholder="비밀번호 (수정/삭제용)" :disabled="isLoading">
+        <input v-model="newPost.title" placeholder="제목" :disabled="isLoading">
+        <textarea v-model="newPost.content" placeholder="내용" :disabled="isLoading"></textarea>
+        <button @click="createPost" :disabled="isLoading">
+            {{ isLoading ? '전송 중...' : '글쓰기' }}
+        </button>
     </div>
 
     <div class="search-bar">
@@ -39,13 +49,12 @@
         <p>{{ post.Content }}</p>
         <div class="post-meta">
             작성자: {{ post.Author }} | 작성일: {{ new Date(post.Date).toLocaleString() }}
-            <button class="btn-del" @click="deletePost(post.ID)">삭제</button>
+            <button class="btn-del" @click="deletePost(post.ID)" :disabled="isLoading">삭제</button>
         </div>
     </div>
 </div>
 
 <script>
-    // 배포한 GAS URL을 여기에 입력하세요
     const API_URL = 'https://script.google.com/macros/s/AKfycby0Y2trjJGVx-K000NemLYfKlFvAQSaCJ9rMFJCVMe9tx2N-zJkGyE-T1trPxffAdJ3/exec';
 
     const { createApp, ref, computed, onMounted } = Vue;
@@ -55,65 +64,87 @@
             const posts = ref([]);
             const searchQuery = ref('');
             const myPostsOnly = ref(false);
+            const isLoading = ref(false); // 로딩 상태 추가
             const myId = ref(localStorage.getItem('myAnonId') || '');
             const newPost = ref({ author: myId.value, title: '', content: '', password: '' });
 
             const fetchPosts = async () => {
-                const res = await axios.get(`${API_URL}?action=read`);
-                posts.value = res.data;
+                isLoading.value = true;
+                try {
+                    const res = await axios.get(`${API_URL}?action=read`);
+                    posts.value = res.data;
+                } catch (error) {
+                    console.error("데이터 로드 실패", error);
+                } finally {
+                    isLoading.value = false;
+                }
             };
 
             const createPost = async () => {
                 if(!newPost.value.author || !newPost.value.password) return alert("아이디와 비번을 입력하세요");
                 
-                // JSON 대신 URLSearchParams 사용 (GAS와 호환성이 더 좋음)
+                isLoading.value = true;
                 const params = new URLSearchParams();
                 params.append('action', 'create');
                 params.append('author', newPost.value.author);
                 params.append('title', newPost.value.title);
                 params.append('content', newPost.value.content);
                 params.append('password', newPost.value.password);
-            
+                
                 try {
-                    // axios 호출 시 Content-Type 설정
                     await axios.post(API_URL, params, {
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                     });
-                    fetchPosts();
+                    localStorage.setItem('myAnonId', newPost.value.author);
+                    newPost.value.title = '';
+                    newPost.value.content = '';
+                    await fetchPosts();
                 } catch (error) {
-                    console.error("에러 발생:", error);
+                    alert("전송 에러가 발생했습니다.");
+                } finally {
+                    isLoading.value = false;
                 }
             };
 
             const deletePost = async (id) => {
                 const password = prompt("비밀번호를 입력하세요");
                 if (!password) return;
-                const res = await axios.post(API_URL, { action: 'delete', id, password });
-                alert(res.data);
-                fetchPosts();
+
+                isLoading.value = true;
+                const params = new URLSearchParams();
+                params.append('action', 'delete');
+                params.append('id', id);
+                params.append('password', password);
+
+                try {
+                    const res = await axios.post(API_URL, params);
+                    alert(res.data);
+                    await fetchPosts();
+                } catch (error) {
+                    alert("삭제 중 에러가 발생했습니다.");
+                } finally {
+                    isLoading.value = false;
+                }
             };
 
             const filteredPosts = computed(() => {
                 return posts.value.filter(p => {
-                    // 데이터가 비어있거나 타입이 다를 경우를 대비해 String으로 감싸줍니다.
                     const title = String(p.Title || "");
                     const content = String(p.Content || "");
                     const author = String(p.Author || "");
                     const query = searchQuery.value.toLowerCase();
-            
+                    
                     const matchSearch = title.toLowerCase().includes(query) || 
                                         content.toLowerCase().includes(query) || 
                                         author.toLowerCase().includes(query);
-                                        
                     const matchMine = myPostsOnly.value ? author === myId.value : true;
-                    
                     return matchSearch && matchMine;
                 });
             });
 
             onMounted(fetchPosts);
 
-            return { posts, newPost, searchQuery, myPostsOnly, createPost, deletePost, filteredPosts };
+            return { posts, newPost, searchQuery, myPostsOnly, isLoading, createPost, deletePost, filteredPosts };
         }
     }).mount('#app');
 </script>
