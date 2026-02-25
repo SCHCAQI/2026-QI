@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>WeValue ( 우리가치 ) - 익명게시판</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; background: #f4f7f6; }
+        .post-form, .search-bar { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input, textarea { width: 100%; margin: 5px 0; padding: 8px; box-sizing: border-box; }
+        .post-card { background: white; padding: 15px; margin-bottom: 10px; border-left: 5px solid #42b983; }
+        .post-meta { font-size: 0.8em; color: #666; }
+        button { cursor: pointer; background: #42b983; color: white; border: none; padding: 8px 15px; border-radius: 4px; }
+        .btn-del { background: #ff5252; margin-left: 5px; }
+    </style>
+</head>
+<body>
+<div id="app">
+    <h2>익명 게시판</h2>
+
+    <div class="post-form">
+        <input v-model="newPost.author" placeholder="아이디">
+        <input v-model="newPost.password" type="password" placeholder="비밀번호 (수정/삭제용)">
+        <input v-model="newPost.title" placeholder="제목">
+        <textarea v-model="newPost.content" placeholder="내용"></textarea>
+        <button @click="createPost">글쓰기</button>
+    </div>
+
+    <div class="search-bar">
+        <input v-model="searchQuery" placeholder="검색어 입력 (제목, 본문, 아이디)">
+        <button @click="myPostsOnly = !myPostsOnly">
+            {{ myPostsOnly ? '전체 보기' : '내 글만 보기' }}
+        </button>
+    </div>
+
+    <div v-for="post in filteredPosts" :key="post.ID" class="post-card">
+        <h3>{{ post.Title }}</h3>
+        <p>{{ post.Content }}</p>
+        <div class="post-meta">
+            작성자: {{ post.Author }} | 작성일: {{ new Date(post.Date).toLocaleString() }}
+            <button class="btn-del" @click="deletePost(post.ID)">삭제</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'YOUR_GAS_WEB_APP_URL'; // 배포한 GAS URL을 여기에 입력하세요
+
+    const { createApp, ref, computed, onMounted } = Vue;
+
+    createApp({
+        setup() {
+            const posts = ref([]);
+            const searchQuery = ref('');
+            const myPostsOnly = ref(false);
+            const myId = ref(localStorage.getItem('myAnonId') || '');
+            const newPost = ref({ author: myId.value, title: '', content: '', password: '' });
+
+            const fetchPosts = async () => {
+                const res = await axios.get(`${API_URL}?action=read`);
+                posts.value = res.data;
+            };
+
+            const createPost = async () => {
+                if(!newPost.value.author || !newPost.value.password) return alert("아이디와 비번을 입력하세요");
+                localStorage.setItem('myAnonId', newPost.value.author); // 아이디 기억
+                await axios.post(API_URL, { action: 'create', ...newPost.value });
+                newPost.value = { author: newPost.value.author, title: '', content: '', password: '' };
+                fetchPosts();
+            };
+
+            const deletePost = async (id) => {
+                const password = prompt("비밀번호를 입력하세요");
+                if (!password) return;
+                const res = await axios.post(API_URL, { action: 'delete', id, password });
+                alert(res.data);
+                fetchPosts();
+            };
+
+            const filteredPosts = computed(() => {
+                return posts.value.filter(p => {
+                    const matchSearch = p.Title.includes(searchQuery.value) || 
+                                        p.Content.includes(searchQuery.value) || 
+                                        p.Author.includes(searchQuery.value);
+                    const matchMine = myPostsOnly.value ? p.Author === myId.value : true;
+                    return matchSearch && matchMine;
+                });
+            });
+
+            onMounted(fetchPosts);
+
+            return { posts, newPost, searchQuery, myPostsOnly, createPost, deletePost, filteredPosts };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
