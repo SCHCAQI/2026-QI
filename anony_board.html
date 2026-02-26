@@ -179,20 +179,44 @@
             const handleBack = () => { viewMode.value = 'list'; };
 
             const savePost = async () => {
+                if (!form.value.title || !form.value.content) {
+                    alert("제목과 내용을 입력해주세요.");
+                    return;
+                }
+            
                 isLoading.value = true;
-                const p = new URLSearchParams();
-                p.append('action', 'create');
-                p.append('author', form.value.author || '익명');
-                p.append('password', form.value.password);
-                p.append('title', form.value.title);
-                p.append('content', form.value.content);
+                
+                // URLSearchParams 사용
+                const params = new URLSearchParams();
+                params.append('action', 'create');
+                params.append('author', form.value.author || '익명');
+                params.append('password', form.value.password);
+                params.append('title', form.value.title);
+                params.append('content', form.value.content);
+            
                 try {
-                    await axios.post(API_URL, p);
+                    // GAS는 POST 후 302 리다이렉트를 하므로, 브라우저가 이를 잘 따라가도록 처리해야 합니다.
+                    // axios는 기본적으로 따르지만, 헤더 충돌을 방지하기 위해 아래와 같이 구성합니다.
+                    const res = await axios({
+                        method: 'post',
+                        url: API_URL,
+                        data: params,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    });
+            
                     localStorage.setItem('myAnonId', form.value.author);
                     myId.value = form.value.author;
                     viewMode.value = 'list';
                     fetchPosts(false);
-                } catch(e) { alert("실패"); isLoading.value = false; }
+                } catch (e) {
+                    console.error("에러 상세:", e);
+                    // 네트워크 에러인지, GAS 내부 에러인지 확인을 위해 e.message를 띄웁니다.
+                    alert("저장 실패: " + (e.response?.data?.message || "네트워크 연결이나 GAS 설정을 확인하세요."));
+                } finally {
+                    isLoading.value = false;
+                }
             };
 
             const updatePost = async () => { /* 수정 로직... */ };
