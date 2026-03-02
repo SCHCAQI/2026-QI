@@ -26,6 +26,7 @@
             --arrow-color: #c7c7cc;
             --code-bg: #f1f1f4;
             --footer-bg: #f9f9f9;
+            --logo-url: url('wevalue_w.png'); /* 기본 로고 */
         }
 
         body.dark-mode {
@@ -39,6 +40,7 @@
             --arrow-color: #444444;
             --code-bg: #1c1c1e;
             --footer-bg: #121212;
+            --logo-url: url('wevalue_w.png'); /* 다크모드 로고 */
         }
 
         body {
@@ -55,7 +57,7 @@
         .header-profile { padding: 30px 20px 20px; display: flex; align-items: center; justify-content: space-between; }
         .header-logo { 
             width: 80px; height: 80px; vertical-align: middle; margin-right: 8px; object-fit: contain;
-            mix-blend-mode: multiply;
+            mix-blend-mode: multiply;content: var(--logo-url);
         }
         .profile-left { display: flex; align-items: center; gap: 15px; }
         .profile-thumb { width: 56px; height: 56px; background: var(--thumb-bg); border-radius: 22px; display: flex; align-items: center; justify-content: center; }
