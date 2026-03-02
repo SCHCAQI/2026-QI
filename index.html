@@ -25,6 +25,7 @@
             --thumb-bg: #f2f2f7;
             --arrow-color: #c7c7cc;
             --code-bg: #f1f1f4;
+            --footer-bg: #f9f9f9;
         }
 
         body.dark-mode {
@@ -37,6 +38,7 @@
             --thumb-bg: #2c2c2e;
             --arrow-color: #444444;
             --code-bg: #1c1c1e;
+            --footer-bg: #121212;
         }
 
         body {
@@ -48,7 +50,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .container { width: 100%; max-width: 600px; margin: 0 auto; padding-bottom: 50px; }
+        .container { width: 100%; max-width: 600px; margin: 0 auto; padding-bottom: 30px; }
 
         .header-profile { padding: 30px 20px 20px; display: flex; align-items: center; justify-content: space-between; }
         .header-logo { 
@@ -82,6 +84,22 @@
         
         a { color: var(--accent-blue); text-decoration: none; font-weight: 600; }
         
+        /* Footer Style Added */
+        .footer {
+            max-width: 600px;
+            margin: 20px auto 50px;
+            padding: 20px;
+            background-color: var(--footer-bg);
+            border-radius: 16px;
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-sub);
+            border: 1px solid var(--border-color);
+        }
+        .footer-item { margin-bottom: 8px; display: flex; gap: 8px; }
+        .footer-item .material-icons { font-size: 14px; margin-top: 2px; }
+        .footer-title { font-weight: 600; color: var(--text-main); margin-bottom: 4px; display: block; }
+
         #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 14px; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 100; }
         #toast.show { opacity: 1; }
     </style>
@@ -166,6 +184,23 @@
             </div>
         </details>
     </div>
+    
+    <footer class="footer">
+        <div class="footer-item">
+            <span class="material-icons" style="color:var(--accent-orange)">error_outline</span>
+            <div>
+                <span class="footer-title">개인정보 주의</span>
+                웹에는 실제 환자정보(등록번호/성함/CaseID 실제값) 게시 금지(자리표시자만 사용).
+            </div>
+        </div>
+        <div class="footer-item">
+            <span class="material-icons" style="color:var(--accent-blue)">info</span>
+            <div>
+                <span class="footer-title">운영 책임</span>
+                본 페이지의 자료·교육·설문·회의·성과 공유는 진료지원간호팀이 책임 운영합니다.
+            </div>
+        </div>
+    </footer>
 </div>
 
 <div id="toast">복사되었습니다!</div>
