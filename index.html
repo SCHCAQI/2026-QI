@@ -65,8 +65,6 @@
 
         .theme-toggle { cursor: pointer; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: var(--item-bg); border: 1px solid var(--border-color); color: var(--text-main); }
 
-        .section-label { padding: 25px 20px 8px; font-size: 18px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
-
         .list-wrap { border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
         details { background-color: var(--bg-color); }
         details + details { border-top: 1px solid var(--border-color); }
@@ -77,28 +75,41 @@
         .menu-arrow { font-size: 18px; color: var(--arrow-color); transition: transform 0.3s; }
         details[open] .menu-arrow { transform: rotate(180deg); }
 
-        .details-content { background-color: var(--item-bg); padding: 16px 20px 16px 60px; border-top: 1px solid var(--border-color); }
-        .sbar-line { margin-bottom: 12px; font-size: 18px; line-height: 1.5; display: flex; }
-        .sbar-label { width: 100px; flex-shrink: 0; font-weight: 500; color: var(--text-main); }
-        .sbar-txt { color: var(--text-main); opacity: 0.9; flex: 1; }
+        /* 수정된 항목 스타일 (Footer 스타일 적용) */
+        .details-content { background-color: var(--bg-color); padding: 12px 16px; border-top: 1px solid var(--border-color); }
+        .link-card {
+            background-color: var(--footer-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: transform 0.1s ease;
+        }
+        .link-card:active { transform: scale(0.98); }
+        .link-card .material-icons { font-size: 20px; color: var(--text-sub); margin-top: 2px; }
+        .link-card-text { font-size: 16px; line-height: 1.4; color: var(--text-main); font-weight: 500; }
         
-        a { color: var(--accent-blue); text-decoration: none; font-weight: 600; }
+        a { color: inherit; text-decoration: none; display: block; }
+        .accent-link { color: var(--accent-blue); font-weight: 600; }
         
-        /* Footer Style Added */
+        /* Footer Style */
         .footer {
             max-width: 600px;
             margin: 20px auto 50px;
             padding: 20px;
             background-color: var(--footer-bg);
             border-radius: 16px;
-            font-size: 18px;
+            font-size: 14px;
             line-height: 1.6;
             color: var(--text-sub);
             border: 1px solid var(--border-color);
         }
         .footer-item { margin-bottom: 8px; display: flex; gap: 8px; }
-        .footer-item .material-icons { font-size: 14px; margin-top: 2px; }
-        .footer-title { font-weight: 600; color: var(--text-main); margin-bottom: 4px; display: block; }
+        .footer-item .material-icons { font-size: 16px; margin-top: 2px; }
+        .footer-title { font-weight: 600; color: var(--text-main); margin-bottom: 2px; display: block; }
 
         #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 14px; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 100; }
         #toast.show { opacity: 1; }
@@ -119,6 +130,7 @@
             <span class="material-icons" id="theme-icon">dark_mode</span>
         </div>
     </div>
+
     <div class="list-wrap">
         <details open>
             <summary>
@@ -127,9 +139,18 @@
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
             <div class="details-content">
-                <div class="sbar-line"><span class="sbar-txt"><a href="https://open.kakao.com/o/grvxNzii" target="_blank">우리가치톡(Kakao 오픈채팅, 프로필 익명)</a></span></div>
-                <div class="sbar-line"><span class="sbar-txt"><a href="https://band.us/band/101260685" target="_blank">PA밴드 바로가기</a></span></div>
-                <div class="sbar-line"><span class="sbar-txt"><a href="https://schcaqi.github.io/2026-QI/praise_board.html" target="_blank">칭찬 게시판</a></span></div>
+                <a href="https://open.kakao.com/o/grvxNzii" target="_blank" class="link-card">
+                    <span class="material-icons">chat_bubble_outline</span>
+                    <span class="link-card-text">우리가치톡(Kakao 오픈채팅, 프로필 익명)</span>
+                </a>
+                <a href="https://band.us/band/101260685" target="_blank" class="link-card">
+                    <span class="material-icons">groups</span>
+                    <span class="link-card-text">PA밴드 바로가기</span>
+                </a>
+                <a href="https://schcaqi.github.io/2026-QI/praise_board.html" target="_blank" class="link-card">
+                    <span class="material-icons">thumb_up_off_alt</span>
+                    <span class="link-card-text">칭찬 게시판</span>
+                </a>
             </div>
         </details>
 
@@ -140,9 +161,18 @@
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
             <div class="details-content">
-                <div class="sbar-line"><span class="sbar-txt"><a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/2.1%20%EB%A9%94%EC%8B%A0%EC%A0%80%20%ED%98%91%EC%97%85%EB%B0%A9%20%EC%9A%B4%EC%98%81%20%EC%84%A4%EB%AA%85%EC%84%9C%20%EB%B0%8F%20%EC%84%B8%EB%B6%80%20%EB%B0%A9%EC%95%88.docx" target="_blank">협업 규칙(10/4/12): 긴급도별 응답 시간 안내 가이드</a></span></div>
-                <div class="sbar-line"><span class="sbar-txt"><a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/2.1%20%EB%A9%94%EC%8B%A0%EC%A0%80%20%ED%98%91%EC%97%85%EB%B0%A9%20%EC%9A%B4%EC%98%81%20%EC%84%A4%EB%AA%85%EC%84%9C%20%EB%B0%8F%20%EC%84%B8%EB%B6%80%20%EB%B0%A9%EC%95%88.docx" target="_blank">템플릿 서식: 상황별 표준 보고 양식 파일 다운로드</a></span></div>
-                <div class="sbar-line"><span class="sbar-txt"><a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/2.1%20%EB%A9%94%EC%8B%A0%EC%A0%80%20%ED%98%91%EC%97%85%EB%B0%A9%20%EC%9A%B4%EC%98%81%20%EC%84%A4%EB%AA%85%EC%84%9C%20%EB%B0%8F%20%EC%84%B8%EB%B6%80%20%EB%B0%A9%EC%95%88.docx" target="_blank">사유코드 매뉴얼: [근무종료/익일인계] 등 표준 사유코드 사용법</a></span></div>
+                <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/2.1%20%EB%A9%94%EC%8B%A0%EC%A0%80%20%ED%98%91%EC%97%85%EB%B0%A9%20%EC%9A%B4%EC%98%81%20%EC%84%A4%EB%AA%85%EC%84%9C%20%EB%B0%8F%20%EC%84%B8%EB%B6%80%20%EB%B0%A9%EC%95%88.docx" target="_blank" class="link-card">
+                    <span class="material-icons">description</span>
+                    <span class="link-card-text">협업 규칙(10/4/12): 긴급도별 응답 시간 안내 가이드</span>
+                </a>
+                <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/2.1%20%EB%A9%94%EC%8B%A0%EC%A0%80%20%ED%98%91%EC%97%85%EB%B0%A9%20%EC%9A%B4%EC%98%81%20%EC%84%A4%EB%AA%85%EC%84%9C%20%EB%B0%8F%20%EC%84%B8%EB%B6%80%20%EB%B0%A9%EC%95%88.docx" target="_blank" class="link-card">
+                    <span class="material-icons">file_download</span>
+                    <span class="link-card-text">템플릿 서식: 상황별 표준 보고 양식 파일 다운로드</span>
+                </a>
+                <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/2.1%20%EB%A9%94%EC%8B%A0%EC%A0%80%20%ED%98%91%EC%97%85%EB%B0%A9%20%EC%9A%B4%EC%98%81%20%EC%84%A4%EB%AA%85%EC%84%9C%20%EB%B0%8F%20%EC%84%B8%EB%B6%80%20%EB%B0%A9%EC%95%88.docx" target="_blank" class="link-card">
+                    <span class="material-icons">code</span>
+                    <span class="link-card-text">사유코드 매뉴얼: [근무종료/익일인계] 등 표준 사유코드 사용법</span>
+                </a>
             </div>
         </details>
 
@@ -153,8 +183,14 @@
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
             <div class="details-content">
-                <div class="sbar-line"><span class="sbar-txt"><a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/2.1%20%EB%A9%94%EC%8B%A0%EC%A0%80%20%ED%98%91%EC%97%85%EB%B0%A9%20%EC%9A%B4%EC%98%81%20%EC%84%A4%EB%AA%85%EC%84%9C%20%EB%B0%8F%20%EC%84%B8%EB%B6%80%20%EB%B0%A9%EC%95%88.docx" target="_blank">온디멘드(ON Demand) 교육 요청: 처치/기기 교육 신청 폼</a></span></div>
-                <div class="sbar-line"><span class="sbar-txt"><a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/2.1%20%EB%A9%94%EC%8B%A0%EC%A0%80%20%ED%98%91%EC%97%85%EB%B0%A9%20%EC%9A%B4%EC%98%81%20%EC%84%A4%EB%AA%85%EC%84%9C%20%EB%B0%8F%20%EC%84%B8%EB%B6%80%20%EB%B0%A9%EC%95%88.docx" target="_blank">3분 Vlog 게시판: 핵심 실무 교육 영상 모음</a></span></div>
+                <a href="#" target="_blank" class="link-card">
+                    <span class="material-icons">edit_note</span>
+                    <span class="link-card-text">온디멘드(ON Demand) 교육 요청: 처치/기기 교육 신청 폼</span>
+                </a>
+                <a href="#" target="_blank" class="link-card">
+                    <span class="material-icons">play_circle_outline</span>
+                    <span class="link-card-text">3분 Vlog 게시판: 핵심 실무 교육 영상 모음</span>
+                </a>
             </div>
         </details>
         
@@ -165,8 +201,14 @@
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
             <div class="details-content">
-                <div class="sbar-line"><span class="sbar-txt"><a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/2.1%20%EB%A9%94%EC%8B%A0%EC%A0%80%20%ED%98%91%EC%97%85%EB%B0%A9%20%EC%9A%B4%EC%98%81%20%EC%84%A4%EB%AA%85%EC%84%9C%20%EB%B0%8F%20%EC%84%B8%EB%B6%80%20%EB%B0%A9%EC%95%88.docx" target="_blank">실시간 KPI 현황: 루프 준수율, 만족도 점수 시각화 공유</a></span></div>
-                <div class="sbar-line"><span class="sbar-txt"><a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/2.1%20%EB%A9%94%EC%8B%A0%EC%A0%80%20%ED%98%91%EC%97%85%EB%B0%A9%20%EC%9A%B4%EC%98%81%20%EC%84%A4%EB%AA%85%EC%84%9C%20%EB%B0%8F%20%EC%84%B8%EB%B6%80%20%EB%B0%A9%EC%95%88.docx" target="_blank">간담회 소식지: 간담회 결과 보고서 및 회의록 게시</a></span></div>
+                <a href="#" target="_blank" class="link-card">
+                    <span class="material-icons">insights</span>
+                    <span class="link-card-text">실시간 KPI 현황: 루프 준수율, 만족도 점수 시각화 공유</span>
+                </a>
+                <a href="#" target="_blank" class="link-card">
+                    <span class="material-icons">assignment</span>
+                    <span class="link-card-text">간담회 소식지: 간담회 결과 보고서 및 회의록 게시</span>
+                </a>
             </div>
         </details>
 
@@ -177,10 +219,13 @@
                 <div class="menu-arrow"><span class="material-icons">expand_more</span></div>
             </summary>
             <div class="details-content">
-                <div class="sbar-line">
-                    <span class="sbar-label"><a href="https://naver.me/FgEeXnnj" target="_blank">3월 설문</a></span>
-                    <span class="sbar-txt">PA 협업 체계 사전 설문 참여</span>
-                </div>
+                <a href="https://naver.me/FgEeXnnj" target="_blank" class="link-card">
+                    <span class="material-icons" style="color:var(--accent-purple)">rate_review</span>
+                    <div>
+                        <span class="footer-title" style="color:var(--accent-purple)">3월 설문</span>
+                        <span class="link-card-text">PA 협업 체계 사전 설문 참여</span>
+                    </div>
+                </a>
             </div>
         </details>
     </div>
