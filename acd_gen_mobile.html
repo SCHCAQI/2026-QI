@@ -150,27 +150,27 @@
 <div class="input-card">
     <div class="input-group">
         <label>병실</label>
-        <input type="text" id="ward" value="1311" oninput="updateAll()">
+        <input type="text" id="ward" value="" oninput="updateAll()">
     </div>
     <div class="input-group">
         <label>등록번호</label>
-        <input type="text" id="regNo" value="12345678" oninput="updateAll()">
+        <input type="text" id="regNo" value="" oninput="updateAll()">
     </div>
     <div class="input-group">
         <label>환자이름</label>
-        <input type="text" id="patient" value="김철수" oninput="updateAll()">
+        <input type="text" id="patient" value="" oninput="updateAll()">
     </div>
     <div class="input-group">
         <label>교수이름</label>
-        <input type="text" id="prof" value="KJS" oninput="updateAll()">
+        <input type="text" id="prof" value="" oninput="updateAll()">
     </div>
     <div class="input-group">
         <label>월일(MMDD)</label>
-        <input type="text" id="date" value="0227" oninput="updateAll()">
+        <input type="text" id="date" value="" oninput="updateAll()">
     </div>
     <div class="input-group">
         <label>시간(HHMM)</label>
-        <input type="text" id="time" value="0030" oninput="updateAll()">
+        <input type="text" id="time" value="" oninput="updateAll()">
     </div>
     <div id="caseIdTop" class="case-id-preview"></div>
     <div id="caseIdHidden" class="hidden-data"></div> </div>
@@ -181,7 +181,7 @@
         <div class="input-card" style="margin-bottom:0; padding:0; border:none;">
             <div class="input-group">
                 <label>긴급도</label>
-                <input type="text" id="a_urgent" list="list_urgent" class="editable-combo" placeholder="10" oninput="updateAll()">
+                <input type="text" id="a_urgent" list="list_urgent" class="editable-combo" placeholder="선택하세요" oninput="updateAll()">
             </div>
             <div class="input-group">
                 <label>지금(핵심)</label>
@@ -206,7 +206,7 @@
         <div class="input-card" style="margin-bottom:0; padding:0; border:none;">
             <div class="input-group">
                 <label>사유코드</label>
-                <input type="text" id="c_reason" list="list_reason" class="editable-combo" placeholder="인계" oninput="updateAll()">
+                <input type="text" id="c_reason" list="list_reason" class="editable-combo" placeholder="선택하세요" oninput="updateAll()">
             </div>
             <div class="input-group">
                 <label>다음확인시간</label>
@@ -243,7 +243,7 @@
     <div class="card-body">
         <div class="input-group">
             <label>구분 (입원/검사 등)</label>
-            <input type="text" id="i_now" list="list_info" class="editable-combo" placeholder="입원" oninput="updateAll()">
+            <input type="text" id="i_now" list="list_info" class="editable-combo" placeholder="선택하세요" oninput="updateAll()">
         </div>
         <div class="result-box" id="res_i" onclick="copyText('res_i')"></div>
     </div>
