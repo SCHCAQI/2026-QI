@@ -99,8 +99,7 @@
             </datalist>
         </td>
         <td><input type="text" id="c_time" oninput="updateAll()"></td>
-        <td><input type="text" id="c_status" oninput="updateAll()"></td>
-        <td><input type="text" id="c_fu" oninput="updateAll()"></td>
+        <td class="cell-readonly"></td><td class="cell-readonly"></td>
         <td class="cell-result" id="res_c" onclick="copyText('res_c')"></td>
     </tr>
     <tr>
@@ -168,7 +167,7 @@
         const aNow = document.getElementById('a_now').value;
         const aBasis = document.getElementById('a_basis').value;
         const aReq = document.getElementById('a_req').value;
-        document.getElementById('res_a').innerText = `[A]${caseId} / 지금: ${aNow} / 근거: ${aBasis} / 요청: ${aReq} / ${aUrgentInput}`;
+        document.getElementById('res_a').innerText = `[A]${caseId} / 지금: ${aNow} / 근거: ${aBasis} / 요청: ${aReq} / ${aUrgentVal}`;
 
         // C(보호기록) 결과
         const cReason = document.getElementById('c_reason').value || "인계";
