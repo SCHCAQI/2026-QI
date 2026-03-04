@@ -19,6 +19,9 @@
         /* 강조된 입력 가능 콤보박스 */
         .editable-combo { border: 2px solid #2c5a8d; background-color: #fff; }
 
+        /* 긴급도 입력창 강조 스타일 */
+        #a_urgent { font-weight: bold; transition: background-color 0.2s; }
+
         .case-id-display { background-color: #ffe5cc; font-weight: bold; font-size: 11px; word-break: break-all; }
         .table-head { background-color: #2c5a8d; color: white; font-size: 11px; }
         .row-label { background-color: #e9eff7; font-weight: bold; width: 60px; }
@@ -143,7 +146,25 @@
         for(let c of caseCells) { c.innerText = caseId; }
 
         // A(보고) 결과
-        const aUrgent = document.getElementById('a_urgent').value || "10";
+        const aUrgentInput = document.getElementById('a_urgent');
+        const aUrgentVal = aUrgentInput.value;
+        
+        // 색상 초기화
+        aUrgentInput.style.backgroundColor = "";
+        aUrgentInput.style.color = "";
+
+        // 값에 따른 색상 적용
+        if(aUrgentVal === "10") {
+            aUrgentInput.style.backgroundColor = "red";
+            aUrgentInput.style.color = "white";
+        } else if(aUrgentVal === "4") {
+            aUrgentInput.style.backgroundColor = "orange";
+            aUrgentInput.style.color = "white";
+        } else if(aUrgentVal === "12") {
+            aUrgentInput.style.backgroundColor = "green";
+            aUrgentInput.style.color = "white";
+        }
+
         const aNow = document.getElementById('a_now').value;
         const aBasis = document.getElementById('a_basis').value;
         const aReq = document.getElementById('a_req').value;
