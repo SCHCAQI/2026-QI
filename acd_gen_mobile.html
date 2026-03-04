@@ -311,7 +311,7 @@
         document.getElementById('res_d').innerText = `[D]${caseId} / 결과:${dNow} / 현재:${dStatus} / F/U:${dFu}`;
 
         // 정보성 결과
-        const iNow = document.getElementById('i_now').value || "입원";
+        const iNow = document.getElementById('i_now').value;
         document.getElementById('res_i').innerText = `(보고)${caseId}/${iNow}/12`;
     }
 
