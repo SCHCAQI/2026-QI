@@ -93,7 +93,11 @@
         .link-card:active { transform: scale(0.98); }
         .link-card .material-icons { font-size: 20px; color: var(--text-sub); margin-top: 2px; }
         .link-card-text { font-size: 16px; line-height: 1.4; color: var(--text-main); font-weight: 500; }
-        
+        .link-card a {
+            display: inline-flex; /* block 대신 inline-flex로 변경하여 텍스트 크기만큼만 영역 차지 */
+            align-items: center;
+            text-decoration: none;
+        }
         a { color: inherit; text-decoration: none; display: block; }
         .accent-link { color: var(--accent-blue); font-weight: 600; }
         
@@ -249,13 +253,15 @@
                     <span class="material-icons">assignment</span>
                     <span class="link-card-text">간담회 소식지(3분기)</span>
                 </a>
-                <a href="#" target="_blank" class="link-card">
-                    <span class="material-icons">assignment</span>
-                    <span class="link-card-text">회의록</span>
-                </a>
-                <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/0304.%ED%9A%8C%EC%9D%98%EB%A1%9D_%EC%96%91%EC%8B%9D.docx" target="_blank" class="link-card">
-                    <span class="link-card-text">[양식 다운로드]</span>
-                </a>
+                <div class="link-card" style="justify-content: space-between; align-items: center;">
+                    <a href="#" target="_blank" style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                        <span class="material-icons">assignment</span>
+                        <span class="link-card-text">회의록</span>
+                    </a>
+                    <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/0304.%ED%9A%8C%EC%9D%98%EB%A1%9D_%EC%96%91%EC%8B%9D.docx" target="_blank" style="flex-shrink: 0;">
+                        <span class="link-card-text" style="font-size: 14px; color: var(--accent-blue);">[양식 다운로드]</span>
+                    </a>
+                </div>
             </div>
         </details>
 
