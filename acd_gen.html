@@ -71,7 +71,11 @@
         <td class="cell-readonly"></td>
         <td>
             <input type="text" id="a_urgent" list="list_urgent" class="editable-combo" placeholder="10" oninput="updateAll()">
-            <datalist id="list_urgent"><option value=""><option value="4"><option value="12"></datalist>
+            <datalist id="list_urgent">
+                <option value="10">
+                <option value="4">
+                <option value="12">
+            </datalist>
         </td>
         <td><input type="text" id="a_now" oninput="updateAll()"></td>
         <td><input type="text" id="a_basis" oninput="updateAll()"></td>
@@ -84,9 +88,9 @@
         <td class="cell-readonly case-id-cell"></td>
         <td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td>
         <td>
-            <input type="text" id="c_reason" list="list_reason" class="editable-combo" placeholder="인계" oninput="updateAll()">
+            <input type="text" id="c_reason" list="list_reason" class="editable-combo" placeholder="" oninput="updateAll()">
             <datalist id="list_reason">
-                <option value="수술중"><option value="시술중"><option value="회진"><option value=""><option value="응급상황">
+                <option value="수술중"><option value="시술중"><option value="회진"><option value="인계"><option value="응급상황">
                 <option value="담당부재"><option value="정보부족"><option value="인력부족"><option value="기타"><option value="근무종료">
                 <option value="업무종료"><option value="익일인계"><option value="야간전환">
             </datalist>
@@ -110,7 +114,7 @@
         <td class="cell-readonly"></td><td class="cell-readonly"></td>
         <td>
             <input type="text" id="i_now" list="list_info" class="editable-combo" placeholder="입원" oninput="updateAll()">
-            <datalist id="list_info"><option value=""><option value="검사"><option value="자가약"></datalist>
+            <datalist id="list_info"><option value="입원"><option value="검사"><option value="자가약"></datalist>
         </td>
         <td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td>
         <td class="cell-result" id="res_i" onclick="copyText('res_i')"></td>
