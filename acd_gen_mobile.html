@@ -293,7 +293,20 @@
         document.getElementById('caseIdTop').innerText = "Case ID: " + caseId;
         
         // A 결과
-        const aUrgent = document.getElementById('a_urgent').value || "10";
+        const aUrgentInput = document.getElementById('a_urgent');
+        const aUrgentVal = aUrgentInput.value;
+        
+        // 초기화
+        aUrgentInput.style.backgroundColor = "white";
+        aUrgentInput.style.color = "black";
+
+        if(aUrgentVal === "10") {
+            aUrgentInput.style.backgroundColor = "red"; aUrgentInput.style.color = "white";
+        } else if(aUrgentVal === "4") {
+            aUrgentInput.style.backgroundColor = "orange"; aUrgentInput.style.color = "white";
+        } else if(aUrgentVal === "12") {
+            aUrgentInput.style.backgroundColor = "green"; aUrgentInput.style.color = "white";
+        }
         const aNow = document.getElementById('a_now').value;
         const aBasis = document.getElementById('a_basis').value;
         const aReq = document.getElementById('a_req').value;
