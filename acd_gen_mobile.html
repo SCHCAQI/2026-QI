@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>현장 업무 자동 생성 도구 (모바일)</title>
+    <style>
+        :root {
+            --primary-color: #1e4a7e;
+            --secondary-color: #2c5a8d;
+            --bg-gray: #f5f7f9;
+            --result-yellow: #ffffcc;
+        }
+
+        body { 
+            font-family: 'Malgun Gothic', sans-serif; 
+            font-size: 14px; 
+            margin: 0; 
+            padding: 10px; 
+            background-color: var(--bg-gray);
+            color: #333; 
+        }
+
+        .header { 
+            background-color: var(--primary-color); 
+            color: white; 
+            padding: 15px; 
+            font-weight: bold; 
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* 입력 그룹 섹션 */
+        .section-title {
+            font-size: 13px;
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin: 15px 5px 5px;
+        }
+
+        .input-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2열 배치 */
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        input { 
+            padding: 8px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .editable-combo { border: 2px solid var(--secondary-color); }
+
+        /* Case ID 표시용 (상단 전용) */
+        .case-id-preview {
+            grid-column: span 2;
+            background: #fff3e0;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            word-break: break-all;
+            text-align: center;
+            font-weight: bold;
+            border: 1px dashed #ffa726;
+        }
+
+        /* 결과 카드 레이아웃 */
+        .card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: #e9eff7;
+            padding: 10px;
+            font-weight: bold;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-body { padding: 12px; }
+
+        /* 결과 창 (노란색) */
+        .result-box {
+            background-color: var(--result-yellow);
+            padding: 12px;
+            border: 1px solid #e6e600;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 13px;
+            line-height: 1.4;
+            cursor: pointer;
+            word-break: break-all;
+            position: relative;
+        }
+        .result-box:active { background-color: #f0f000; }
+        .result-box::after {
+            content: "터치하여 복사";
+            position: absolute;
+            bottom: 3px;
+            right: 5px;
+            font-size: 9px;
+            color: #999;
+        }
+
+        .tip-box { 
+            background-color: #fffde7; 
+            border: 1px solid #ffe082; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* Case ID 숨기기 클래스 (데이터 바인딩용) */
+        .hidden-data { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="header">현장 업무 문장 자동 생성</div>
+
+<div class="section-title">기본 정보 입력</div>
+<div class="input-card">
+    <div class="input-group">
+        <label>병실</label>
+        <input type="text" id="ward" value="1311" oninput="updateAll()">
+    </div>
+    <div class="input-group">
+        <label>등록번호</label>
+        <input type="text" id="regNo" value="12345678" oninput="updateAll()">
+    </div>
+    <div class="input-group">
+        <label>환자이름</label>
+        <input type="text" id="patient" value="김철수" oninput="updateAll()">
+    </div>
+    <div class="input-group">
+        <label>교수이름</label>
+        <input type="text" id="prof" value="KJS" oninput="updateAll()">
+    </div>
+    <div class="input-group">
+        <label>월일(MMDD)</label>
+        <input type="text" id="date" value="0227" oninput="updateAll()">
+    </div>
+    <div class="input-group">
+        <label>시간(HHMM)</label>
+        <input type="text" id="time" value="0030" oninput="updateAll()">
+    </div>
+    <div id="caseIdTop" class="case-id-preview"></div>
+    <div id="caseIdHidden" class="hidden-data"></div> </div>
+
+<div class="card">
+    <div class="card-header"><span>A (보고)</span></div>
+    <div class="card-body">
+        <div class="input-card" style="margin-bottom:0; padding:0; border:none;">
+            <div class="input-group">
+                <label>긴급도</label>
+                <input type="text" id="a_urgent" list="list_urgent" class="editable-combo" placeholder="10" oninput="updateAll()">
+            </div>
+            <div class="input-group">
+                <label>지금(핵심)</label>
+                <input type="text" id="a_now" oninput="updateAll()">
+            </div>
+            <div class="input-group">
+                <label>근거(데이터)</label>
+                <input type="text" id="a_basis" oninput="updateAll()">
+            </div>
+            <div class="input-group">
+                <label>요청(평가/조치)</label>
+                <input type="text" id="a_req" oninput="updateAll()">
+            </div>
+        </div>
+        <div class="result-box" id="res_a" onclick="copyText('res_a')"></div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header"><span>C (보호기록)</span></div>
+    <div class="card-body">
+        <div class="input-card" style="margin-bottom:0; padding:0; border:none;">
+            <div class="input-group">
+                <label>사유코드</label>
+                <input type="text" id="c_reason" list="list_reason" class="editable-combo" placeholder="인계" oninput="updateAll()">
+            </div>
+            <div class="input-group">
+                <label>다음확인시간</label>
+                <input type="text" id="c_time" placeholder="HHMM" oninput="updateAll()">
+            </div>
+        </div>
+        <div class="result-box" id="res_c" onclick="copyText('res_c')"></div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header"><span>D (완료)</span></div>
+    <div class="card-body">
+        <div class="input-card" style="margin-bottom:0; padding:0; border:none;">
+            <div class="input-group">
+                <label>결과</label>
+                <input type="text" id="d_now" oninput="updateAll()">
+            </div>
+            <div class="input-group">
+                <label>현재상태</label>
+                <input type="text" id="d_status" oninput="updateAll()">
+            </div>
+            <div class="input-group" style="grid-column: span 2;">
+                <label>F/U(재보고 기준)</label>
+                <input type="text" id="d_fu" oninput="updateAll()">
+            </div>
+        </div>
+        <div class="result-box" id="res_d" onclick="copyText('res_d')"></div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header"><span>정보성</span></div>
+    <div class="card-body">
+        <div class="input-group">
+            <label>구분 (입원/검사 등)</label>
+            <input type="text" id="i_now" list="list_info" class="editable-combo" placeholder="입원" oninput="updateAll()">
+        </div>
+        <div class="result-box" id="res_i" onclick="copyText('res_i')"></div>
+    </div>
+</div>
+
+<div class="tip-box">
+    <strong>사용 팁</strong><br>
+    파란 테두리 셀은 리스트 선택 또는 직접 입력이 가능합니다. 노란색 결과창을 터치하면 클립보드로 복사됩니다.
+</div>
+
+<datalist id="list_urgent"><option value="10"><option value="4"><option value="12"></datalist>
+<datalist id="list_reason">
+    <option value="수술중"><option value="시술중"><option value="회진"><option value="인계">
+    <option value="응급상황"><option value="담당부재"><option value="정보부족"><option value="근무종료">
+</datalist>
+<datalist id="list_info"><option value="입원"><option value="검사"><option value="자가약"></datalist>
+
+<script>
+    function updateAll() {
+        const ward = document.getElementById('ward').value;
+        const regNo = document.getElementById('regNo').value;
+        const patient = document.getElementById('patient').value;
+        const prof = document.getElementById('prof').value;
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+
+        const caseId = `[${ward}]-[${regNo}]-[${patient}]-[${prof}]-[${date}]-[${time}]`;
+        document.getElementById('caseIdTop').innerText = "Case ID: " + caseId;
+        
+        // A 결과
+        const aUrgent = document.getElementById('a_urgent').value || "10";
+        const aNow = document.getElementById('a_now').value;
+        const aBasis = document.getElementById('a_basis').value;
+        const aReq = document.getElementById('a_req').value;
+        document.getElementById('res_a').innerText = `[A]${caseId} / 지금:${aNow} / 근거:${aBasis} / 요청:${aReq} / ${aUrgent}`;
+
+        // C 결과
+        const cReason = document.getElementById('c_reason').value || "인계";
+        const cTime = document.getElementById('c_time').value;
+        document.getElementById('res_c').innerText = `[C]${caseId} / ${cReason} / 다음확인 ${cTime} (전화 1회 후)`;
+
+        // D 결과
+        const dNow = document.getElementById('d_now').value;
+        const dStatus = document.getElementById('d_status').value;
+        const dFu = document.getElementById('d_fu').value;
+        document.getElementById('res_d').innerText = `[D]${caseId} / 결과:${dNow} / 현재:${dStatus} / F/U:${dFu}`;
+
+        // 정보성 결과
+        const iNow = document.getElementById('i_now').value || "입원";
+        document.getElementById('res_i').innerText = `(보고)${caseId}/${iNow}/12`;
+    }
+
+    function copyText(id) {
+        const text = document.getElementById(id).innerText;
+        if(!text) return;
+        navigator.clipboard.writeText(text).then(() => {
+            alert("복사되었습니다!");
+        });
+    }
+
+    window.onload = updateAll;
+</script>
+
+</body>
+</html>
