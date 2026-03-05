@@ -313,7 +313,7 @@
         document.getElementById('res_a').innerText = `[A]${caseId} / 지금:${aNow} / 근거:${aBasis} / 요청:${aReq} / ${aUrgentVal}`;
 
         // C 결과
-        const cReason = document.getElementById('c_reason').value || "인계";
+        const cReason = document.getElementById('c_reason').value;
         const cTime = document.getElementById('c_time').value;
         document.getElementById('res_c').innerText = `[C]${caseId} / ${cReason} / 다음확인 ${cTime} (전화 1회 후)`;
 
