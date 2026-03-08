@@ -2,180 +2,140 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeValue 현장ACD 메신저 템플릿</title>
     <style>
-        body {
-            font-family: 'Malgun Gothic', sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            font-size: 12px;
+        :root {
+            --header-blue: #2e5a88;
+            --sub-blue: #3b6b9a;
+            --light-gray: #f4f4f4;
+            --result-yellow: #ffff99;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            table-layout: fixed;
-        }
-        th, td {
-            border: 1px solid #a0a0a0;
-            padding: 8px 4px;
-            text-align: center;
-        }
+        body { font-family: 'Malgun Gothic', sans-serif; margin: 20px; background: var(--light-gray); font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
+        
         /* 헤더 스타일 */
-        .main-header {
-            background-color: #2e5a88;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 15px;
-        }
-        .sub-header {
-            background-color: #3b6b9a;
-            color: white;
-            font-weight: bold;
-        }
-        .label-cell {
-            background-color: #e9eff5;
-            font-weight: bold;
-        }
-        /* 특정 강조 셀 */
-        .highlight-yellow {
-            background-color: #ffff00;
-            font-weight: bold;
-            color: #d9534f;
-        }
-        .urgent-cell {
-            background-color: #28a745;
-            color: white;
-            font-weight: bold;
-        }
-        .input-result {
-            background-color: #ffff99;
-            text-align: left;
-            padding-left: 10px;
-        }
-        /* 하단 팁 */
-        .footer-tip {
-            margin-top: 10px;
-            background-color: #fff9c4;
-            border: 1px solid #ffe082;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-        }
-        input {
-            width: 90%;
-            border: 1px solid #ccc;
-            text-align: center;
-        }
+        .main-header { background: var(--header-blue); color: white; font-size: 16px; font-weight: bold; padding: 12px; }
+        .sub-header { background: var(--sub-blue); color: white; }
+        .label-cell { background: #eef2f7; font-weight: bold; }
+        
+        /* 입력 및 결과 스타일 */
+        input[type="text"] { width: 90%; border: 1px solid #ddd; padding: 4px; text-align: center; border-radius: 3px; }
+        input:focus { border-color: #3b6b9a; outline: none; background: #fffde7; }
+        .result-cell { background: var(--result-yellow); text-align: left; padding-left: 15px; font-family: monospace; font-weight: bold; }
+        .urgent-input { background: #28a745; color: white; font-weight: bold; }
+        
+        .footer { margin-top: 15px; padding: 10px; background: #fff9c4; border: 1px solid #ffe082; text-align: center; font-weight: bold; }
+        .highlight-text { color: #d9534f; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <table>
-        <tr>
-            <th colspan="12" class="main-header">WeValue 현장ACD 메신저 템플릿</th>
-        </tr>
+        <tr><th colspan="12" class="main-header">WeValue 현장ACD 메신저 템플릿</th></tr>
         
         <tr class="label-cell">
-            <td rowspan="2" colspan="2">구분</td>
+            <td rowspan="2" colspan="2">공통 정보</td>
             <td>병실</td>
             <td>등록번호</td>
             <td>환자이름</td>
             <td>교수이름</td>
             <td>월일(MMDD)</td>
             <td>시간(HHMM)</td>
-            <td colspan="4">CaseID</td>
+            <td colspan="4">CaseID (자동생성)</td>
         </tr>
         <tr>
-            <td>1311</td>
-            <td>12345678</td>
-            <td>가나다</td>
-            <td>박OO</td>
-            <td>0308</td>
-            <td>2211</td>
-            <td colspan="4">[1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211]</td>
+            <td><input type="text" id="ward" value="1311" oninput="updateAll()"></td>
+            <td><input type="text" id="regNo" value="12345678" oninput="updateAll()"></td>
+            <td><input type="text" id="pName" value="가나다" oninput="updateAll()"></td>
+            <td><input type="text" id="prof" value="박OO" oninput="updateAll()"></td>
+            <td><input type="text" id="date" value="0308" oninput="updateAll()"></td>
+            <td><input type="text" id="time" value="2211" oninput="updateAll()"></td>
+            <td colspan="4" id="caseIdDisplay" style="font-weight: bold;"></td>
         </tr>
 
         <tr class="sub-header">
-            <td colspan="2" class="highlight-yellow">141W, 142W 전용<br>"하이패스" 태그</td>
-            <td>긴급도(10/4/12)</td>
+            <td colspan="2"><span style="color:#ffeb3b">"하이패스"</span> 태그</td>
+            <td>긴급도</td>
             <td>지금(핵심)</td>
-            <td>근거(데이터)</td>
-            <td>요청(평가/조치)</td>
+            <td>근거</td>
+            <td>요청</td>
             <td>사유코드</td>
-            <td>시간(HHMM)</td>
+            <td>시간</td>
             <td>현재(상태)</td>
-            <td>F/U(재보고 기준)</td>
-            <td colspan="2">메신저 입력 양식<br>(복사하여 붙여넣기)</td>
+            <td>F/U</td>
+            <td colspan="2">메신저 입력 양식 (복사 가능)</td>
         </tr>
 
         <tr>
             <td colspan="2" class="label-cell">A(보고)</td>
-            <td class="urgent-cell">12</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td colspan="2" class="input-result">[A][1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211] / 지금: / 근거: / 요청: / 12</td>
+            <td><input type="text" id="a_urg" value="12" class="urgent-input" oninput="updateAll()"></td>
+            <td><input type="text" id="a_now" oninput="updateAll()"></td>
+            <td><input type="text" id="a_base" oninput="updateAll()"></td>
+            <td><input type="text" id="a_req" oninput="updateAll()"></td>
+            <td colspan="4" class="label-cell" style="background:#f9f9f9">필요시 입력</td>
+            <td colspan="2" class="result-cell" id="res_A"></td>
         </tr>
+
         <tr>
-            <td colspan="2" class="label-cell">C(보호기록)-PA</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td colspan="2" class="input-result">[C][1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211] / {사유코드} / 다음확인 (전화 1회 후)</td>
+            <td colspan="2" class="label-cell">C(보호기록)</td>
+            <td colspan="3" style="background:#f9f9f9"></td>
+            <td colspan="2"><input type="text" id="c_reason" placeholder="{사유코드}" oninput="updateAll()"></td>
+            <td colspan="3" class="label-cell">전화 1회 후 다음확인</td>
+            <td colspan="2" class="result-cell" id="res_C"></td>
         </tr>
-        <tr>
-            <td colspan="2" class="label-cell">C(보호기록)-병동</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td colspan="2" class="input-result">[C][1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211] / {사유코드} / 다음확인 (전화 1회 후)</td>
-        </tr>
+
         <tr>
             <td colspan="2" class="label-cell">D(완료)</td>
-            <td></td>
-            <td></td>
-            <td>확인</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>처방확인</td>
-            <td></td>
-            <td colspan="2" class="input-result">[D][1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211] / 결과:확인 / 현재:처방확인 / F/U:</td>
-        </tr>
-        <tr>
-            <td colspan="2" class="label-cell">정보성</td>
+            <td colspan="2"></td>
+            <td><input type="text" id="d_base" value="확인" oninput="updateAll()"></td>
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td colspan="2" class="input-result">(보고)[1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211]/12</td>
+            <td><input type="text" id="d_stat" value="처방확인" oninput="updateAll()"></td>
+            <td><input type="text" id="d_fu" oninput="updateAll()"></td>
+            <td colspan="2" class="result-cell" id="res_D"></td>
         </tr>
     </table>
 
-    <div class="footer-tip">
-        사용 팁 : 양식의 흰색 입력셀에 정보를 입력하면 메신저 입력 양식이 노란 배경색의 셀에 자동으로 생성됩니다. ( "메신저 입력 양식" 셀 )
+    <div class="footer">
+        ?? 팁: 흰색 박스의 내용을 수정하면 노란색 양식이 자동으로 완성됩니다.
     </div>
 
+    <script>
+        function updateAll() {
+            // 공통 변수 추출
+            const ward = document.getElementById('ward').value;
+            const regNo = document.getElementById('regNo').value;
+            const pName = document.getElementById('pName').value;
+            const prof = document.getElementById('prof').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+
+            // CaseID 조합
+            const caseId = `[${ward}]-[${regNo}]-[${pName}]-[${prof}]-[${date}]-[${time}]`;
+            document.getElementById('caseIdDisplay').innerText = caseId;
+
+            // A(보고) 업데이트
+            const aUrg = document.getElementById('a_urg').value;
+            const aNow = document.getElementById('a_now').value;
+            const aBase = document.getElementById('a_base').value;
+            const aReq = document.getElementById('a_req').value;
+            document.getElementById('res_A').innerText = `[A]${caseId} / 지금:${aNow} / 근거:${aBase} / 요청:${aReq} / ${aUrg}`;
+
+            // C(보호기록) 업데이트
+            const cReason = document.getElementById('c_reason').value || "{사유코드}";
+            document.getElementById('res_C').innerText = `[C]${caseId} / ${cReason} / 다음확인 (전화 1회 후)`;
+
+            // D(완료) 업데이트
+            const dBase = document.getElementById('d_base').value;
+            const dStat = document.getElementById('d_stat').value;
+            const dFu = document.getElementById('d_fu').value;
+            document.getElementById('res_D').innerText = `[D]${caseId} / 결과:${dBase} / 현재:${dStat} / F/U:${dFu}`;
+        }
+
+        // 초기 실행
+        updateAll();
+    </script>
 </body>
 </html>
