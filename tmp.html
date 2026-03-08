@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeValue 현장ACD 메신저 템플릿</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            font-size: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            table-layout: fixed;
+        }
+        th, td {
+            border: 1px solid #a0a0a0;
+            padding: 8px 4px;
+            text-align: center;
+        }
+        /* 헤더 스타일 */
+        .main-header {
+            background-color: #2e5a88;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px;
+        }
+        .sub-header {
+            background-color: #3b6b9a;
+            color: white;
+            font-weight: bold;
+        }
+        .label-cell {
+            background-color: #e9eff5;
+            font-weight: bold;
+        }
+        /* 특정 강조 셀 */
+        .highlight-yellow {
+            background-color: #ffff00;
+            font-weight: bold;
+            color: #d9534f;
+        }
+        .urgent-cell {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+        .input-result {
+            background-color: #ffff99;
+            text-align: left;
+            padding-left: 10px;
+        }
+        /* 하단 팁 */
+        .footer-tip {
+            margin-top: 10px;
+            background-color: #fff9c4;
+            border: 1px solid #ffe082;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        input {
+            width: 90%;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <table>
+        <tr>
+            <th colspan="12" class="main-header">WeValue 현장ACD 메신저 템플릿</th>
+        </tr>
+        
+        <tr class="label-cell">
+            <td rowspan="2" colspan="2">구분</td>
+            <td>병실</td>
+            <td>등록번호</td>
+            <td>환자이름</td>
+            <td>교수이름</td>
+            <td>월일(MMDD)</td>
+            <td>시간(HHMM)</td>
+            <td colspan="4">CaseID</td>
+        </tr>
+        <tr>
+            <td>1311</td>
+            <td>12345678</td>
+            <td>가나다</td>
+            <td>박OO</td>
+            <td>0308</td>
+            <td>2211</td>
+            <td colspan="4">[1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211]</td>
+        </tr>
+
+        <tr class="sub-header">
+            <td colspan="2" class="highlight-yellow">141W, 142W 전용<br>"하이패스" 태그</td>
+            <td>긴급도(10/4/12)</td>
+            <td>지금(핵심)</td>
+            <td>근거(데이터)</td>
+            <td>요청(평가/조치)</td>
+            <td>사유코드</td>
+            <td>시간(HHMM)</td>
+            <td>현재(상태)</td>
+            <td>F/U(재보고 기준)</td>
+            <td colspan="2">메신저 입력 양식<br>(복사하여 붙여넣기)</td>
+        </tr>
+
+        <tr>
+            <td colspan="2" class="label-cell">A(보고)</td>
+            <td class="urgent-cell">12</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" class="input-result">[A][1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211] / 지금: / 근거: / 요청: / 12</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="label-cell">C(보호기록)-PA</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" class="input-result">[C][1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211] / {사유코드} / 다음확인 (전화 1회 후)</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="label-cell">C(보호기록)-병동</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" class="input-result">[C][1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211] / {사유코드} / 다음확인 (전화 1회 후)</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="label-cell">D(완료)</td>
+            <td></td>
+            <td></td>
+            <td>확인</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>처방확인</td>
+            <td></td>
+            <td colspan="2" class="input-result">[D][1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211] / 결과:확인 / 현재:처방확인 / F/U:</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="label-cell">정보성</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2" class="input-result">(보고)[1311]-[12345678]-[가나다]-[박OO]-[0308]-[2211]/12</td>
+        </tr>
+    </table>
+
+    <div class="footer-tip">
+        사용 팁 : 양식의 흰색 입력셀에 정보를 입력하면 메신저 입력 양식이 노란 배경색의 셀에 자동으로 생성됩니다. ( "메신저 입력 양식" 셀 )
+    </div>
+
+</body>
+</html>
