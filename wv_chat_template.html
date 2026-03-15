@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeValue 현장ACD 메신저 템플릿</title>
+    <style>
+        :root {
+            --primary-blue: #1e4b7a;
+            --header-blue: #2c5b8f;
+            --label-bg: #e8eef7;
+            --output-yellow: #ffff00;
+            --border-color: #333;
+            --input-white: #ffffff;
+        }
+
+        body { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; background-color: #fdf6e3; margin: 20px; color: #333; }
+        .container { max-width: 1200px; margin: auto; background: white; padding: 20px; border: 1px solid #ccc; }
+
+        header h1 { background: var(--primary-blue); color: white; text-align: center; padding: 10px; margin: -20px -20px 20px -20px; font-size: 1.4rem; border-bottom: 2px solid #000; }
+
+        .section-title { background: var(--header-blue); color: white; font-size: 1.1rem; padding: 6px; text-align: center; font-weight: bold; border: 1px solid var(--border-color); margin-top: 10px; }
+
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th, td { border: 1px solid var(--border-color); padding: 5px; text-align: center; font-size: 0.85rem; height: 30px; }
+        
+        .label { background: var(--label-bg); font-weight: bold; }
+        input { width: 95%; border: 1px solid #bbb; padding: 3px; text-align: center; font-size: 0.9rem; background-color: var(--input-white); }
+        input:focus { background-color: #fff9c4; outline: none; border-color: var(--primary-blue); }
+
+        .output-cell { background-color: var(--output-yellow); font-weight: bold; color: black; text-align: left; padding-left: 10px; word-break: break-all; }
+        .urgent-input { background-color: red; color: white; font-weight: bold; }
+
+        .tip-area { color: red; font-weight: bold; text-align: center; margin-top: 25px; font-size: 1.1rem; }
+        
+        /* 테이블 간격 조정 */
+        .margin-bottom { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>WeValue 현장ACD 메신저 템플릿 ( v1.260316 )</h1>
+    </header>
+
+    <div class="section-title">대화방 프로필 설정</div>
+    <table class="margin-bottom">
+        <tr>
+            <th class="label" width="10%">병동간호사</th>
+            <th class="label" width="10%">소속병동</th>
+            <td width="8%"><input type="text" id="p_ward" value="92"></td>
+            <th class="label" width="8%">근무</th>
+            <td width="8%"><input type="text" id="p_shift" value="나이트"></td>
+            <th class="label" width="8%">팀</th>
+            <td width="8%"><input type="text" id="p_team" value="B"></td>
+            <th class="label" width="8%">이름</th>
+            <td width="10%"><input type="text" id="p_name" value="이OO"></td>
+            <td class="output-cell" id="out_profile_nurse"></td>
+        </tr>
+        <tr>
+            <th class="label">PA</th>
+            <th class="label">소속과</th>
+            <td><input type="text" id="pa_dept" value="141-MH"></td>
+            <th class="label">담당교수님</th>
+            <td><input type="text" id="pa_prof" value="KJS"></td>
+            <th class="label" colspan="1">이름</th>
+            <td><input type="text" id="pa_name" value="이OO"></td>
+            <td colspan="2"></td>
+            <td class="output-cell" id="out_profile_pa"></td>
+        </tr>
+    </table>
+
+    <div class="section-title">CASE ID</div>
+    <table class="margin-bottom">
+        <thead class="label">
+            <tr>
+                <th width="8%">병실</th>
+                <th width="10%">등록번호</th>
+                <th width="10%">환자이름</th>
+                <th width="10%">교수이름</th>
+                <th width="10%">월일(MMDD)</th>
+                <th width="10%">시간(HHMM)</th>
+                <th class="output-cell" style="text-align:center">CaseID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" id="c_room" value="1311"></td>
+                <td><input type="text" id="c_reg" value="12345678"></td>
+                <td><input type="text" id="c_pat" value="가나다"></td>
+                <td><input type="text" id="c_prof" value="박OO"></td>
+                <td><input type="text" id="c_date" value="0316"></td>
+                <td><input type="text" id="c_time" value="0140"></td>
+                <td class="output-cell" id="out_case_id"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <thead class="label">
+            <tr>
+                <th width="8%">구분</th>
+                <th width="10%">141W,142W 전용<br>"하이패스" 태그</th>
+                <th width="8%">긴급도</th>
+                <th width="8%">지금(핵심)</th>
+                <th width="8%">근거(데이터)</th>
+                <th width="8%">요청(평가/조치)</th>
+                <th width="8%">사유코드</th>
+                <th width="8%">시간(HHMM)</th>
+                <th width="8%">현재(상태)</th>
+                <th width="8%">F/U(재보고 기준)</th>
+                <th class="output-cell" style="text-align:center">메신저 입력 양식 (복사하여 붙여넣기)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="label">A(보고)</td>
+                <td><input type="text" id="m_tag"></td>
+                <td><input type="text" id="m_urgent" value="10" class="urgent-input"></td>
+                <td><input type="text" id="m_now"></td>
+                <td><input type="text" id="m_base"></td>
+                <td><input type="text" id="m_req"></td>
+                <td></td><td></td><td></td><td></td>
+                <td class="output-cell" id="out_msg_a"></td>
+            </tr>
+            <tr>
+                <td class="label">D(완료)</td>
+                <td></td><td></td>
+                <td style="background:#eee"></td>
+                <td></td><td></td><td></td><td></td>
+                <td><input type="text" id="m_status" value="처방확인"></td>
+                <td><input type="text" id="m_fu"></td>
+                <td class="output-cell" id="out_msg_d"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="tip-area">
+        사용 팁 : 양식의 흰색 입력셀에 정보를 입력하면 메신저 입력 양식이 노란 배경색의 셀에 자동으로 생성됩니다. ( "메신저 입력 양식" 셀 )
+    </div>
+</div>
+
+<script>
+    const inputs = document.querySelectorAll('input');
+    
+    function updateAll() {
+        // 1. 프로필 업데이트
+        const p_ward = document.getElementById('p_ward').value;
+        const p_shift = document.getElementById('p_shift').value;
+        const p_team = document.getElementById('p_team').value;
+        const p_name = document.getElementById('p_name').value;
+        document.getElementById('out_profile_nurse').innerText = `[${p_ward}/${p_shift}/${p_team}] ${p_name}`;
+
+        const pa_dept = document.getElementById('pa_dept').value;
+        const pa_prof = document.getElementById('pa_prof').value;
+        const pa_name = document.getElementById('pa_name').value;
+        document.getElementById('out_profile_pa').innerText = `[${pa_dept}/${pa_prof}] ${pa_name}`;
+
+        // 2. Case ID 업데이트
+        const c_room = document.getElementById('c_room').value;
+        const c_reg = document.getElementById('c_reg').value;
+        const c_pat = document.getElementById('c_pat').value;
+        const c_prof = document.getElementById('c_prof').value;
+        const c_date = document.getElementById('c_date').value;
+        const c_time = document.getElementById('c_time').value;
+        const caseIdStr = `[${c_room}]-[${c_reg}]-[${c_pat}]-[${c_prof}]-[${c_date}]-[${c_time}]`;
+        document.getElementById('out_case_id').innerText = caseIdStr;
+
+        // 3. 메신저 양식 A(보고)
+        const m_now = document.getElementById('m_now').value;
+        const m_base = document.getElementById('m_base').value;
+        const m_req = document.getElementById('m_req').value;
+        const m_urgent = document.getElementById('m_urgent').value;
+        document.getElementById('out_msg_a').innerText = `[A]${caseIdStr} / 지금: ${m_now} / 근거: ${m_base} / 요청: ${m_req} / ${m_urgent}`;
+
+        // 4. 메신저 양식 D(완료)
+        const m_status = document.getElementById('m_status').value;
+        const m_fu = document.getElementById('m_fu').value;
+        document.getElementById('out_msg_d').innerText = `[D]${caseIdStr} / 결과: 현재:${m_status} / F/U: ${m_fu}`;
+    }
+
+    // 모든 input에 이벤트 리스너 추가
+    inputs.forEach(input => {
+        input.addEventListener('input', updateAll);
+    });
+
+    // 초기 실행
+    updateAll();
+</script>
+
+</body>
+</html>
