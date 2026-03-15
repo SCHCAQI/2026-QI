@@ -118,20 +118,34 @@
         <td class="cell-result" id="res_a" onclick="copyText('res_a')"></td>
     </tr>
     <tr>
-        <td class="row-label">C(보호기록)</td>
+        <td class="row-label">C(보호기록)-PA</td>
         <td class="cell-readonly case-id-cell" style="display: none; width:0px"></td>
         <td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td>
         <td>
-            <input type="text" id="c_reason" list="list_reason" class="editable-combo" placeholder="" oninput="updateAll()">
-            <datalist id="list_reason">
+            <input type="text" id="c_reason_pa" list="list_reason_pa" class="editable-combo" placeholder="" oninput="updateAll()">
+            <datalist id="list_reason_pa">
                 <option value="수술중"><option value="시술중"><option value="회진"><option value="인계"><option value="응급상황">
                 <option value="담당부재"><option value="정보부족"><option value="인력부족"><option value="기타"><option value="근무종료">
                 <option value="업무종료"><option value="익일인계"><option value="야간전환">
             </datalist>
         </td>
-        <td><input type="text" id="c_time" oninput="updateAll()"></td>
+        <td><input type="text" id="c_time_pa" oninput="updateAll()"></td>
         <td class="cell-readonly"></td><td class="cell-readonly"></td>
-        <td class="cell-result" id="res_c" onclick="copyText('res_c')"></td>
+        <td class="cell-result" id="res_c_pa" onclick="copyText('res_c_pa')"></td>
+    </tr>
+    <tr>
+        <td class="row-label">C(보호기록)-병동</td>
+        <td class="cell-readonly case-id-cell" style="display: none; width:0px"></td>
+        <td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td><td class="cell-readonly"></td>
+        <td>
+            <input type="text" id="c_reason_ward" list="list_reason_ward" class="editable-combo" placeholder="" oninput="updateAll()">
+            <datalist id="list_reason_ward">
+                <option value="IN-OUT(인계)">
+            </datalist>
+        </td>
+        <td><input type="text" id="c_time_ward" oninput="updateAll()"></td>
+        <td class="cell-readonly"></td><td class="cell-readonly"></td>
+        <td class="cell-result" id="res_c_ward" onclick="copyText('res_c_ward')"></td>
     </tr>
     <tr>
         <td class="row-label">D(완료)</td>
@@ -200,10 +214,15 @@
         const aReq = document.getElementById('a_req').value;
         document.getElementById('res_a').innerText = `[A]${caseId} / 지금: ${aNow} / 근거: ${aBasis} / 요청: ${aReq} / ${aUrgentVal}`;
 
-        // C(보호기록) 결과
-        const cReason = document.getElementById('c_reason').value;
-        const cTime = document.getElementById('c_time').value;
-        document.getElementById('res_c').innerText = `[C]${caseId} / ${cReason} / 다음확인 ${cTime} (전화 1회 후)`;
+        // C(보호기록) 결과-pa
+        const cReason = document.getElementById('c_reason_pa').value;
+        const cTime = document.getElementById('c_time_pa').value;
+        document.getElementById('res_c_pa').innerText = `[C]${caseId} / ${cReason} / 다음확인 ${cTime} (전화 1회 후)`;
+
+        // C(보호기록) 결과-병동
+        const cReason = document.getElementById('c_reason_ward').value;
+        const cTime = document.getElementById('c_time_ward').value;
+        document.getElementById('res_c_ward').innerText = `[C]${caseId} / ${cReason} / 다음확인 ${cTime} (전화 1회 후)`;
 
         // D(완료) 결과
         const dNow = document.getElementById('d_now').value;
