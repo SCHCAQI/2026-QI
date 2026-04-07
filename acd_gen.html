@@ -46,25 +46,49 @@
     <tr class="input-row">
         <td class="input-header" width="120px">병동 간호사</td>
         <td class="input-header" width="120px">소속병동</td>
-        <td width="150px"><input type="text" id="dept" value="" oninput="updateAll()"></td>
+        <td width="150px">
+            <input type="text" id="dept_ward" list="list_ward_dept" class="editable-combo" placeholder="" oninput="updateAll()">
+            <datalist id="list_ward_dept">
+                <option value="92">
+                <option value="131">
+                <option value="141">
+            </datalist>
+        </td>
         <td class="input-header" width="120px">근무</td>
-        <td width="150px"><input type="text" id="shift" value="" oninput="updateAll()"></td>
+        <td width="150px">
+            <input type="text" id="shift_ward" list="list_shift" value="" oninput="updateAll()">
+            <datalist id="list_shift">
+                <option value="데이">
+                <option value="이브닝">
+                <option value="나이트">
+            </datalist>
+        </td>
         <td class="input-header" width="120px">팀</td>
-        <td width="150px"><input type="text" id="team" value="" oninput="updateAll()"></td>
+        <td width="150px"><input type="text" id="team_ward" value="" oninput="updateAll()"></td>
         <td class="input-header" width="120px">이름</td>
-        <td width="150px"><input type="text" id="name" value="" oninput="updateAll()"></td>
-        <td class="cell-result" id="res_p_room" onclick="copyText('res_a')"></td>
+        <td width="150px"><input type="text" id="name_ward" value="" oninput="updateAll()"></td>
+        <td class="cell-result" id="res_p_ward" onclick="copyText('res_p_ward')"></td>
     </tr>
     <tr class="input-row">
         <td class="input-header">PA</td>
         <td class="input-header">소속과</td>
-        <td><input type="text" id="dept" value="" oninput="updateAll()"></td>
+        <td>
+            <input type="text" id="dept_pa" list="list_pa_dept" class="editable-combo" placeholder="" oninput="updateAll()">
+            <datalist id="list_pa_dept">
+                <option value="92-CS">
+                <option value="92-MC">
+                <option value="131-URO">
+                <option value="131-ENT">
+                <option value="141-MH">
+                <option value="142-MH">
+            </datalist>
+        </td>
         <td class="input-header">담당교수님</td>
-        <td><input type="text" id="shift" value="" oninput="updateAll()"></td>
+        <td><input type="text" id="master_name" value="" oninput="updateAll()"></td>
         <td class="input-header" COLSPAN="2"></td>
         <td class="input-header">이름</td>
-        <td><input type="text" id="name" value="" oninput="updateAll()"></td>
-        <td class="cell-result" id="res_p_room" onclick="copyText('res_a')"></td>
+        <td><input type="text" id="name_pa" value="" oninput="updateAll()"></td>
+        <td class="cell-result" id="res_p_pa" onclick="copyText('res_p_pa')"></td>
     </tr>
 </table>
 
@@ -102,7 +126,21 @@
     <tr>
         <td class="row-label" >A(보고)</td>
         <td class="cell-readonly case-id-cell" style="display: none; width:0px"></td>
-        <td class="cell-readonly"></td>
+        <td class="cell-readonly">
+            <input type="text" id="hipasstag" list="list_hipasstag" class="editable-combo" placeholder="" oninput="updateAll()">
+            <datalist id="list_hipasstag">
+                <option value="[CHEMO]">
+                <option value="[BLOOD]">
+                <option value="[CVR]">
+                <option value="[LIFE]">
+                <option value="[MEET]">
+                <option value="[MARROW]">
+                <option value="[ISO]">
+                <option value="[C-Status]">
+                <option value="[PAIN]">
+                <option value="[OUT]">
+            </datalist>
+        </td>
         <td>
             <input type="text" id="a_urgent" list="list_urgent" class="editable-combo" placeholder="" oninput="updateAll()">
             <datalist id="list_urgent">
@@ -208,21 +246,32 @@
             aUrgentInput.style.backgroundColor = "green";
             aUrgentInput.style.color = "white";
         }
-
+        
+        const dept_ward = document.getElementById('dept_ward').value;
+        const shift_ward = document.getElementById('shift_ward').value;
+        const team_ward = document.getElementById('team_ward').value;
+        const name_ward = document.getElementById('name_ward').value;
+        document.getElementById('res_p_ward').innerText = `[${dept_ward}/${shift_ward}/${team_ward}] ${name_ward}`;
+        
+        const dept_pa = document.getElementById('dept_pa').value;
+        const master_name = document.getElementById('master_name').value;
+        const name_pa = document.getElementById('name_pa').value;
+        document.getElementById('res_p_pa').innerText = `[${dept_pa}/${master_name}] ${name_pa}`;
+        
         const aNow = document.getElementById('a_now').value;
         const aBasis = document.getElementById('a_basis').value;
         const aReq = document.getElementById('a_req').value;
         document.getElementById('res_a').innerText = `[A]${caseId} / 지금: ${aNow} / 근거: ${aBasis} / 요청: ${aReq} / ${aUrgentVal}`;
 
         // C(보호기록) 결과-pa
-        const cReason = document.getElementById('c_reason_pa').value;
-        const cTime = document.getElementById('c_time_pa').value;
-        document.getElementById('res_c_pa').innerText = `[C]${caseId} / ${cReason} / 다음확인 ${cTime} (전화 1회 후)`;
+        const cReason_pa = document.getElementById('c_reason_pa').value;
+        const cTime_pa = document.getElementById('c_time_pa').value;
+        document.getElementById('res_c_pa').innerText = `[C]${caseId} / ${cReason_pa} / 다음확인 ${cTime_pa} (전화 1회 후)`;
 
         // C(보호기록) 결과-병동
-        const cReason = document.getElementById('c_reason_ward').value;
-        const cTime = document.getElementById('c_time_ward').value;
-        document.getElementById('res_c_ward').innerText = `[C]${caseId} / ${cReason} / 다음확인 ${cTime} (전화 1회 후)`;
+        const cReason_ward = document.getElementById('c_reason_ward').value;
+        const cTime_ward = document.getElementById('c_time_ward').value;
+        document.getElementById('res_c_ward').innerText = `[C]${caseId} / ${cReason_ward} / 다음확인 ${cTime_ward} (전화 1회 후)`;
 
         // D(완료) 결과
         const dNow = document.getElementById('d_now').value;
