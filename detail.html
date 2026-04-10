@@ -115,7 +115,7 @@
                 try {
                     await axios.post(API_URL, params);
                     localStorage.setItem('myAnonId', form.value.author);
-                    location.href = 'index.html';
+                    location.href = 'praise_board.html';
                 } catch(e) { alert("처리 실패. 비밀번호를 확인하세요."); } finally { isLoading.value = false; }
             };
 
