@@ -11,8 +11,25 @@
         :root { --primary: #7c4dff; --primary-soft: #f3efff; --bg: #f2f4f7; --header-bg: #ffffff; --card-bg: #ffffff; --text: #1a1a1a; --text-light: #707070; --border: #eaecf0; --input-bg: #ffffff; }
         [data-theme='dark'] { --bg: #121212; --header-bg: #1e1e1e; --card-bg: #1e1e1e; --text: #e8e8e8; --text-light: #a0a0a0; --border: #2c2c2c; --input-bg: #2a2a2a; }
         body { font-family: 'Pretendard', sans-serif; background: var(--card-bg); margin: 0; color: var(--text); line-height: 1.6; }
-        .layer-header { padding: 0 20px; height: 60px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); position: sticky; top: 0; }
-        .content-area { padding: 30px 24px; max-width: 800px; margin: 0 auto; }
+        .layer-header { 
+            padding: 0 20px; 
+            height: 60px; 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: var(--header-bg); /* 배경색이 변수로부터 확실히 들어가야 함 */
+            position: sticky; 
+            top: 0; 
+            z-index: 100; /* 추가: 콘텐츠보다 위에 오도록 설정 */
+        }
+        
+        .content-area { 
+            padding: 30px 24px; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            position: relative; /* 추가: z-index가 적용된 헤더와의 배치 관계 명확화 */
+        }
         input, textarea { width: 100%; border: 1px solid var(--border); padding: 14px; border-radius: 10px; background: var(--input-bg); color: var(--text); box-sizing: border-box; outline: none; margin-bottom: 15px; font-size: 15px; }
         .btn-text { background: none; border: none; cursor: pointer; font-size: 15px; }
         .loading-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.05); display:flex; justify-content:center; align-items:center; z-index:1000; }
@@ -150,6 +167,5 @@
         }
     }).mount('#app');
 </script>
-<p>version. 20260410.1</p>
 </body>
 </html>
