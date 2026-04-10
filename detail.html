@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeValue - 상세보기</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        /* index.html과 동일한 루트 스타일 및 공통 스타일 포함 */
+        :root { --primary: #7c4dff; --primary-soft: #f3efff; --bg: #f2f4f7; --header-bg: #ffffff; --card-bg: #ffffff; --text: #1a1a1a; --text-light: #707070; --border: #eaecf0; --input-bg: #ffffff; }
+        [data-theme='dark'] { --bg: #121212; --header-bg: #1e1e1e; --card-bg: #1e1e1e; --text: #e8e8e8; --text-light: #a0a0a0; --border: #2c2c2c; --input-bg: #2a2a2a; }
+        body { font-family: 'Pretendard', sans-serif; background: var(--card-bg); margin: 0; color: var(--text); line-height: 1.6; }
+        .layer-header { padding: 0 20px; height: 60px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); position: sticky; top: 0; }
+        .content-area { padding: 30px 24px; max-width: 800px; margin: 0 auto; }
+        input, textarea { width: 100%; border: 1px solid var(--border); padding: 14px; border-radius: 10px; background: var(--input-bg); color: var(--text); box-sizing: border-box; outline: none; margin-bottom: 15px; font-size: 15px; }
+        .btn-text { background: none; border: none; cursor: pointer; font-size: 15px; }
+        .loading-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.05); display:flex; justify-content:center; align-items:center; z-index:1000; }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div v-if="isLoading" class="loading-overlay">로딩 중...</div>
+
+    <div class="layer-header">
+        <button @click="goBack" class="btn-text" style="color:var(--text-light)">{{ isEditOrWrite ? '취소' : '닫기' }}</button>
+        <strong style="font-size:17px;">{{ pageTitle }}</strong>
+        <div>
+            <button v-if="isEditOrWrite" @click="submitPost" class="btn-text" style="color:var(--primary); font-weight:bold;">완료</button>
+            <div v-else-if="form.author === myId">
+                <button @click="mode = 'edit'" class="btn-text" style="color:var(--text-light); margin-right:12px;">수정</button>
+                <button @click="deletePost" class="btn-text" style="color:#ff5a5f; font-weight:bold;">삭제</button>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="mode === 'detail'" class="content-area">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+            <div style="width: 36px; height: 36px; background: var(--primary-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: bold;">{{ form.author.substring(0,1) }}</div>
+            <div>
+                <div style="font-weight: bold; font-size: 14px;">{{ form.author }}</div>
+                <div style="color: var(--text-light); font-size: 12px;">{{ formatDate(form.date) }}</div>
+            </div>
+        </div>
+        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">{{ form.title }}</h2>
+        <div style="height: 1px; background: var(--border); margin-bottom: 24px;"></div>
+        <p style="white-space: pre-wrap;">{{ form.content }}</p>
+    </div>
+
+    <div v-else class="content-area">
+        <div style="display: flex; gap: 10px;">
+            <input v-model="form.author" placeholder="닉네임" :disabled="mode === 'edit'" style="flex: 1;">
+            <input v-model="form.password" type="password" placeholder="비밀번호" style="flex: 1;">
+        </div>
+        <input v-model="form.title" placeholder="제목" style="font-weight: bold; font-size: 18px;">
+        <textarea v-model="form.content" rows="15" placeholder="나누고 싶은 이야기를 적어주세요."></textarea>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycby0Y2trjJGVx-K000NemLYfKlFvAQSaCJ9rMFJCVMe9tx2N-zJkGyE-T1trPxffAdJ3/exec';
+    const { createApp, ref, onMounted, computed } = Vue;
+
+    createApp({
+        setup() {
+            const mode = ref('detail'); // detail, write, edit
+            const isLoading = ref(false);
+            const myId = ref(localStorage.getItem('myAnonId') || '');
+            const form = ref({ id: '', author: myId.value, title: '', content: '', password: '', date: '' });
+
+            const pageTitle = computed(() => {
+                if (mode.value === 'write') return '새 글 작성';
+                if (mode.value === 'edit') return '글 수정하기';
+                return '게시글';
+            });
+
+            const isEditOrWrite = computed(() => mode.value === 'write' || mode.value === 'edit');
+
+            const loadData = async () => {
+                const params = new URLSearchParams(window.location.search);
+                const id = params.get('id');
+                const urlMode = params.get('mode');
+
+                if (urlMode === 'write') {
+                    mode.value = 'write';
+                    return;
+                }
+
+                if (id) {
+                    isLoading.value = true;
+                    try {
+                        // 실제로는 상세조회 API가 있으면 좋지만, 여기서는 리스트에서 찾거나 전체 로드 후 필터링
+                        const res = await axios.get(`${API_URL}?action=read`);
+                        const post = res.data.posts.find(p => String(p.ID) === String(id));
+                        if (post) {
+                            form.value = { id: post.ID, author: post.Author, title: post.Title, content: post.Content, date: post.Date, password: '' };
+                        }
+                    } catch(e) { alert("데이터 로드 실패"); } finally { isLoading.value = false; }
+                }
+            };
+
+            const submitPost = async () => {
+                if (!form.value.title || !form.value.content) return alert("내용을 입력하세요.");
+                isLoading.value = true;
+                const action = mode.value === 'write' ? 'create' : 'update';
+                
+                const params = new URLSearchParams();
+                params.append('action', action);
+                if(action === 'update') params.append('id', form.value.id);
+                params.append('author', form.value.author);
+                params.append('password', form.value.password);
+                params.append('title', form.value.title);
+                params.append('content', form.value.content);
+
+                try {
+                    await axios.post(API_URL, params);
+                    localStorage.setItem('myAnonId', form.value.author);
+                    location.href = 'index.html';
+                } catch(e) { alert("처리 실패. 비밀번호를 확인하세요."); } finally { isLoading.value = false; }
+            };
+
+            const deletePost = async () => {
+                const pw = prompt("비밀번호를 입력하세요.");
+                if(!pw) return;
+                isLoading.value = true;
+                const params = new URLSearchParams();
+                params.append('action', 'delete');
+                params.append('id', form.value.id);
+                params.append('password', pw);
+                try {
+                    await axios.post(API_URL, params);
+                    location.href = 'index.html';
+                } catch(e) { alert("삭제 실패"); } finally { isLoading.value = false; }
+            };
+
+            const goBack = () => {
+                if(mode.value === 'edit') mode.value = 'detail';
+                else location.href = 'index.html';
+            };
+
+            const formatDate = (d) => d ? new Date(d).toLocaleString() : '';
+
+            onMounted(() => {
+                const theme = localStorage.getItem('wevalue_theme');
+                if(theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+                loadData();
+            });
+
+            return { mode, form, isLoading, myId, pageTitle, isEditOrWrite, submitPost, deletePost, goBack, formatDate };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
