@@ -179,7 +179,8 @@
                 params.append('content', form.value.content);
 
                 try {
-                    await axios.post(API_URL, params);
+                    const res = await axios.post(API_URL, params);
+                    alert(res);
                     localStorage.setItem('myAnonId', form.value.author);
                     location.href = 'praise_board.html';
                 } catch(e) { 
