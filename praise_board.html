@@ -118,6 +118,7 @@
             onMounted(() => {
                 if(isDarkMode.value) document.documentElement.setAttribute('data-theme', 'dark');
                 fetchPosts();
+                getVersion();
             });
 
             return { filteredPosts, isLoading, searchQuery, currentPage, totalPages, isDarkMode, toggleTheme, goToDetail, goToWrite, changePage, formatDate };
