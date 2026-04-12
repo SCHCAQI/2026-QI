@@ -132,7 +132,8 @@
         const btn = document.querySelector('button');
         
         // "2026qi"의 SHA-256 해시값
-        const correctHash = "39626388960098f6233405f6365b26391d1797868037367858c87c936034f59c"; 
+        const correctHash = "034f7b198dc1cab8e07cbcfaa04680b14fe67a49daa01c100b776244d257462c"; 
+
 
         if (!input) {
             messageDiv.innerText = "번호를 입력해 주세요.";
@@ -144,8 +145,10 @@
         btn.disabled = true;
 
         const inputHash = await sha256(input);
+        
+        alert(inputHash);
 
-        if (inputHash === correctHash) {
+        if (inputHash == correctHash) {
             sessionStorage.setItem('isAuthorized', 'true');
             window.location.href = "home.html";
         } else {
