@@ -57,9 +57,10 @@
     <button class="write-fab" @click="goToWrite">+</button>
 </div>
 
-<p style="text-align:center">version. 20260412.2</p>
+<p style="text-align:center" id="uiVersion">{{version}}</p>
 
 <script>
+    const uiVersion = '20260412.2';
     const API_URL = 'https://script.google.com/macros/s/AKfycbz3h_a7V97YYLlf761DZxcujsRA2z38uPWzwyhqKvrb3Ltpo5g-HH65Gor6sy3ZH-Pp/exec';
     const { createApp, ref, computed, onMounted } = Vue;
 
@@ -85,6 +86,14 @@
                     const res = await axios.get(`${API_URL}?action=read&page=${currentPage.value}`);
                     posts.value = res.data.posts || [];
                     totalPages.value = res.data.totalPages || 1;
+                } catch(e) { console.error(e); } finally { isLoading.value = false; }
+            };
+
+            const getVersion = async () => {
+                try {
+                    const res = await axios.get(`${API_URL}?action=version`);
+                    const {svrVersion, status} = res.data;
+                    version = svrVersion;
                 } catch(e) { console.error(e); } finally { isLoading.value = false; }
             };
 
