@@ -67,7 +67,7 @@
 
 
 <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbznZsK2mYUBg7V0cNap9pNX_bR7mCjfa7mfaBJ50wM3jhkFDMBgpjC4QZGRjRGAQ1yL/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzS43_Y1mw81I3rh2FkDkTzkCrGyGM2-o3u7jaQBQUqbvkXaI_AwTUQSfeniqmQlQV9/exec';
     const { createApp, ref, computed, onMounted } = Vue;
 
     createApp({
@@ -80,7 +80,7 @@
             const isDarkMode = ref(localStorage.getItem('wevalue_theme') === 'dark');
             
             // 버전 관련 변수
-            const uiVersion = ref('20260412.11'); // UI 버전
+            const uiVersion = ref('20260412.12'); // UI 버전
             const svrVersion = ref('Loading...');   // 서버 버전
             
             const toggleTheme = () => {

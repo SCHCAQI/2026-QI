@@ -120,7 +120,7 @@
 </div>
 
 <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbznZsK2mYUBg7V0cNap9pNX_bR7mCjfa7mfaBJ50wM3jhkFDMBgpjC4QZGRjRGAQ1yL/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzS43_Y1mw81I3rh2FkDkTzkCrGyGM2-o3u7jaQBQUqbvkXaI_AwTUQSfeniqmQlQV9/exec';
     const { createApp, ref, onMounted, computed } = Vue;
 
     createApp({
@@ -227,7 +227,10 @@
                 params.append('id', form.value.id);
                 params.append('password', pw);
                 try {
-                    await axios.post(API_URL, params);
+                    const res = await axios.post(API_URL, params);
+                    const {result, message} = res.data;
+                    alert(message);
+                    
                     location.href = 'praise_board.html';
                 } catch(e) { 
                     alert("삭제 실패"); 
