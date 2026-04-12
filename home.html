@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeValue</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="wevalue_w.png" type="image/png">
+    <link rel="shortcut icon" href="wevalue_w.png">    
+    <link rel="apple-touch-icon" href="wevalue_w.png">    
+    <link rel="icon" sizes="192x192" href="wevalue_w.png">
+    <link rel="icon" sizes="512x512" href="wevalue_w.png">    
+    <meta name="msapplication-TileImage" content="wevalue_w.png">
+
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --item-bg: #f9f9f9;
+            --text-main: #191919;
+            --text-sub: #8e8e93;
+            --border-color: #f2f2f7;
+            --accent-blue: #007aff;
+            --accent-orange: #ff9500;
+            --accent-green: #34c759;
+            --accent-purple: #af52de;
+            --footer-bg: #f9f9f9;
+            --logo-url: url('logo.png');
+        }
+
+        body.dark-mode {
+            --bg-color: #000000;
+            --item-bg: #121212;
+            --text-main: #ffffff;
+            --text-sub: #8e8e93;
+            --border-color: #1c1c1e;
+            --accent-blue: #3586ff;
+            --footer-bg: #121212;
+            --logo-url: url('logo_black.png');
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            transition: background-color 0.2s ease;
+        }
+
+        .container { width: 100%; max-width: 600px; margin: 0 auto; padding-bottom: 30px; }
+
+        /* Header */
+        .header-profile { padding: 30px 20px 10px; display: flex; align-items: center; justify-content: space-between; }
+        .header-logo { width: 50px; height: 50px; object-fit: contain; content: var(--logo-url); }
+        .profile-left { display: flex; align-items: center; gap: 12px; }
+        .profile-info h1 { margin: 0; font-size: 20px; font-weight: 700; }
+        .profile-info p { margin: 2px 0 0; font-size: 14px; color: var(--text-sub); }
+        .theme-toggle { cursor: pointer; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--item-bg); border: 1px solid var(--border-color); }
+
+        /* Tab Control Style */
+        .tabs-container {
+            position: sticky;
+            top: 0;
+            background: var(--bg-color);
+            z-index: 10;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-menu {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 0 10px;
+            scrollbar-width: none; /* Firefox */
+        }
+        .tab-menu::-webkit-scrollbar { display: none; } /* Chrome, Safari */
+
+        .tab-btn {
+            padding: 14px 16px;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-sub);
+            border: none;
+            background: none;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-blue);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 15%;
+            width: 70%;
+            height: 3px;
+            background-color: var(--accent-blue);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Link Card Styles (기존 유지) */
+        .link-card {
+            background-color: var(--item-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+        .link-card .material-icons { font-size: 22px; }
+        .link-card-text { font-size: 15px; font-weight: 500; }
+        
+        /* 그룹 컨테이너 */
+        .link-card-group {
+            width: 100%;
+            margin-bottom: 12px;
+            border: none;
+        }
+        
+        /* 요약 헤더 (클릭하는 부분) */
+        summary.link-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            list-style: none; /* 기본 화살표 제거 */
+            padding: 16px;
+            background-color: var(--item-bg); /* 변수 적용 */
+            border: 1px solid var(--border-color); /* 변수 적용 */
+            border-radius: 12px;
+            color: var(--text-main); /* 변수 적용 */
+        }
+        summary::-webkit-details-marker { display: none; }
+        
+        .summary-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 화살표 애니메이션 */
+        .arrow {
+            transition: transform 0.3s ease;
+            color: var(--text-sub); /* 변수 적용 */
+        }
+        details[open] .arrow {
+            transform: rotate(180deg);
+        }
+        
+        /* 하위 메뉴 영역 */
+        .sub-menu {
+            background-color: var(--bg-color); /* 변수 적용 */
+            margin: -8px 5px 10px 5px;
+            padding: 12px 0 8px 0;
+            border-radius: 0 0 12px 12px;
+            border: 1px solid var(--border-color); /* 변수 적용 */
+            border-top: none;
+        }
+        
+        /* 하위 링크 개별 스타일 */
+        .sub-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px 12px 45px;
+            text-decoration: none;
+            color: var(--text-main); /* 변수 적용 */
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .sub-link .material-icons {
+            font-size: 18px;
+            color: var(--text-sub); /* 변수 적용 */
+        }
+        
+        .sub-link:hover {
+            background-color: var(--item-bg);
+            color: var(--accent-blue);
+        }
+        
+        .sub-link:hover .material-icons {
+            color: var(--accent-blue);
+        }
+
+        /* Footer */
+        .footer { margin: 20px; padding: 16px; background-color: var(--footer-bg); border-radius: 12px; font-size: 13px; color: var(--text-sub); border: 1px solid var(--border-color); }
+        .footer-title { font-weight: 600; color: var(--text-main); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header-profile">
+        <div class="profile-left">
+            <div class="profile-thumb"><img src="wevalue_w.png" alt="Logo" class="header-logo"></div>
+            <div class="profile-info">
+                <h1>WeValue(v1.0412.3)</h1>
+                <p>협업기반 휴머니즘 중심의 파트너스</p>
+            </div>
+        </div>
+        <div class="theme-toggle" onclick="toggleTheme()">
+            <span class="material-icons" id="theme-icon">dark_mode</span>
+        </div>
+    </div>
+    
+    <footer class="footer">
+            <span class="material-icons" style="color:var(--accent-orange)">error_outline</span>
+        <div class="footer-item">
+            <div>
+                <span class="footer-title">개인정보 주의</span> 환자 및 개인정보 업로드 금지
+            </div>
+        </div>
+        <div class="footer-item">
+            <div>
+                <span class="footer-title">운영 책임</span>
+                본 페이지의 자료·교육·설문·회의·성과 공유는 진료지원간호팀이 책임 운영합니다.
+            </div>
+        </div>
+        <div class="footer-item">
+            <div>
+                <span class="footer-title">구글플레이 또는 앱스토어에서 한컴독스를 미리 설치하세요.</span>
+            </div>
+        </div>
+    </footer>
+    
+    <div class="tabs-container">
+        <div class="tab-menu">
+            <button class="tab-btn active" onclick="openTab(event, 'tab1')">소통의 광장</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab2')">업무기준</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab3')">배움</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab4')">지표</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab5')">설문</button>
+        </div>
+    </div>
+    
+    <div class="list-wrap">
+        <div id="tab1" class="tab-content active">
+            <div class="details-content">
+                <a href="https://open.kakao.com/o/grvxNzii" target="_blank" class="link-card">
+                    <span class="material-icons">chat_bubble_outline</span>
+                    <span class="link-card-text">우리가치톡(Kakao 오픈채팅, 프로필 익명)</span>
+                </a>
+                <!--<a href="https://band.us/band/101260685" target="_blank" class="link-card">
+                    <span class="material-icons">groups</span>
+                    <span class="link-card-text">PA밴드 바로가기</span>
+                </a>-->
+                <a href="https://schcaqi.github.io/2026-QI/praise_board.html" target="_blank" class="link-card">
+                    <span class="material-icons">thumb_up_off_alt</span>
+                    <span class="link-card-text">칭찬 게시판</span>
+                </a>
+            </div>
+        </div>
+
+        <div id="tab2" class="tab-content">
+            <div id="movieList" class="details-content">
+                <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/%EC%97%85%EB%AC%B4%EC%9D%98%20%EA%B8%B0%EC%A4%80/%EC%9A%B0%EB%A6%AC%EA%B0%80%EC%B9%98(WeValue)%20%EC%86%8C%ED%86%B5%EC%9D%98%20%EC%B2%A0%ED%95%99%20ACD.hwp" target="_blank" class="link-card">
+                    <span class="material-icons">description</span>
+                    <span class="link-card-text">우리가치(WeValue) 소통의 철학 A·C·D</span>
+                </a>
+                <div class="link-card-container">
+                    <div class="link-item">
+                        <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/movie/1.PA.%EB%B3%91%EB%8F%99%EA%B0%84%ED%98%B8%EC%82%AC%20%ED%94%84%EB%A1%9C%ED%95%84%20%EC%84%A4%EC%A0%95%20%EB%B0%8F%20%EB%8D%B0%EC%9D%BC%EB%A6%AC%20%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%20%EA%B2%8C%EC%8B%9C%EB%B0%A9%EB%B2%95.mp4" target="_blank" class="link-card">
+                            <span class="material-icons">play_circle_outline</span>
+                            <span class="link-card-text">1.PA.병동간호사 프로필 설정 및 데일리 프로토콜 게시방법.mp4</span>
+                        </a>
+                    </div>
+                    
+                    <div class="link-item">
+                        <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/movie/2.%EB%B3%91%EB%8F%99%20A%20%EB%8B%A8%EA%B3%84.mp4" target="_blank" class="link-card">
+                            <span class="material-icons">play_circle_outline</span>
+                            <span class="link-card-text">2.병동 A 단계.mp4</span>
+                        </a>
+                    </div>
+                    
+                    <div class="link-item">
+                        <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/movie/3.PA%20C%EB%8B%A8%EA%B3%84-D%EB%8B%A8%EA%B3%84.mp4" target="_blank" class="link-card">
+                            <span class="material-icons">play_circle_outline</span>
+                            <span class="link-card-text">3.PA C단계-D단계.mp4</span>
+                        </a>
+                    </div>
+                    
+                    <div class="link-item">
+                        <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/movie/4.%EB%B3%91%EB%8F%99%20C%20%EB%8B%A8%EA%B3%84.mp4" target="_blank" class="link-card">
+                            <span class="material-icons">play_circle_outline</span>
+                            <span class="link-card-text">4.병동 C 단계.mp4</span>
+                        </a>
+                    </div>
+                    
+                    <div class="link-item">
+                        <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/movie/5.%EB%B3%91%EB%8F%99%20done%EC%99%84%EB%A3%8C%20%EB%8B%A8%EA%B3%84(%EB%84%A4%20%EB%8B%B5%EB%B3%80%EC%9C%BC%EB%A1%9C%20%EC%A2%85%EA%B2%B0).mp4" target="_blank" class="link-card">
+                            <span class="material-icons">play_circle_outline</span>
+                            <span class="link-card-text">5.병동 done완료 단계(네 답변으로 종결).mp4</span>
+                        </a>
+                    </div>
+                    
+                    <div class="link-item">
+                        <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/movie/6.%EC%A0%95%EB%B3%B4%EC%84%B1%EB%B3%B4%EA%B3%A0%20(%EB%B3%91%EB%8F%99)%20%EC%A0%88%EC%B0%A8%20A-D-%EB%84%A4(%EB%B3%91%EB%8F%99).mp4" target="_blank" class="link-card">
+                            <span class="material-icons">play_circle_outline</span>
+                            <span class="link-card-text">6.정보성보고 (병동) 절차 A-D-네(병동).mp4</span>
+                        </a>
+                    </div>
+                    
+                    <div class="link-item">
+                        <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/movie/7.%EC%82%AC%EC%A7%84%EB%B3%B4%EA%B3%A0%EC%A0%88%EC%B0%A8%20(%EC%82%AC%EC%A7%84%20%EC%A0%84%EC%86%A1%ED%9B%84%EC%97%90%20%EB%8B%B5%EC%9E%A5%EA%B8%B0%EB%8A%A5%EC%9C%BC%EB%A1%9C%20%EB%B3%B4%EA%B3%A0).mp4" target="_blank" class="link-card">
+                            <span class="material-icons">play_circle_outline</span>
+                            <span class="link-card-text">7.사진보고절차 (사진 전송후에 답장기능으로 보고).mp4</span>
+                        </a>
+                    </div>
+                    
+                    <div class="link-item">
+                        <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/movie/8.PA%20%20A%EB%8B%A8%EA%B3%84(%ED%9A%8C%EC%A7%84%ED%9B%84).mp4" target="_blank" class="link-card">
+                            <span class="material-icons">play_circle_outline</span>
+                            <span class="link-card-text">8.PA  A단계(회진후).mp4</span>
+                        </a>
+                    </div>
+                    
+                    <div class="link-item">
+                        <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/movie/9.%EB%B3%91%EB%8F%99%20%EC%95%BC%EA%B0%84%EC%9D%B4%EC%9D%8C%EA%B8%B0%EB%A1%9D(%EC%A3%BC%EB%A7%90%20,%20%EA%B3%B5%ED%9C%B4%EC%9D%BC,%20%EC%95%BC%EA%B0%84%20%EA%B8%B0%EB%A1%9D%20%EB%B0%8F%20%EB%B3%B4%EA%B3%A0%EC%9A%A9%EB%8F%84).mp4" target="_blank" class="link-card">
+                            <span class="material-icons">play_circle_outline</span>
+                            <span class="link-card-text">9.병동 야간이음기록(주말 , 공휴일, 야간 기록 및 보고용도).mp4</span>
+                        </a>
+                    </div>
+                    
+                    <div class="link-item">
+                        <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/movie/10.%EC%9D%91%EA%B8%89%EC%83%81%ED%99%A9%EC%9D%80%20%EC%84%A0%EB%B3%B4%EA%B3%A0%EC%B2%98%EC%B9%98%20%ED%9B%84%20%EA%B8%B0%EB%A1%9D%EB%82%A8%EA%B8%B0%EA%B8%B0.mp4" target="_blank" class="link-card">
+                            <span class="material-icons">play_circle_outline</span>
+                            <span class="link-card-text">10.응급상황은 선보고처치 후 기록남기기.mp4</span>
+                        </a>
+                    </div>
+                </div>
+                <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/%EC%97%85%EB%AC%B4%EC%9D%98%20%EA%B8%B0%EC%A4%80/%EC%9A%B0%EB%A6%AC%EA%B0%80%EC%B9%98(WeValue)%20%EC%95%BD%EC%86%8D.hwp" target="_blank" class="link-card">
+                    <span class="material-icons">file_download</span>
+                    <span class="link-card-text">우리가치(WeValue) 약속</span>
+                </a>
+                <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents_new/%ED%98%91%EC%97%85%20%EB%A9%94%EC%8B%A0%EC%A0%80%20%EC%8B%A4%EB%AC%B4%20%EC%9A%B4%EC%98%81%20%EA%B0%80%EC%9D%B4%EB%93%9C%20(26.3.31.v2.0).hwp" target="_blank" class="link-card">
+                    <span class="material-icons">code</span>
+                    <span class="link-card-text">[WeValue] 현장 협업 메신저 운영 가이드</span>
+                </a>
+                <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/%EC%97%85%EB%AC%B4%EC%9D%98%20%EA%B8%B0%EC%A4%80/Q&A.hwp" target="_blank" class="link-card">
+                    <span class="material-icons">menu_book</span>
+                    <span class="link-card-text">Q&A</span>
+                </a>
+            </div>
+            
+            <div class="details-content">
+                <div class="link-card" style="flex-direction: column; gap: 8px;">
+                        <span class="link-card-text">ACD 입력양식 생성기</span>
+                    
+                    <div style="display: flex; gap: 8px; width: 100%; padding-left: 32px; box-sizing: border-box;">
+                        <a href="https://schcaqi.github.io/2026-QI/acd_gen_ent.html" target="_blank" style="flex: 1; font-weight:bold; font-size: 15px; color: var(--accent-blue); background: var(--bg-color); padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: center;">
+                            PC용(병동)
+                        </a>
+                        <a href="https://schcaqi.github.io/2026-QI/acd_gen_mobile.html" target="_blank" style="flex: 1; font-weight:bold; font-size: 15px; color: var(--accent-blue); background: var(--bg-color); padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: center;">
+                            모바일용
+                        </a>
+                        <a href="https://schcaqi.github.io/2026-QI/acd_gen_pa.html" target="_blank" style="flex: 1; font-weight:bold; font-size: 15px; color: var(--accent-blue); background: var(--bg-color); padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: center;">
+                            PC용(PA)
+                        </a>
+                        <a href="https://schcaqi.github.io/2026-QI/acd_gen_mobile.html" target="_blank" style="flex: 1; font-weight:bold; font-size: 15px; color: var(--accent-blue); background: var(--bg-color); padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: center;">
+                            모바일용
+                        </a>
+                        <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents_new/4.%20WeValue_%ED%98%84%EC%9E%A5ACD_%EB%A9%94%EC%8B%A0%EC%A0%80%ED%85%9C%ED%94%8C%EB%A6%BF.xlsx" target="_blank" style="flex: 1; font-weight:bold; font-size: 15px; color: var(--accent-blue); background: var(--bg-color); padding: 8px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: center;">
+                            Excel문서 다운로드
+                        </a>
+                    </div>
+                </div>
+            
+                <a href="#" target="_blank" class="link-card">
+                    <span class="material-icons">play_circle_outline</span>
+                    <span class="link-card-text">3분 Vlog 게시판: 핵심 실무 교육 영상 모음</span>
+                </a>
+                <a href="#" target="_blank" class="link-card">
+                    <span class="material-icons">edit_note</span>
+                    <span class="link-card-text">공동 시뮬레이션</span>
+                </a>
+            </div>
+        </div>
+        
+        <div id="tab3" class="tab-content">
+            <div class="details-content">
+                <div class="link-card" style="flex-direction: column; gap: 8px;">
+                    <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/%EB%B0%B0%EC%9B%80%EC%9D%98%20%EC%B0%BD%EA%B5%AC-%20%EC%98%A8%EB%94%94%EB%A7%A8%EB%93%9C%20%EA%B5%90%EC%9C%A1%20%EC%8B%A0%EC%B2%AD%20%EB%A7%A4%EB%89%B4%EC%96%BC.hwp" target="_blank" style="color: var(--accent-blue);display: flex; align-items: center; gap: 12px; width: 100%;">
+                        <span class="material-icons">edit_note</span>
+                        <span class="link-card-text">온디맨드교육이란?</span>
+                    </a>
+                    <a href="https://form.naver.com/response/uWZlOh24fLfOHMv2uf57tA" target="_blank" class="link-card">
+                        교육 요청
+                    </a>
+                    <a href="https://form.naver.com/response/iBzzFEtlLyFJhwDIWewR-g" target="_blank"  class="link-card">
+                        교육 및 기기 숙련도 요청
+                    </a>
+                </div>
+            
+                <a href="#" target="_blank" class="link-card">
+                    <span class="material-icons">play_circle_outline</span>
+                    <span class="link-card-text">3분 Vlog 게시판: 핵심 실무 교육 영상 모음</span>
+                </a>
+                <a href="#" target="_blank" class="link-card">
+                    <span class="material-icons">edit_note</span>
+                    <span class="link-card-text">공동 시뮬레이션</span>
+                </a>
+            </div>
+        </div>
+        
+        <div id="tab4" class="tab-content">
+            <div class="details-content">
+                <a href="#" target="_blank" class="link-card">
+                    <span class="material-icons">insights</span>
+                    <span class="link-card-text">루프 준수율 / 시간약속 준수율 현황</span>
+                </a>
+                
+                
+                <details class="link-card-group">
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">assignment</span>
+                            <span class="link-card-text">간담회 소식지(1분기)</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1Ks32Oviecc8yGwm1ossX_seXPJN2-mjJ/view?usp=drive_link" target="_blank" class="sub-link">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">간담회 소식지(1분기)</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/141Xb9H26YGe7RhLCLD7w5mEk_iOSO2VA/view?usp=drive_link" target="_blank" class="sub-link">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">제1차 현장 간담회 결과 보고</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1Tcf69e534HP0gdU598bCNgBrYifZd4y2/view?usp=drive_link" target="_blank" class="sub-link">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">협업 시스템 종합 사용 설명서</span>
+                        </a>
+                    </div>
+                </details>
+                
+                
+                <a href="#" target="_blank" class="link-card">
+                    <span class="material-icons">assignment</span>
+                    <span class="link-card-text">간담회 소식지(2분기)</span>
+                </a>
+                <a href="#" target="_blank" class="link-card">
+                    <span class="material-icons">assignment</span>
+                    <span class="link-card-text">간담회 소식지(3분기)</span>
+                </a>
+                <div class="link-card" style="justify-content: space-between; align-items: center;">
+                    <a href="#" target="_blank" style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                        <span class="material-icons">assignment</span>
+                        <span class="link-card-text">회의록</span>
+                    </a>
+                    <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/0304.%ED%9A%8C%EC%9D%98%EB%A1%9D_%EC%96%91%EC%8B%9D.docx" target="_blank" style="flex-shrink: 0;">
+                        <span class="link-card-text" style="font-size: 14px; color: var(--accent-blue);">[양식 다운로드]</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div id="tab5" class="tab-content">
+            <div class="details-content">
+                <a href="https://form.naver.com/response/IuBBCDK8wsxo1TMt23Clrw" target="_blank" class="link-card">
+                    <span class="material-icons" style="color:var(--accent-purple)">rate_review</span>
+                    <div>
+                        <span class="footer-title" style="color:var(--accent-purple)"></span>
+                        <span class="link-card-text">PA 협업 체계 사전 설문 참여</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script>
+    const body = document.body;
+    const themeIcon = document.getElementById('theme-icon');
+
+    if (localStorage.getItem("sbar_theme") === "dark") {
+        body.classList.add("dark-mode");
+        themeIcon.innerText = 'light_mode';
+    }
+
+    // Tab Control Logic
+    function openTab(evt, tabName) {
+        const tabcontents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabcontents.length; i++) {
+            tabcontents[i].classList.remove("active");
+        }
+
+        const tablinks = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
+
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+        
+        // 탭 클릭 시 부드럽게 중앙으로 스크롤 (모바일 대응)
+        evt.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    function toggleTheme() {
+        const isDark = body.classList.toggle('dark-mode');
+        themeIcon.innerText = isDark ? 'light_mode' : 'dark_mode';
+        localStorage.setItem("sbar_theme", isDark ? "dark" : "light");
+    }
+</script>
+
+</body>
+</html>
