@@ -81,7 +81,7 @@
         <strong style="font-size:17px;">{{ pageTitle }}</strong>
         <div>
             <button v-if="isEditOrWrite" @click="submitPost" class="btn-text" style="color:var(--primary); font-weight:bold;">완료</button>
-            <div v-else-if="form.author === myId">
+            <div v-else>
                 <button @click="mode = 'edit'" class="btn-text" style="color:var(--text-light); margin-right:12px;">수정</button>
                 <button @click="deletePost" class="btn-text" style="color:#ff5a5f; font-weight:bold;">삭제</button>
             </div>
