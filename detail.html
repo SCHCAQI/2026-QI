@@ -140,24 +140,44 @@
                     mode.value = 'write';
                     return;
                 }
-
+            
                 if (id) {
-
                     isLoading.value = true;
                     try {
-                        const res = await axios.get(`${API_URL}?action=read`);
-                        const post = res.data.posts.find(p => String(p.ID) === String(id));
-                        if (post) {
+                        // 1. 특정 ID만 가져오는 'detail' 액션으로 서버 요청 (추천 방식)
+                        // 만약 서버에 detail 액션을 아직 안 만드셨다면 기존처럼 'read'를 사용하되 전체를 훑어야 합니다.
+                        const res = await axios.get(`${API_URL}?action=detail&id=${id}`);
+                        
+                        if (res.data.success) {
+                            const post = res.data.post;
                             form.value = { 
-                                id: post.ID, 
+                                id: post.Id, // 대소문자 방어 코드
                                 author: post.Author, 
                                 title: post.Title, 
                                 content: post.Content, 
                                 date: post.Date, 
                                 password: '' 
                             };
+                        } else {
+                            // 2. 만약 서버에 detail이 없다면 기존 read 로직을 보완 (임시방편)
+                            const readRes = await axios.get(`${API_URL}?action=read`);
+                            const post = readRes.data.posts.find(p => String(p.ID || p.Id).trim() === String(id).trim());
+                            
+                            if (post) {
+                                form.value = { 
+                                    id: post.Id, 
+                                    author: post.Author, 
+                                    title: post.Title, 
+                                    content: post.Content, 
+                                    date: post.Date, 
+                                    password: '' 
+                                };
+                            } else {
+                                alert("게시글을 찾을 수 없습니다. (최신 목록에 없을 수 있습니다)");
+                            }
                         }
                     } catch(e) { 
+                        console.error(e);
                         alert("데이터를 불러오지 못했습니다."); 
                     } finally { 
                         isLoading.value = false; 
@@ -175,6 +195,7 @@
                 if(action === 'update') params.append('id', form.value.id);
                 params.append('author', form.value.author);
                 params.append('password', form.value.password);
+                alert(form.value.password);
                 params.append('title', form.value.title);
                 params.append('content', form.value.content);
 
@@ -186,7 +207,7 @@
                     localStorage.setItem('myAnonId', form.value.author);
                     location.href = 'praise_board.html';
                 } catch(e) { 
-                    alert("처리 실패."); 
+                    alert("처리 실패. 비밀번호를 확인하세요."); 
                 } finally { 
                     isLoading.value = false; 
                 }
@@ -224,7 +245,7 @@
                 loadData();
             });
 
-            return { mode, form, isLoading, myId, pageTitle, isEditOrWrite, submitPost, deletePost, goBack, formatDate };
+            return { mode, form, isLoading, pageTitle, isEditOrWrite, submitPost, deletePost, goBack, formatDate };
         }
     }).mount('#app');
 </script>
