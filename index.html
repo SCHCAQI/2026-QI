@@ -132,6 +132,78 @@
         .link-card .material-icons { font-size: 22px; }
         .link-card-text { font-size: 15px; font-weight: 500; }
 
+        /* 그룹 컨테이너 */
+.link-card-group {
+    width: 100%;
+    margin-bottom: 10px;
+    border: none;
+}
+
+/* 요약 헤더 (클릭하는 부분) */
+summary.link-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    list-style: none; /* 기본 화살표 제거 */
+    padding: 15px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+summary::-webkit-details-marker { display: none; }
+
+.summary-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 화살표 애니메이션 */
+.arrow {
+    transition: transform 0.3s ease;
+    color: #999;
+}
+details[open] .arrow {
+    transform: rotate(180deg);
+}
+
+/* 하위 메뉴 영역 */
+.sub-menu {
+    background: #fdfdfd; /* 약간 다른 배경색으로 구분 */
+    margin: -5px 5px 10px 5px;
+    padding: 5px 0;
+    border-radius: 0 0 12px 12px;
+    border: 1px solid #f0f0f0;
+    border-top: none;
+}
+
+/* 하위 링크 개별 스타일 */
+.sub-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px 12px 45px; /* 왼쪽 여백을 주어 들여쓰기 효과 */
+    text-decoration: none;
+    color: #666;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.sub-link .material-icons {
+    font-size: 18px;
+    color: #aaa;
+}
+
+.sub-link:hover {
+    background-color: #f0f7ff;
+    color: var(--accent-blue, #007bff);
+}
+
+.sub-link:hover .material-icons {
+    color: var(--accent-blue, #007bff);
+}
+
         /* Footer */
         .footer { margin: 20px; padding: 16px; background-color: var(--footer-bg); border-radius: 12px; font-size: 13px; color: var(--text-sub); border: 1px solid var(--border-color); }
         .footer-title { font-weight: 600; color: var(--text-main); }
@@ -359,10 +431,34 @@
                     <span class="material-icons">insights</span>
                     <span class="link-card-text">루프 준수율 / 시간약속 준수율 현황</span>
                 </a>
-                <a href="#" target="_blank" class="link-card">
-                    <span class="material-icons">assignment</span>
-                    <span class="link-card-text">간담회 소식지(1분기)</span>
-                </a>
+                
+                
+                <details class="link-card-group">
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">assignment</span>
+                            <span class="link-card-text">간담회 소식지(1분기)</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1Ks32Oviecc8yGwm1ossX_seXPJN2-mjJ/view?usp=drive_link" target="_blank" class="sub-link">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">간담회 소식지(1분기)</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1MumT2V-AsetLr2TlOJ_KxHWbwrouMR8f/view?usp=drive_link" target="_blank" class="sub-link">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">제1차 현장 간담회 결과 보고</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1CpyIWuM9gCpQ5dGlUqkF2_z2K1kVlYFO/view?usp=drive_link" target="_blank" class="sub-link">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">협업 시스템 종합 사용 설명서</span>
+                        </a>
+                    </div>
+                </details>
+                
+                
                 <a href="#" target="_blank" class="link-card">
                     <span class="material-icons">assignment</span>
                     <span class="link-card-text">간담회 소식지(2분기)</span>
