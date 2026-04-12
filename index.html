@@ -2,30 +2,123 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>º¸¾È ÀÎÁõ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WeValue ì¸ì¦</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f8f9fa; }
-        .auth-container { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); text-align: center; }
-        input { width: 180px; padding: 12px; font-size: 1.5rem; text-align: center; border: 2px solid #eee; border-radius: 8px; margin-bottom: 1.5rem; letter-spacing: 5px; }
-        input:focus { outline: none; border-color: #007bff; }
-        button { padding: 12px 30px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: 0.3s; }
-        button:hover { background-color: #0056b3; }
-        #message { color: #dc3545; margin-top: 15px; font-weight: bold; min-height: 1.2em; }
+        /* ê¸°ë³¸ ìŠ¤íƒ€ì¼ ì´ˆê¸°í™” */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            background-color: #f2f4f7; /* ë¶€ë“œëŸ¬ìš´ ë°°ê²½ìƒ‰ */
+            padding: 20px;
+        }
+
+        .auth-container { 
+            background: white; 
+            padding: 40px 25px; 
+            border-radius: 24px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); 
+            text-align: center; 
+            width: 100%;
+            max-width: 380px;
+        }
+
+        /* íƒ€ì´í‹€ ì„¹ì…˜ */
+        .brand-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1a73e8; /* ë¸Œëœë“œ ì»¬ëŸ¬ */
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-subtitle {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 18px; 
+            font-size: 1.1rem; 
+            text-align: center; 
+            border: 2px solid #f0f2f5; 
+            border-radius: 16px; 
+            letter-spacing: 2px;
+            background-color: #f9fafb;
+            transition: all 0.3s ease;
+        }
+
+        input:focus { 
+            outline: none; 
+            border-color: #1a73e8; 
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
+        }
+
+        button { 
+            width: 100%;
+            padding: 18px; 
+            background-color: #1a73e8; 
+            color: white; 
+            border: none; 
+            border-radius: 16px; 
+            cursor: pointer; 
+            font-size: 1.1rem; 
+            font-weight: 700;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.2);
+        }
+
+        button:active { 
+            transform: scale(0.97); 
+            background-color: #1557b0; 
+        }
+
+        #message { 
+            color: #d93025; 
+            margin-top: 20px; 
+            font-size: 0.85rem; 
+            font-weight: 500;
+            min-height: 1.2em; 
+        }
     </style>
 </head>
 <body>
 
 <div class="auth-container">
-    <h2>º¸¾È ÀÎÁõ</h2>
-    <p>ÀÎÁõ ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä.</p>
-    <input type="password" id="authCode" maxlength="6" placeholder="******">
-    <br>
-    <button onclick="handleAuth()">ÀÎÁõÇÏ±â</button>
+    <div class="brand-title">WeValue</div>
+    <div class="brand-subtitle">( 2026-QI )</div>
+    
+    <p style="color: #444; font-size: 1rem; margin-bottom: 20px; font-weight: 600;">ë³´ì•ˆ ì¸ì¦ì´ í•„ìš”í•©ë‹ˆë‹¤</p>
+    
+    <div class="input-group">
+        <input type="password" 
+               id="authCode" 
+               maxlength="10" 
+               inputmode="text" 
+               placeholder="ì¸ì¦ ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”"
+               autocomplete="off">
+    </div>
+    
+    <button onclick="handleAuth()">ì¸ì¦ í™•ì¸</button>
     <div id="message"></div>
 </div>
 
 <script>
-    // SHA-256 ÇØ½Ã »ı¼º ÇÔ¼ö
+    // SHA-256 í•´ì‹œ ìƒì„± í•¨ìˆ˜
     async function sha256(message) {
         const msgBuffer = new TextEncoder().encode(message);
         const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -36,23 +129,35 @@
     async function handleAuth() {
         const input = document.getElementById('authCode').value;
         const messageDiv = document.getElementById('message');
+        const btn = document.querySelector('button');
         
-        // ´Ù¸¥ ¹øÈ£¸¦ ¾²°í ½Í´Ù¸é ¹Ì¸® ÇØ½ÌµÈ °ªÀ» ¿©±â¿¡ ³ÖÀ¸¼¼¿ä.
+        // "2026qi"ì˜ SHA-256 í•´ì‹œê°’
         const correctHash = "39626388960098f6233405f6365b26391d1797868037367858c87c936034f59c"; 
+
+        if (!input) {
+            messageDiv.innerText = "ë²ˆí˜¸ë¥¼ ì…ë ¥í•´ ì£¼ì„¸ìš”.";
+            return;
+        }
+
+        btn.innerText = "í™•ì¸ ì¤‘...";
+        btn.style.opacity = "0.7";
+        btn.disabled = true;
 
         const inputHash = await sha256(input);
 
         if (inputHash === correctHash) {
-            // ÀÎÁõ ¼º°ø: ¼¼¼Ç ½ºÅä¸®Áö¿¡ ÇÃ·¡±× ÀúÀå (ÀÓ½Ã º¸¾È)
             sessionStorage.setItem('isAuthorized', 'true');
             window.location.href = "home.html";
         } else {
-            messageDiv.innerText = "ÀÎÁõ ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.";
+            messageDiv.innerText = "ì¸ì¦ ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
             document.getElementById('authCode').value = "";
+            btn.innerText = "ì¸ì¦ í™•ì¸";
+            btn.style.opacity = "1";
+            btn.disabled = false;
         }
     }
 
-    // ¿£ÅÍÅ° Áö¿ø
+    // ì—”í„°í‚¤ ì§€ì›
     document.getElementById('authCode').addEventListener('keypress', async (e) => {
         if (e.key === 'Enter') await handleAuth();
     });
