@@ -72,11 +72,10 @@
             const currentPage = ref(1);
             const totalPages = ref(1);
             const isDarkMode = ref(localStorage.getItem('wevalue_theme') === 'dark');
-            const svrVersion = 'Version...';
             
             // 버전 관련 변수
             const uiVersion = ref('20260412.4'); // UI 버전
-            const version = ref('Loading...');   // 서버 버전
+            const svrVersion = ref('Loading...');   // 서버 버전
             
             const toggleTheme = () => {
                 isDarkMode.value = !isDarkMode.value;
@@ -122,7 +121,7 @@
                 getVersion();
             });
 
-            return { filteredPosts, isLoading, searchQuery, currentPage, totalPages, isDarkMode, toggleTheme, goToDetail, goToWrite, changePage, formatDate };
+            return { filteredPosts, isLoading, searchQuery, currentPage, totalPages, isDarkMode, toggleTheme, goToDetail, goToWrite, changePage, formatDate, uiVersion, svrVersion };
         }
     }).mount('#app');
 </script>
