@@ -92,8 +92,7 @@
             const getVersion = async () => {
                 try {
                     const res = await axios.get(`${API_URL}?action=version`);
-                    const {svrVersion, status} = res.data;
-                    version = svrVersion;
+                    version.value = res.data.version;
                 } catch(e) { console.error(e); } finally { isLoading.value = false; }
             };
 
