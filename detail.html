@@ -180,7 +180,9 @@
 
                 try {
                     const res = await axios.post(API_URL, params);
-                    alert(res);
+                    const {result, message} = res.data;
+                    alert(message);
+                    
                     localStorage.setItem('myAnonId', form.value.author);
                     location.href = 'praise_board.html';
                 } catch(e) { 
