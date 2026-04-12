@@ -136,6 +136,8 @@
                 const params = new URLSearchParams(window.location.search);
                 const id = params.get('id');
                 const urlMode = params.get('mode');
+                
+                alert(id);
 
                 if (urlMode === 'write') {
                     mode.value = 'write';
