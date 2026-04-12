@@ -57,10 +57,10 @@
     <button class="write-fab" @click="goToWrite">+</button>
 </div>
 
-<p style="text-align:center" id="uiVersion">{{version}}</p>
+<p style="text-align:center">Ui.{{uiVersion}}/Svr.{{version}}</p>
 
 <script>
-    const uiVersion = '20260412.2';
+    const uiVersion = '20260412.3';
     const API_URL = 'https://script.google.com/macros/s/AKfycbz3h_a7V97YYLlf761DZxcujsRA2z38uPWzwyhqKvrb3Ltpo5g-HH65Gor6sy3ZH-Pp/exec';
     const { createApp, ref, computed, onMounted } = Vue;
 
