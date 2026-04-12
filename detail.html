@@ -120,7 +120,7 @@
 </div>
 
 <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyRYFQErYdWCDUQ2O72rLXXXB2jFdsAg7O8xf_EtkVMvU4jArOaTEHip30zTQgW6yrb/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbznZsK2mYUBg7V0cNap9pNX_bR7mCjfa7mfaBJ50wM3jhkFDMBgpjC4QZGRjRGAQ1yL/exec';
     const { createApp, ref, onMounted, computed } = Vue;
 
     createApp({
@@ -201,7 +201,6 @@
                 if(action === 'update') params.append('id', form.value.id);
                 params.append('author', form.value.author);
                 params.append('password', form.value.password);
-                alert(form.value.password);
                 params.append('title', form.value.title);
                 params.append('content', form.value.content);
 
