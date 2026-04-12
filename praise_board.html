@@ -42,7 +42,7 @@
         <input v-model="searchQuery" class="search-input" placeholder="궁금한 내용을 검색해보세요">
     </div>
 
-    <div v-for="post in filteredPosts" :key="post.ID" class="list-item" @click="goToDetail(post.ID)">
+    <div v-for="post in filteredPosts" :key="post.Id" class="list-item" @click="goToDetail(post.Id)">
         <div style="font-size:13px; color:var(--text-light); margin-bottom:8px;">{{ post.Author }} · {{ formatDate(post.Date) }}</div>
         <div class="title">{{ post.Title }}</div>
         <div class="content-preview">{{ post.Content }}</div>
