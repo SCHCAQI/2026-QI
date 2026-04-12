@@ -55,9 +55,10 @@
     </div>
 
     <button class="write-fab" @click="goToWrite">+</button>
+    
+    <p style="text-align:center">Ui.{{uiVersion}}/Svr.{{version}}</p>
 </div>
 
-<p style="text-align:center">Ui.{{uiVersion}}/Svr.{{version}}</p>
 
 <script>
     const uiVersion = '20260412.4';
@@ -72,7 +73,11 @@
             const currentPage = ref(1);
             const totalPages = ref(1);
             const isDarkMode = ref(localStorage.getItem('wevalue_theme') === 'dark');
-
+            
+            // 버전 관련 변수
+            const uiVersion = ref('20260412.4'); // UI 버전
+            const version = ref('Loading...');   // 서버 버전
+            
             const toggleTheme = () => {
                 isDarkMode.value = !isDarkMode.value;
                 const mode = isDarkMode.value ? 'dark' : 'light';
