@@ -121,7 +121,7 @@
         setup() {
             const mode = ref('detail');
             const isLoading = ref(false);
-            const myId = localStorage.getItem('myAnonId') || '';
+            const myId = ref('');
             const form = ref({ id: '', author: myId, title: '', content: '', password: '', date: '' });
 
             const pageTitle = computed(() => {
