@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SCH2026QI"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QST4T7KX86"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
     
-      gtag('config', 'SCH2026QI');
+      gtag('config', 'G-QST4T7KX86');
     </script>
     
     <script>
@@ -488,11 +489,11 @@
                     <span class="link-card-text">간담회 소식지(3분기)</span>
                 </a>
                 <div class="link-card" style="justify-content: space-between; align-items: center;">
-                    <a href="#" target="_blank" style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                    <a href="#" target="_blank" style="display: flex; align-items: center; gap: 12px; flex: 1;" class="link-card">
                         <span class="material-icons">assignment</span>
                         <span class="link-card-text">회의록</span>
                     </a>
-                    <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/0304.%ED%9A%8C%EC%9D%98%EB%A1%9D_%EC%96%91%EC%8B%9D.docx" target="_blank" style="flex-shrink: 0;">
+                    <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/0304.%ED%9A%8C%EC%9D%98%EB%A1%9D_%EC%96%91%EC%8B%9D.docx" target="_blank" style="flex-shrink: 0;" class="link-card">
                         <span class="link-card-text" style="font-size: 14px; color: var(--accent-blue);">[양식 다운로드]</span>
                     </a>
                 </div>
@@ -547,6 +548,16 @@
         themeIcon.innerText = isDark ? 'light_mode' : 'dark_mode';
         localStorage.setItem("sbar_theme", isDark ? "dark" : "light");
     }
+    
+    document.querySelectorAll('.link-card, .sub-link').forEach(link => {
+    link.addEventListener('click', function() {
+        const linkText = this.querySelector('.link-card-text, .sub-link-text')?.innerText || this.innerText;
+        
+        gtag('event', 'select_content', {
+            'content_type': 'link_click',
+            'item_id': linkText.trim()
+        });
+    });
 </script>
 
 </body>
