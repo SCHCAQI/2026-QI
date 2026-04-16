@@ -11,12 +11,6 @@
       gtag('config', 'G-QST4T7KX86');
     </script>
     
-    <script>
-        if (sessionStorage.getItem('isAuthorized') !== 'true') {
-            alert("인증이 필요한 페이지입니다.");
-            window.location.href = "index.html";
-        }
-    </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -493,7 +487,7 @@
                         <span class="material-icons">assignment</span>
                         <span class="link-card-text">회의록</span>
                     </a>
-                    <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/0304.%ED%9A%8C%EC%9D%98%EB%A1%9D_%EC%96%91%EC%8B%9D.docx" target="_blank" style="flex-shrink: 0;" class="link-card">
+                    <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/0304.%ED%9A%8C%EC%9D%98%EB%A1%9D_%EC%96%91%EC%8B%9D.docx" target="_blank" style="flex-shrink: 0;" >
                         <span class="link-card-text" style="font-size: 14px; color: var(--accent-blue);">[양식 다운로드]</span>
                     </a>
                 </div>
@@ -549,14 +543,28 @@
         localStorage.setItem("sbar_theme", isDark ? "dark" : "light");
     }
     
-    document.querySelectorAll('.link-card, .sub-link').forEach(link => {
-    link.addEventListener('click', function() {
-        const linkText = this.querySelector('.link-card-text, .sub-link-text')?.innerText || this.innerText;
-        
-        gtag('event', 'select_content', {
-            'content_type': 'link_click',
-            'item_id': linkText.trim()
-        });
+    document.addEventListener('DOMContentLoaded', () => {
+        // 클릭 이벤트 감지
+        document.addEventListener('click', function(e) {
+            // 클릭된 요소나 그 부모 중에 링크(.link-card, .sub-link)가 있는지 확인
+            const link = e.target.closest('.link-card, .sub-link');
+            
+            // 1. 링크가 존재하고, href가 실제 연결된 경우만 실행
+            if (link && link.getAttribute('href') !== '#') {
+                const textElement = link.querySelector('.link-card-text, .sub-link-text');
+                const label = textElement ? textElement.innerText.trim() : link.innerText.trim();
+    
+                // 2. gtag 전송
+                if (typeof gtag === 'function') {
+//                    gtag('event', 'click_wevalue_link', {
+                    gtag('event', label || 'click_wevalue_link', {
+                        'link_label': label || 'Unknown',
+                        'link_url': link.href,
+                        'transport_type': 'beacon'
+                    });
+                }
+            }
+        }, true); 
     });
 </script>
 
