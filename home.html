@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <script>
+        if (sessionStorage.getItem('isAuthorized') !== 'true') {
+            window.location.href = "index.html";
+        }
+    </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QST4T7KX86"></script>
     <script>
@@ -418,15 +423,30 @@
                     <span class="material-icons">assignment</span>
                     <span class="link-card-text">간담회 소식지(3분기)</span>
                 </a>
-                <div class="link-card" style="justify-content: space-between; align-items: center;">
-                    <a href="#" target="_blank" style="display: flex; align-items: center; gap: 12px; flex: 1;" class="link-card">
-                        <span class="material-icons">assignment</span>
-                        <span class="link-card-text">회의록</span>
-                    </a>
-                    <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/0304.%ED%9A%8C%EC%9D%98%EB%A1%9D_%EC%96%91%EC%8B%9D.docx" target="_blank" style="flex-shrink: 0;" >
-                        <span class="link-card-text" style="font-size: 14px; color: var(--accent-blue);">[양식 다운로드]</span>
-                    </a>
-                </div>
+                <details class="link-card-group">
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">insights</span>
+                            <span class="link-card-text">메신저 소통지수(현황판)</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1Ks32Oviecc8yGwm1ossX_seXPJN2-mjJ/view?usp=drive_link" target="_blank" class="sub-link">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">간담회 소식지(1분기)</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/141Xb9H26YGe7RhLCLD7w5mEk_iOSO2VA/view?usp=drive_link" target="_blank" class="sub-link">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">제1차 현장 간담회 결과 보고</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1Tcf69e534HP0gdU598bCNgBrYifZd4y2/view?usp=drive_link" target="_blank" class="sub-link">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">협업 시스템 종합 사용 설명서</span>
+                        </a>
+                    </div>
+                </details>
             </div>
         </div>
         
