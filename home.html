@@ -362,21 +362,29 @@
         
         <div id="tab3" class="tab-content">
             <div class="details-content">
-                <div class="link-card" style="flex-direction: column; gap: 8px;">
-                    <a href="https://drive.google.com/file/d/1Di05cM9ica66xH0UTWFr_C3J9s4hITGi/view?usp=drive_link" target="_blank" style="color: var(--accent-blue);display: flex; align-items: center; gap: 12px; width: 100%;">
-                        <span class="material-icons">[ENT PA 1:1 오픈채팅/직통연결]</span>
-                        <span class="link-card-text">[WeValue]Mera tube vs Tracoe.pdf</span>
-                    </a>
-                    <a href="https://form.naver.com/response/uWZlOh24fLfOHMv2uf57tA" target="_blank" class="link-card">
-                        교육 요청
-                    </a>
-                    <a href="https://form.naver.com/response/iBzzFEtlLyFJhwDIWewR-g" target="_blank"  class="link-card">
-                        교육 및 기기 숙련도 요청
-                    </a>
-                </div>
+                <details class="link-card-group">
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">assignment</span>
+                            <span class="link-card-text">간담회 소식지(1분기)</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1Di05cM9ica66xH0UTWFr_C3J9s4hITGi/view?usp=drive_link" target="_blank" class="sub-link">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">[ENT PA 1:1 오픈채팅/직통연결]</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1Di05cM9ica66xH0UTWFr_C3J9s4hITGi/view?usp=drive_link" target="_blank" class="sub-link">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">[WeValue]Mera tube vs Tracoe.pdf</span>
+                        </a>
+                    </div>
+                </details>
             </div>
         </div>
-        
+        <!--
         <div id="tab4" class="tab-content">
             <div class="details-content">
                 <a href="#" target="_blank" class="link-card">
@@ -457,6 +465,7 @@
                 </a>
             </div>
         </div>
+        -->
     </div>
     
 </div>
