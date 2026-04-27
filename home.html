@@ -286,15 +286,15 @@
     <div class="list-wrap">
         <div id="tab1" class="tab-content active">
             <div class="details-content">
-                <a href="https://open.kakao.com/o/grvxNzii" target="_blank" class="link-card">
+                <a href="https://open.kakao.com/o/grvxNzii" target="_blank" class="link-card" data-label="우리가치톡(Kakao 오픈채팅, 프로필 익명)">
                     <span class="material-icons">chat_bubble_outline</span>
                     <span class="link-card-text">우리가치톡(Kakao 오픈채팅, 프로필 익명)</span>
                 </a>
-                <!--<a href="https://band.us/band/101260685" target="_blank" class="link-card">
+                <!--<a href="https://band.us/band/101260685" target="_blank" class="link-card" data-label="PA밴드 바로가기">
                     <span class="material-icons">groups</span>
                     <span class="link-card-text">PA밴드 바로가기</span>
                 </a>-->
-                <a href="https://schcaqi.github.io/2026-QI/praise_board.html" target="_blank" class="link-card">
+                <a href="https://schcaqi.github.io/2026-QI/praise_board.html" target="_blank" class="link-card" data-label="칭찬 게시판">
                     <span class="material-icons">thumb_up_off_alt</span>
                     <span class="link-card-text">칭찬 게시판</span>
                 </a>
@@ -304,28 +304,28 @@
         <div id="tab2" class="tab-content">
             <div id="movieList" class="details-content">
                 <!--
-                <a href="https://drive.google.com/file/d/1ZuLXm5AaxyxMz2XthuO75r3XPJgvjSUJ/view?usp=drive_link" target="_blank" class="link-card">
+                <a href="https://drive.google.com/file/d/1ZuLXm5AaxyxMz2XthuO75r3XPJgvjSUJ/view?usp=drive_link" target="_blank" class="link-card" data-label="[우리가치(WeValue) 공지] 소통의 철학 ACD 루프">
                     <span class="material-icons">description</span>
                     <span class="link-card-text">[우리가치(WeValue) 공지] 소통의 철학 ACD 루프</span>
                 </a>
-                <a href="https://drive.google.com/file/d/1hzwNxIxp0rgNmJcDlb3Vl3NJszsRzTEj/view?usp=drive_link" target="_blank" class="link-card">
+                <a href="https://drive.google.com/file/d/1hzwNxIxp0rgNmJcDlb3Vl3NJszsRzTEj/view?usp=drive_link" target="_blank" class="link-card" data-label="1.우리가치 운영 전략 수정(안)">
                     <span class="material-icons">description</span>
                     <span class="link-card-text">1.우리가치 운영 전략 수정(안)</span>
                 </a>
-                <a href="https://drive.google.com/file/d/1ZrMpX1jP1V2wr3PL6KuYdaEOOUFdyjYz/view?usp=drive_link" target="_blank" class="link-card">
+                <a href="https://drive.google.com/file/d/1ZrMpX1jP1V2wr3PL6KuYdaEOOUFdyjYz/view?usp=drive_link" target="_blank" class="link-card" data-label="3.[우리가치] 사내 메신저 협업 표준 가이드">
                     <span class="material-icons">description</span>
                     <span class="link-card-text">3.[우리가치] 사내 메신저 협업 표준 가이드</span>
                 </a>
                 -->
-                <a href="https://drive.google.com/file/d/1ufjcVAhLks2wnGzsqJel585GDow-htsZ/view?usp=drive_link" target="_blank" class="link-card">
+                <a href="https://drive.google.com/file/d/1ufjcVAhLks2wnGzsqJel585GDow-htsZ/view?usp=drive_link" target="_blank" class="link-card" data-label="1.우리가 단톡방을 함께 쓰는 이유">
                     <span class="material-icons">description</span>
                     <span class="link-card-text">1.우리가 단톡방을 함께 쓰는 이유</span>
                 </a>
-                <a href="https://drive.google.com/file/d/1aCylFIYyLO6XrNWn4_INPMG0b6IB3w5x/view?usp=drive_link" target="_blank" class="link-card">
+                <a href="https://drive.google.com/file/d/1aCylFIYyLO6XrNWn4_INPMG0b6IB3w5x/view?usp=drive_link" target="_blank" class="link-card" data-label="2.단기항암 파트 운영 계획">
                     <span class="material-icons">description</span>
                     <span class="link-card-text">2.단기항암 파트 운영 계획</span>
                 </a>
-                <a href="https://drive.google.com/file/d/1N91QL9e29qAOXMHueKDf9bAV_Rud8HqZ/view?usp=drive_link" target="_blank" class="link-card">
+                <a href="https://drive.google.com/file/d/1N91QL9e29qAOXMHueKDf9bAV_Rud8HqZ/view?usp=drive_link" target="_blank" class="link-card" data-label="1.우리가치 운영 전략 수정(안)">
                     <span class="material-icons">description</span>
                     <span class="link-card-text">3.[우리가치] 협업 메신저 운영 가이드</span>
                 </a>
@@ -658,7 +658,7 @@
             
             // 1. 링크가 존재하고, href가 실제 연결된 경우만 실행
             if (link && link.getAttribute('href') !== '#') {
-                const textElement = link.querySelector('.link-card-text, .sub-link-text, .sub-link');
+                const textElement = link.querySelector('.link-card-text, .sub-link-text');
                 const label = textElement ? textElement.innerText.trim() : link.innerText.trim();
                 // 2. gtag 전송
                 if (typeof gtag === 'function') {
