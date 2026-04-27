@@ -502,7 +502,7 @@
                         <span class="link-card-text">온디맨드교육이란?</span>
                     </a>
                     <a href="https://form.naver.com/response/uWZlOh24fLfOHMv2uf57tA" target="_blank" class="link-card">
-                        교육 요청
+                        <span class="link-card-text">교육 요청</span>
                     </a>
                     <!--
                     <a href="https://form.naver.com/response/iBzzFEtlLyFJhwDIWewR-g" target="_blank"  class="link-card">
@@ -658,7 +658,7 @@
             
             // 1. 링크가 존재하고, href가 실제 연결된 경우만 실행
             if (link && link.getAttribute('href') !== '#') {
-                const textElement = link.querySelector('.link-card-text, .sub-link-text');
+                const textElement = link.querySelector('.link-card-text, .sub-link-text, .sub-link');
                 const label = textElement ? textElement.innerText.trim() : link.innerText.trim();
                 // 2. gtag 전송
                 if (typeof gtag === 'function') {
