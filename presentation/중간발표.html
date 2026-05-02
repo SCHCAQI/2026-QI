@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 QI 활동 중간발표 - 우리 가치(WeValue)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #005596;    /* 신뢰감을 주는 메디컬 블루 */
+            --secondary: #00A3DA;  /* 활동적인 스카이 블루 */
+            --accent: #FF6B6B;     /* 강조 포인트 */
+            --bg-dark: #F1F5F9;
+            --text-main: #1E293B;
+            --white: #FFFFFF;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background-color: var(--bg-dark); 
+            font-family: 'Pretendard', sans-serif; 
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+        }
+
+        .slide {
+            width: 1280px; height: 720px;
+            background-color: var(--white);
+            margin-bottom: 50px;
+            position: relative; overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column;
+        }
+
+        /* 공통 헤더 스타일 */
+        .header {
+            padding: 40px 60px 20px;
+            display: flex; justify-content: space-between; align-items: flex-end;
+        }
+        .header h2 { 
+            font-size: 42px; color: var(--primary); font-weight: 700;
+            border-left: 8px solid var(--secondary); padding-left: 20px;
+        }
+        .header .page-num { font-family: 'Montserrat'; font-size: 20px; color: #94A3B8; }
+
+        .content { flex: 1; padding: 20px 60px 60px; position: relative; z-index: 2; }
+
+        /* 표지 스타일 */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            justify-content: center; align-items: center; text-align: center;
+        }
+        .title-slide h3 { font-size: 32px; font-weight: 400; opacity: 0.9; margin-bottom: 10px; }
+        .title-slide h1 { font-size: 72px; font-weight: 800; line-height: 1.2; margin-bottom: 30px; }
+        .title-slide .team-info { font-size: 24px; margin-top: 50px; }
+        .title-slide .badge { 
+            display: inline-block; padding: 10px 25px; background: rgba(255,255,255,0.2); 
+            border-radius: 50px; font-weight: 600; margin-bottom: 20px;
+        }
+
+        /* 문제 분석 (Fishbone/Grid) */
+        .analysis-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
+        .analysis-card { background: #F8FAFC; padding: 30px; border-radius: 20px; border-top: 5px solid var(--secondary); }
+        .analysis-card h4 { font-size: 24px; margin-bottom: 15px; color: var(--primary); }
+        .analysis-card li { list-style: none; margin-bottom: 10px; font-size: 18px; position: relative; padding-left: 20px; }
+        .analysis-card li::before { content: '?'; position: absolute; left: 0; color: var(--secondary); font-weight: bold; }
+
+        /* V.I.P 전략 레이아웃 */
+        .vip-container { display: flex; gap: 20px; height: 100%; align-items: stretch; }
+        .vip-item { 
+            flex: 1; background: #FFF; border: 1px solid #E2E8F0; border-radius: 20px; 
+            padding: 30px; display: flex; flex-direction: column; transition: transform 0.3s;
+        }
+        .vip-item:hover { transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .vip-icon { 
+            width: 70px; height: 70px; background: var(--primary); color: white; 
+            border-radius: 15px; display: flex; align-items: center; justify-content: center; 
+            font-size: 30px; margin-bottom: 20px;
+        }
+        .vip-title { font-size: 28px; font-weight: 700; margin-bottom: 15px; }
+
+        /* 4-Track 모델 테이블 */
+        .track-table { width: 100%; border-collapse: collapse; margin-top: 20px; border-radius: 15px; overflow: hidden; }
+        .track-table th { background: var(--primary); color: white; padding: 20px; text-align: center; }
+        .track-table td { padding: 20px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC; text-align: center; }
+        .track-tag { display: inline-block; padding: 5px 15px; border-radius: 5px; font-weight: 600; font-size: 14px; }
+        .tag-blue { background: #DBEAFE; color: #1E40AF; }
+        .tag-green { background: #DCFCE7; color: #166534; }
+
+        /* 성과/지표 */
+        .metric-container { display: flex; justify-content: space-around; margin-top: 50px; }
+        .metric-box { text-align: center; }
+        .metric-value { font-family: 'Montserrat'; font-size: 80px; font-weight: 800; color: var(--primary); }
+        .metric-label { font-size: 22px; font-weight: 600; color: #64748B; margin-top: 10px; }
+
+        /* 이미지 플레이스홀더 */
+        .img-placeholder { 
+            width: 100%; height: 200px; background: #E2E8F0; border-radius: 10px; 
+            display: flex; align-items: center; justify-content: center; color: #94A3B8;
+            margin-top: 15px; font-size: 14px; text-align: center; padding: 10px;
+        }
+
+        /* 5대 약속 섹션 */
+        .promise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .promise-item { display: flex; align-items: center; gap: 20px; background: #F1F5F9; padding: 15px 25px; border-radius: 15px; }
+        .promise-num { 
+            background: var(--secondary); color: white; width: 40px; height: 40px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;
+        }
+
+        .accent-text { color: var(--accent); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title -->
+    <div class="slide title-slide">
+        <div class="badge">2026년 질 향상(QI) 활동 중간보고</div>
+        <h3>이보다 더 좋을 순 없다!! 협업기반 간호 현장</h3>
+        <h1>스마트 소통 및 시각 매뉴얼을 통한<br><span style="color: #FFD93D;">협업 가치(WeValue)</span> 혁신</h1>
+        <div class="team-info">
+            <p><strong>팀명:</strong> 우리 가치(WeValue) 팀</p>
+            <p style="font-size: 18px; margin-top: 10px; opacity: 0.8;">발표일: 2026. 05. 02</p>
+        </div>
+    </div>
+
+    <!-- Slide 2: 배경 및 문제 분석 -->
+    <div class="slide">
+        <div class="header">
+            <h2>01. 활동 배경 및 문제 분석</h2>
+            <div class="page-num">01</div>
+        </div>
+        <div class="content">
+            <p style="font-size: 22px; margin-bottom: 30px;">병동-PA 간 협업 과정에서의 <span class="accent-text">소통 단절</span>과 <span class="accent-text">정보 접근성 저하</span> 해결 시급</p>
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <h4>제도적 측면</h4>
+                    <ul>
+                        <li>표준화된 보고 체계 부재</li>
+                        <li>업무 경계 모호로 인한 혼선</li>
+                        <li>공식 피드백 채널 결여</li>
+                    </ul>
+                </div>
+                <div class="analysis-card">
+                    <h4>환경적 측면</h4>
+                    <ul>
+                        <li>비공식 채널 의존(정보 분절)</li>
+                        <li>부서별 상이한 실무 매뉴얼</li>
+                        <li>정보 탐색 지연으로 업무 흐름 중단</li>
+                    </ul>
+                </div>
+                <div class="analysis-card">
+                    <h4>조직문화 측면</h4>
+                    <ul>
+                        <li>부서 특성에 따른 수용성 차이</li>
+                        <li>실시간 소통 효율화 요구 증가</li>
+                        <li>기존 업무 리듬 유지 희망</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: 핵심 전략 (V.I.P) -->
+    <div class="slide">
+        <div class="header">
+            <h2>02. 핵심 개선 전략: V.I.P</h2>
+            <div class="page-num">02</div>
+        </div>
+        <div class="content">
+            <div class="vip-container">
+                <div class="vip-item">
+                    <div class="vip-icon"><i class="fa-solid fa-eye"></i></div>
+                    <div class="vip-title">[V]isual</div>
+                    <p><strong>정보 접근성 혁신</strong></p>
+                    <ul style="font-size: 16px; margin-top: 15px; color: #64748B;">
+                        <li>QR 명함 포스터 배포</li>
+                        <li>실무 가이드 바로가기 배치</li>
+                        <li>원 컷(One-cut) 가이드 구축</li>
+                    </ul>
+                </div>
+                <div class="vip-item" style="border-top: 5px solid var(--secondary);">
+                    <div class="vip-icon" style="background: var(--secondary);"><i class="fa-solid fa-comments"></i></div>
+                    <div class="vip-title">[I]nstitutional</div>
+                    <p><strong>소통 표준화</strong></p>
+                    <ul style="font-size: 16px; margin-top: 15px; color: #64748B;">
+                        <li>부서별 4-Track 운영 모델</li>
+                        <li>스마트 소통 5대 약속</li>
+                        <li>Closed-loop(답장) 문화</li>
+                    </ul>
+                </div>
+                <div class="vip-item">
+                    <div class="vip-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                    <div class="vip-title">[P]rofessional</div>
+                    <p><strong>업무 전문성 강화</strong></p>
+                    <ul style="font-size: 16px; margin-top: 15px; color: #64748B;">
+                        <li>부서 특화 콘텐츠 제작</li>
+                        <li>PA-병동 간호사 지식 공유</li>
+                        <li>환자 안전 관리 강화</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: [V] 시각 지원 활동 -->
+    <div class="slide">
+        <div class="header">
+            <h2>03. [Visual] 정보 접근 경로 단일화</h2>
+            <div class="page-num">03</div>
+        </div>
+        <div class="content">
+            <div class="two-column" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px;">
+                <div>
+                    <h3 style="color: var(--secondary); margin-bottom: 20px;">탐색 시간 'Zero'를 위한 인프라 구축</h3>
+                    <div style="background: #F8FAFC; padding: 25px; border-radius: 15px;">
+                        <p><strong>1. 접근성 개선:</strong> PC 바탕화면 [실무 가이드] 아이콘 배치</p>
+                        <p style="margin-top: 15px;"><strong>2. QR 활용:</strong> 스테이션 내 [QR 명함 포스터] 부착</p>
+                        <p style="margin-top: 15px;"><strong>3. One-cut 가이드:</strong> 텍스트 탈피, 시각 자료 중심</p>
+                        <ul style="margin-left: 20px; font-size: 16px; color: #64748B; margin-top: 10px;">
+                            <li>배액관 종류 표기(Labeling) 샘플</li>
+                            <li>외과계 드레싱 물품 세팅 가이드</li>
+                            <li>항암제 투여 및 고위험 약물 주의사항</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="img-placeholder" style="height: 400px; border: 2px dashed var(--secondary);">
+                        <div>
+                            <i class="fa-solid fa-qrcode" style="font-size: 50px; margin-bottom: 10px;"></i><br>
+                            [참고 이미지]<br>QR 명함 포스터 및<br>실무 가이드 화면 캡쳐
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: [I] 소통 표준화 (4-Track) -->
+    <div class="slide">
+        <div class="header">
+            <h2>04. [Institutional] 부서별 4-Track 소통 모델</h2>
+            <div class="page-num">04</div>
+        </div>
+        <div class="content">
+            <table class="track-table">
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>대상 부서</th>
+                        <th>운영 모델</th>
+                        <th>핵심 전략</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Track 1</strong></td>
+                        <td>92병동 (CS/MC)</td>
+                        <td><span class="track-tag tag-blue">통합형 (단체)</span></td>
+                        <td>채널 단일화, 파편화된 도구(SMS/엑셀) 지양</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Track 2</strong></td>
+                        <td>131병동 (URO)</td>
+                        <td><span class="track-tag tag-blue">집중형 (개인)</span></td>
+                        <td>표준 프로토콜(5대 약속) 집중 적용</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Track 3</strong></td>
+                        <td>131(ENT)/141(항암)</td>
+                        <td><span class="track-tag tag-green">특화형 (단체)</span></td>
+                        <td>기존 체계 유지 + [답장] 기능 강화</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Track 4</strong></td>
+                        <td>14층 (MH)</td>
+                        <td><span class="track-tag tag-green">안정화 (개인)</span></td>
+                        <td>시각 가이드 중심의 점진적 효율화</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="margin-top: 30px; padding: 20px; border-left: 5px solid var(--accent); background: #FFF1F2;">
+                <p><strong>운영 원칙:</strong> 부서별 업무 특성과 리듬을 존중하되, <span class="accent-text">소통의 완결성(Closed-loop)</span> 확보를 최우선으로 함.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: 스마트 소통 5대 약속 -->
+    <div class="slide">
+        <div class="header">
+            <h2>05. 스마트 소통 5대 약속 (WeValue 5-Promises)</h2>
+            <div class="page-num">05</div>
+        </div>
+        <div class="content">
+            <div class="promise-grid">
+                <div class="promise-item">
+                    <div class="promise-num">1</div>
+                    <div><strong>[표준] 메시지 첫머리 [병실/성함] 기재</strong><br><small>환자 즉각 식별 및 신속 대응 기반 마련</small></div>
+                </div>
+                <div class="promise-item">
+                    <div class="promise-num">2</div>
+                    <div><strong>[회진] 결정 사항의 선제적 공유</strong><br><small>유선 불능 시에도 메신저로 즉시 사전 알림</small></div>
+                </div>
+                <div class="promise-item">
+                    <div class="promise-num">3</div>
+                    <div><strong>[자가약] 진행 상태 중심의 요약 공유</strong><br><small>사진 보고 지양, 실무 상태 위주 텍스트 공유</small></div>
+                </div>
+                <div class="promise-item">
+                    <div class="promise-num">4</div>
+                    <div><strong>[제외] 공식 채널(EMR/유선) 활용 원칙</strong><br><small>중대 의사결정은 반드시 공식 경로 이용</small></div>
+                </div>
+                <div class="promise-item" style="grid-column: span 2; background: var(--primary); color: white;">
+                    <div class="promise-num" style="background: white; color: var(--primary);">5</div>
+                    <div><strong>[매너] [답장(Reply)] 기능을 통한 Closed-loop 완성</strong><br>메시지 확인 시 반드시 답장하여 소통의 완결을 알림</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: 중간 성과 및 목표 달성도 -->
+    <div class="slide">
+        <div class="header">
+            <h2>06. 중간 성과 및 향후 계획</h2>
+            <div class="page-num">06</div>
+        </div>
+        <div class="content">
+            <div class="metric-container">
+                <div class="metric-box">
+                    <div class="metric-value">85<span style="font-size: 40px;">점</span></div>
+                    <div class="metric-label">협업 만족도 (목표 80점)</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">92<span style="font-size: 40px;">%</span></div>
+                    <div class="metric-label">소통 완결성(답장율)</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">124<span style="font-size: 40px;">건</span></div>
+                    <div class="metric-label">QR 가이드 접속 (월평균)</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div style="background: #F8FAFC; padding: 25px; border-radius: 15px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fa-solid fa-star accent-text"></i> 주요 성과</h4>
+                    <p>? 정보 탐색 시간 획기적 단축 (3초 이내)</p>
+                    <p>? 불필요한 유선 재확인 전화 감소</p>
+                    <p>? 부서 간 상호 존중 소통 문화 정착</p>
+                </div>
+                <div style="background: #F8FAFC; padding: 25px; border-radius: 15px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fa-solid fa-arrow-right accent-text"></i> 향후 계획</h4>
+                    <p>? 특화 콘텐츠(숏폼 영상 등) 추가 제작</p>
+                    <p>? 우수 활용 사례 부서 포상 및 공유</p>
+                    <p>? 활동 전후 협업 지표 최종 비교 분석</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Finish -->
+    <div class="slide title-slide" style="background: var(--primary);">
+        <h1>경청해 주셔서 감사합니다.</h1>
+        <p style="font-size: 28px; margin-top: 20px;">함께 소통하고 같이 성장하는 <br><strong>우리 가치(WeValue)</strong> 팀이 되겠습니다.</p>
+        <div style="margin-top: 60px; opacity: 0.6;">
+            <i class="fa-solid fa-hospital" style="font-size: 40px;"></i>
+        </div>
+    </div>
+
+</body>
+</html>
