@@ -16,6 +16,18 @@
       gtag('js', new Date());
     
       gtag('config', 'G-QST4T7KX86');
+      
+      // home.html의 스크립트 부분
+    window.onload = function() {
+        // localStorage(유지) 혹은 sessionStorage(일회성) 둘 중 하나라도 true면 통과
+        const isAuth = localStorage.getItem('isAuthorized') === 'true' || 
+                       sessionStorage.getItem('isAuthorized') === 'true';
+    
+        if (!isAuth) {
+            // 인증이 없으면 인증 페이지로 리다이렉트
+            window.location.href = "index.html"; // 실제 인증 파일명으로 수정
+        }
+    };
     </script>
     
 
