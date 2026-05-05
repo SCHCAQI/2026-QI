@@ -34,7 +34,7 @@
         :root {
             --bg-color: #ffffff;
             --item-bg: #f9f9f9;
-            --text-main: #000000;
+            --text-main: #191919;
             --text-sub: #3e3e33;
             --border-color: #f2f2f7;
             --accent-blue: #007aff;
@@ -224,8 +224,8 @@
         }
 
         /* Footer */
-        .footer { margin: 10px; padding: 16px; background-color: var(--footer-bg); border-radius: 12px; font-size: 13px; color: var(--text-sub); border: 1px solid var(--border-color); }
-        .footer-title { font-weight: 700; color: var(--text-main); }
+        .footer { margin: 20px; padding: 16px; background-color: var(--footer-bg); border-radius: 12px; font-size: 13px; color: var(--text-sub); border: 1px solid var(--border-color); }
+        .footer-title { font-weight: 600; color: var(--text-main); }
     </style>
 
 </head>
@@ -239,7 +239,7 @@
         <div class="profile-left">
             <div class="profile-thumb"><img src="wevalue_w.png" alt="Logo" class="header-logo"></div>
             <div class="profile-info">
-                <h1>WeValue(v1.0505.3)</h1>
+                <h1>WeValue(v1.0505.1)</h1>
                 <p>협업 자료실</p>
             </div>
         </div>
@@ -251,12 +251,12 @@
     <footer class="footer">
         <div class="footer-item">
             <div>
-                <span class="footer-title">우리가치 (WeValue)</span><br/>우리는 서로의 전문성이 맞물릴 때 가장 안전한 [간호 환경]을 완성합니다<br/>
+                <span class="footer-title">우리가치 (WeValue)</span><br/>우리는 서로의 전문성이 맞물릴 때 가장 안전한 [간호 환경]을 완성합니다
             </div>
         </div>
         <div class="footer-item">
             <div>
-                <span class="footer-title">활동 목표</span><br/>PA-병동 간 협업 만족도 80점 이상달성<br/>
+                <span class="footer-title">활동 목표</span><br/>PA-병동 간 협업 만족도 80점 이상달성
             </div>
         </div>
         <div class="footer-item">
@@ -264,7 +264,7 @@
                 <span class="footer-title">핵심 전략 (V.I.P)</span> <br/>
                 V (Visual): 눈으로 확인하는 실무 가이드 (QR 영상, One-cut 가이드)<br/>
                 I (Institutional): 약속된 소통 규칙 (10분 룰, 답장 문화, 4-Track 모델)<br/>
-                P (Partner): 서로를 인정하는 보상 체계 (우리가치 히어로 포상)<br/>
+                P (Partner): 서로를 인정하는 보상 체계 (우리가치 히어로 포상)
             </div>
         </div>
     </footer>
@@ -295,10 +295,28 @@
                     <span class="material-icons">thumb_up_off_alt</span>
                     <span class="link-card-text">칭찬 게시판</span>
                 </a>
-                <a href="https://drive.google.com/file/d/1bk0DoQTLu-3bm0O8_UEBRDcyHaJEvDkl/view?usp=drive_link" target="_blank" class="link-card" data-label="병동 순회활동">
-                    <span class="material-icons">thumb_up_off_alt</span>
-                    <span class="link-card-text">병동 순회활동</span>
-                </a>
+                
+                <details class="link-card-group">
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">assignment</span>
+                            <span class="link-card-text">병동 순회활동</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1bk0DoQTLu-3bm0O8_UEBRDcyHaJEvDkl/view?usp=drive_link" target="_blank" class="sub-link" data-label="병동 순회활동">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">병동 순회활동</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1ND2MKM4KWjrVHipk-obCSNkXOm2hx51d/view?usp=drive_link" target="_blank" class="sub-link" data-label="14층 현장 순회 결과 [4월 병동 순회 활동]">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">14층 현장 순회 결과 [4월 병동 순회 활동]</span>
+                        </a>
+                    </div>
+                </details>
+                
             </div>
         </div>
 
