@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL 바로가기 메뉴</title>
+    <!-- 폰트 어썸 (돋보기 아이콘용) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: #f5f7f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* 검색창 스타일 */
+        .search-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        #searchInput:focus {
+            border-color: #007bff;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            cursor: pointer;
+        }
+
+        /* 메뉴 리스트 스타일 */
+        .menu-wrapper {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .category-group {
+            margin-bottom: 25px;
+        }
+
+        .category-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #0056b3;
+            border-left: 4px solid #0056b3;
+            padding-left: 10px;
+            margin-bottom: 10px;
+        }
+
+        .menu-item {
+            background: white;
+            margin-bottom: 8px;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: #444;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: #f0f7ff;
+            transform: translateX(5px);
+        }
+
+        .menu-item span {
+            font-size: 15px;
+            word-break: break-all;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>메뉴 바로가기</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="카테고리 또는 파일명 검색..." onkeyup="filterMenu()">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+    </header>
+
+    <div class="menu-wrapper" id="menuList">
+        <!-- 공통매뉴얼 -->
+        <div class="category-group" data-category="공통매뉴얼">
+            <div class="category-title">공통매뉴얼</div>
+            <a href="https://m.site.naver.com/1KzBT" class="menu-item" target="_blank"><span>1. 기관내 삽관이 필요한 시점.mp4</span></a>
+            <a href="https://m.site.naver.com/1KzBq" class="menu-item" target="_blank"><span>1. 기관내 삽관이 필요한 시점.pdf</span></a>
+            <a href="https://m.site.naver.com/1KFku" class="menu-item" target="_blank"><span>2. 저산소증 응급관리.mp4</span></a>
+            <a href="https://m.site.naver.com/1KFkN" class="menu-item" target="_blank"><span>2. 저산소증 응급관리.pdf</span></a>
+            <a href="https://m.site.naver.com/1KFwE" class="menu-item" target="_blank"><span>3. 기관절개술 환자의 관리.mp4</span></a>
+            <a href="https://m.site.naver.com/1KFxk" class="menu-item" target="_blank"><span>3. 기관절개술 환자의 관리.pdf</span></a>
+            <a href="https://m.site.naver.com/1KzzS" class="menu-item" target="_blank"><span>4. 프로토콜_기관내삽관.pdf</span></a>
+            <a href="https://m.site.naver.com/1KzAk" class="menu-item" target="_blank"><span>4. 프로토콜_기관절개관.pdf</span></a>
+            <a href="https://m.site.naver.com/1KzAG" class="menu-item" target="_blank"><span>4. 프로토콜_저산소증.pdf</span></a>
+        </div>
+
+        <!-- 진료지원간호팀 업무용 -->
+        <div class="category-group" data-category="진료지원간호팀 업무용">
+            <div class="category-title">진료지원간호팀 업무용</div>
+            <a href="https://m.site.naver.com/1KvyR" class="menu-item" target="_blank"><span>1.내분비대사내과</span></a>
+            <a href="https://m.site.naver.com/1KvzE" class="menu-item" target="_blank"><span>2.소화기내과</span></a>
+            <a href="https://m.site.naver.com/1KvAu" class="menu-item" target="_blank"><span>3.신장내과</span></a>
+            <a href="https://m.site.naver.com/1KvB9" class="menu-item" target="_blank"><span>4.심장내과</span></a>
+            <a href="https://m.site.naver.com/1KvBB" class="menu-item" target="_blank"><span>5.혈액종양내과.pdf</span></a>
+            <a href="https://m.site.naver.com/1KvBX" class="menu-item" target="_blank"><span>6.호흡기알레르기내과</span></a>
+            <a href="https://m.site.naver.com/1KvCW" class="menu-item" target="_blank"><span>7.신경과</span></a>
+            <a href="https://m.site.naver.com/1KvDn" class="menu-item" target="_blank"><span>8.소아청소년과</span></a>
+            <a href="https://m.site.naver.com/1KvDJ" class="menu-item" target="_blank"><span>9.정신건강의학과</span></a>
+            <a href="https://m.site.naver.com/1KvEe" class="menu-item" target="_blank"><span>10.재활의학과.pdf</span></a>
+            <a href="https://m.site.naver.com/1KvFa" class="menu-item" target="_blank"><span>11.외과.pdf</span></a>
+            <a href="https://m.site.naver.com/1Kv라" class="menu-item" target="_blank"><span>12.정형외과</span></a>
+            <a href="https://m.site.naver.com/1KvFC" class="menu-item" target="_blank"><span>13.신경외과</span></a>
+            <a href="https://m.site.naver.com/1KvFO" class="menu-item" target="_blank"><span>14.산부인과</span></a>
+            <a href="https://m.site.naver.com/1KvG6" class="menu-item" target="_blank"><span>15.심장혈관흉부외과.pdf</span></a>
+            <a href="https://m.site.naver.com/1KvGm" class="menu-item" target="_blank"><span>16.성형외과.pdf</span></a>
+            <a href="https://m.site.naver.com/1KvGz" class="menu-item" target="_blank"><span>17.이비인후과</span></a>
+            <a href="https://m.site.naver.com/1KvGY" class="menu-item" target="_blank"><span>18.비뇨의학과</span></a>
+            <a href="https://m.site.naver.com/1KvH9" class="menu-item" target="_blank"><span>19.안과</span></a>
+        </div>
+    </div>
+
+    <script>
+        function filterMenu() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const groups = document.querySelectorAll('.category-group');
+
+            groups.forEach(group => {
+                const categoryName = group.getAttribute('data-category').toLowerCase();
+                const items = group.querySelectorAll('.menu-item');
+                let groupHasVisibleItem = false;
+
+                // 카테고리명 자체가 키워드를 포함하는지 확인
+                const categoryMatches = categoryName.includes(keyword);
+
+                items.forEach(item => {
+                    const itemName = item.textContent.toLowerCase();
+                    
+                    // 아이템 이름에 키워드가 있거나, 카테고리명에 키워드가 있으면 표시
+                    if (itemName.includes(keyword) || categoryMatches) {
+                        item.classList.remove('hidden');
+                        groupHasVisibleItem = true;
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+
+                // 해당 카테고리에 표시할 항목이 하나도 없으면 카테고리 전체를 숨김
+                if (groupHasVisibleItem) {
+                    group.classList.remove('hidden');
+                } else {
+                    group.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
