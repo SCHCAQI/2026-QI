@@ -35,7 +35,7 @@
             --bg-color: #ffffff;
             --item-bg: #f9f9f9;
             --text-main: #191919;
-            --text-sub: #8e8e93;
+            --text-sub: #3e3e33;
             --border-color: #f2f2f7;
             --accent-blue: #007aff;
             --accent-orange: #ff9500;
@@ -239,7 +239,7 @@
         <div class="profile-left">
             <div class="profile-thumb"><img src="wevalue_w.png" alt="Logo" class="header-logo"></div>
             <div class="profile-info">
-                <h1>WeValue(v1.0427.1)</h1>
+                <h1>WeValue(v1.0505.3)</h1>
                 <p>협업 자료실</p>
             </div>
         </div>
@@ -248,38 +248,35 @@
         </div>
     </div>
     
-    <!--
     <footer class="footer">
-            <span class="material-icons" style="color:var(--accent-orange)">error_outline</span>
         <div class="footer-item">
             <div>
-                <span class="footer-title">개인정보 주의</span> 환자 및 개인정보 업로드 금지
+                <span class="footer-title">우리가치 (WeValue)</span><br/>우리는 서로의 전문성이 맞물릴 때 가장 안전한 [간호 환경]을 완성합니다
             </div>
         </div>
         <div class="footer-item">
             <div>
-                <span class="footer-title">운영 책임</span>
-                본 페이지의 자료·교육·설문·회의·성과 공유는 진료지원간호팀이 책임 운영합니다.
+                <span class="footer-title">활동 목표</span><br/>PA-병동 간 협업 만족도 80점 이상달성
             </div>
         </div>
         <div class="footer-item">
             <div>
-                <span class="footer-title">구글플레이 또는 앱스토어에서 한컴독스를 미리 설치하세요.</span>
+                <span class="footer-title">핵심 전략 (V.I.P)</span> <br/>
+                V (Visual): 눈으로 확인하는 실무 가이드 (QR 영상, One-cut 가이드)<br/>
+                I (Institutional): 약속된 소통 규칙 (10분 룰, 답장 문화, 4-Track 모델)<br/>
+                P (Partner): 서로를 인정하는 보상 체계 (우리가치 히어로 포상)
             </div>
         </div>
     </footer>
-    -->
     
     <div class="tabs-container">
         <div class="tab-menu">
-            <button class="tab-btn active" onclick="openTab(event, 'tab1')">소통의 광장</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab2')">업무기준</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab3')">교육자료</button>
-            <button class="tab-btn" onclick="openTab(event, 'tabReq')">요청</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab4')">지표</button>
-            <!--
+            <button class="tab-btn active" onclick="openTab(event, 'tab1')" data-label="소통의 광장">소통의 광장</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab2')" data-label="업무기준">업무기준</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab3')" data-label="교육자료">교육자료</button>
+            <button class="tab-btn" onclick="openTab(event, 'tabReq')" data-label="요청">요청</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab4')" data-label="지표">지표</button>
             <button class="tab-btn" onclick="openTab(event, 'tab5')">설문</button>
-            -->
         </div>
     </div>
     
@@ -294,10 +291,33 @@
                     <span class="material-icons">groups</span>
                     <span class="link-card-text">PA밴드 바로가기</span>
                 </a>-->
-                <a href="https://schcaqi.github.io/2026-QI/praise_board.html" target="_blank" class="link-card" data-label="칭찬 게시판">
+                <!--<a href="https://schcaqi.github.io/2026-QI/praise_board.html" target="_blank" class="link-card" data-label="칭찬 게시판">-->
+                <a href="https://blab.dothome.co.kr/praise_bd/praise_bd.html" target="_blank" class="link-card" data-label="칭찬 게시판">
                     <span class="material-icons">thumb_up_off_alt</span>
                     <span class="link-card-text">칭찬 게시판</span>
                 </a>
+                
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">assignment</span>
+                            <span class="link-card-text">병동 순회활동</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1bk0DoQTLu-3bm0O8_UEBRDcyHaJEvDkl/view?usp=drive_link" target="_blank" class="sub-link" data-label="병동 순회활동">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">병동 순회활동</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1ND2MKM4KWjrVHipk-obCSNkXOm2hx51d/view?usp=drive_link" target="_blank" class="sub-link" data-label="14층 현장 순회 결과 [4월 병동 순회 활동]">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">14층 현장 순회 결과 [4월 병동 순회 활동]</span>
+                        </a>
+                    </div>
+                </details>
+                
             </div>
         </div>
 
@@ -317,6 +337,7 @@
                     <span class="link-card-text">3.[우리가치] 사내 메신저 협업 표준 가이드</span>
                 </a>
                 -->
+                <!--
                 <a href="https://drive.google.com/file/d/1ufjcVAhLks2wnGzsqJel585GDow-htsZ/view?usp=drive_link" target="_blank" class="link-card" data-label="1.우리가 단톡방을 함께 쓰는 이유">
                     <span class="material-icons">description</span>
                     <span class="link-card-text">1.우리가 단톡방을 함께 쓰는 이유</span>
@@ -329,7 +350,19 @@
                     <span class="material-icons">description</span>
                     <span class="link-card-text">3.[우리가치] 협업 메신저 운영 가이드</span>
                 </a>
-                
+                -->
+                <a href="https://drive.google.com/file/d/18o9QfmwbckYDerXjEUSc-fiSqgi92_yE/view?usp=drive_link" target="_blank" class="link-card" data-label="1.우리가 사내 메신저를 사용해야 하는 진짜 이유">
+                    <span class="material-icons">description</span>
+                    <span class="link-card-text">1.우리가 사내 메신저를 사용해야 하는 진짜 이유</span>
+                </a>
+                <a href="https://drive.google.com/file/d/1uA1QyzI9P7uoiRtQVLdJEo71TEZoareR/view?usp=drive_link" target="_blank" class="link-card" data-label="2.우리 가치(WeValue)] 스마트 소통 실무 안내문 (v1.0)">
+                    <span class="material-icons">description</span>
+                    <span class="link-card-text">2.우리 가치(WeValue)] 스마트 소통 실무 안내문 (v1.0)</span>
+                </a>
+                <a href="https://drive.google.com/file/d/1IPXunvs1y3Jn9QISMhA4kd6rjZlM-gqB/view?usp=drive_link" target="_blank" class="link-card" data-label="3.우리가치(WeValue) QI 활동 실전 핵심 요약">
+                    <span class="material-icons">description</span>
+                    <span class="link-card-text">3.우리가치(WeValue) QI 활동 실전 핵심 요약</span>
+                </a>
             </div>
             
             <!--
@@ -371,7 +404,7 @@
         
         <div id="tab3" class="tab-content">
             <div class="details-content">
-                <details class="link-card-group">
+                <details class="link-card-group" open>
                     <summary class="link-card">
                         <div class="summary-header">
                             <span class="material-icons">groups</span>
@@ -381,15 +414,15 @@
                     </summary>
                     
                     <div class="sub-menu">
-                        <a href="https://open.kakao.com/o/gwtAmOri" target="_blank" class="sub-link">
+                        <a href="https://open.kakao.com/o/gwtAmOri" target="_blank" class="sub-link" data-label="[ENT PA 1:1 오픈채팅/직통연결]">
                             <span class="material-icons">sms</span>
                             <span class="sub-link-text">[ENT PA 1:1 오픈채팅/직통연결]</span>
                         </a>
-                        <a href="https://drive.google.com/file/d/1Di05cM9ica66xH0UTWFr_C3J9s4hITGi/view?usp=drive_link" target="_blank" class="sub-link">
+                        <a href="https://drive.google.com/file/d/1Di05cM9ica66xH0UTWFr_C3J9s4hITGi/view?usp=drive_link" target="_blank" class="sub-link" data-label="[WeValue]Mera tube vs Tracoe.pdf">
                             <span class="material-icons">description</span>
                             <span class="sub-link-text">[WeValue]Mera tube vs Tracoe.pdf</span>
                         </a>
-                        <a href="https://drive.google.com/file/d/1PiQhvsYFK3Qrpu5MbNqDm52bLhPTqwVv/view?usp=drive_link" target="_blank" class="sub-link">
+                        <a href="https://drive.google.com/file/d/1PiQhvsYFK3Qrpu5MbNqDm52bLhPTqwVv/view?usp=drive_link" target="_blank" class="sub-link" data-label="[WeValue]ENT dx.pdf">
                             <span class="material-icons">description</span>
                             <span class="sub-link-text">[WeValue]ENT dx.pdf</span>
                         </a>
@@ -397,7 +430,7 @@
                     </div>
                 </details>
                     
-                <details class="link-card-group">
+                <details class="link-card-group" open>
                     <summary class="link-card">
                         <div class="summary-header">
                             <span class="material-icons">groups</span>
@@ -407,18 +440,18 @@
                     </summary>
                     
                     <div class="sub-menu">
-                        <a href="https://open.kakao.com/o/gveQpOri" target="_blank" class="sub-link">
+                        <a href="https://open.kakao.com/o/gveQpOri" target="_blank" class="sub-link" data-label="[CS PA 1:1 오픈채팅/직통연결]">
                             <span class="material-icons">sms</span>
                             <span class="sub-link-text">[CS PA 1:1 오픈채팅/직통연결]</span>
                         </a>
-                        <a href="https://drive.google.com/file/d/1a-IR00PBs4_kLb9MCBckukd9My8t_gDF/view?usp=drive_link" target="_blank" class="sub-link">
+                        <a href="https://drive.google.com/file/d/1a-IR00PBs4_kLb9MCBckukd9My8t_gDF/view?usp=drive_link" target="_blank" class="sub-link" data-label="[WeValue]CS Thoracostomy 시술준비 물품.pdf">
                             <span class="material-icons">description</span>
                             <span class="sub-link-text">[WeValue]CS Thoracostomy 시술준비 물품.pdf</span>
                         </a>
                     </div>
                 </details>
                     
-                <details class="link-card-group">
+                <details class="link-card-group" open>
                     <summary class="link-card">
                         <div class="summary-header">
                             <span class="material-icons">groups</span>
@@ -428,14 +461,14 @@
                     </summary>
                     
                     <div class="sub-menu">
-                        <a href="https://open.kakao.com/o/glPbrOri" target="_blank" class="sub-link">
+                        <a href="https://open.kakao.com/o/glPbrOri" target="_blank" class="sub-link" data-label="[MC PA 1:1 오픈채팅/직통연결]">
                             <span class="material-icons">sms</span>
                             <span class="sub-link-text">[MC PA 1:1 오픈채팅/직통연결]</span>
                         </a>
                     </div>
                 </details>
                     
-                <details class="link-card-group">
+                <details class="link-card-group" open>
                     <summary class="link-card">
                         <div class="summary-header">
                             <span class="material-icons">groups</span>
@@ -445,14 +478,14 @@
                     </summary>
                     
                     <div class="sub-menu">
-                        <a href="https://open.kakao.com/o/gP2KrOri" target="_blank" class="sub-link">
+                        <a href="https://open.kakao.com/o/gP2KrOri" target="_blank" class="sub-link" data-label="[URO PA 1:1 오픈채팅/직통연결]">
                             <span class="material-icons">sms</span>
                             <span class="sub-link-text">[URO PA 1:1 오픈채팅/직통연결]</span>
                         </a>
                     </div>
                 </details>
                     
-                <details class="link-card-group">
+                <details class="link-card-group" open>
                     <summary class="link-card">
                         <div class="summary-header">
                             <span class="material-icons">groups</span>
@@ -462,20 +495,37 @@
                     </summary>
                     
                     <div class="sub-menu">
-                        <a href="https://open.kakao.com/o/gDpdsOri" target="_blank" class="sub-link">
+                        <a href="https://open.kakao.com/o/gDpdsOri" target="_blank" class="sub-link" data-label="[MH PA 1:1 오픈채팅/직통연결]">
                             <span class="material-icons">sms</span>
                             <span class="sub-link-text">[MH PA 1:1 오픈채팅/직통연결]</span>
                         </a>
                     </div>
                     <div class="sub-menu">
-                        <a href="https://drive.google.com/file/d/17wpo3BoxSBLQLHBY9cVsvpoOvKxLYWa9/view?usp=drive_link" target="_blank" class="sub-link">
+                        <a href="https://drive.google.com/file/d/17wpo3BoxSBLQLHBY9cVsvpoOvKxLYWa9/view?usp=drive_link" target="_blank" class="sub-link" data-label="[WeValue]Cytotoxic.pdf">
                             <span class="material-icons">sms</span>
                             <span class="sub-link-text">[WeValue]Cytotoxic.pdf</span>
                         </a>
                     </div>
                 </details>
                 
-                <details class="link-card-group">
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">groups</span>
+                            <span class="link-card-text">공통</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1GrWP4Xa3V5BRXrQHGpP-I352TWzuUZIv/view?usp=drive_link" target="_blank" class="sub-link" data-label="기관 내 삽관 과정">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">기관 내 삽관 과정</span>
+                        </a>
+                    </div>
+                </details>
+                
+                <details class="link-card-group" open>
                     <summary class="link-card">
                         <div class="summary-header">
                             <span class="material-icons">groups</span>
@@ -485,7 +535,7 @@
                     </summary>
                     <!--
                     <div class="sub-menu">
-                        <a href="https://open.kakao.com/o/gDpdsOri" target="_blank" class="sub-link">
+                        <a href="https://open.kakao.com/o/gDpdsOri" target="_blank" class="sub-link" data-label="[MH PA 1:1 오픈채팅/직통연결]">
                             <span class="material-icons">sms</span>
                             <span class="sub-link-text">[MH PA 1:1 오픈채팅/직통연결]</span>
                         </a>
@@ -497,11 +547,11 @@
         <div id="tabReq" class="tab-content">
             <div class="details-content">
                 <div class="link-card" style="flex-direction: column; gap: 8px;">
-                    <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/%EB%B0%B0%EC%9B%80%EC%9D%98%20%EC%B0%BD%EA%B5%AC-%20%EC%98%A8%EB%94%94%EB%A7%A8%EB%93%9C%20%EA%B5%90%EC%9C%A1%20%EC%8B%A0%EC%B2%AD%20%EB%A7%A4%EB%89%B4%EC%96%BC.hwp" target="_blank" style="color: var(--accent-blue);display: flex; align-items: center; gap: 12px; width: 100%;">
+                    <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/%EB%B0%B0%EC%9B%80%EC%9D%98%20%EC%B0%BD%EA%B5%AC-%20%EC%98%A8%EB%94%94%EB%A7%A8%EB%93%9C%20%EA%B5%90%EC%9C%A1%20%EC%8B%A0%EC%B2%AD%20%EB%A7%A4%EB%89%B4%EC%96%BC.hwp" target="_blank" style="color: var(--accent-blue);display: flex; align-items: center; gap: 12px; width: 100%;" data-label="온디맨드교육이란?">
                         <span class="material-icons">edit_note</span>
                         <span class="link-card-text">온디맨드교육이란?</span>
                     </a>
-                    <a href="https://form.naver.com/response/uWZlOh24fLfOHMv2uf57tA" target="_blank" class="link-card">
+                    <a href="https://form.naver.com/response/uWZlOh24fLfOHMv2uf57tA" target="_blank" class="link-card" data-label="교육 요청">
                         <span class="link-card-text">교육 요청</span>
                     </a>
                     <!--
@@ -532,7 +582,7 @@
                 -->
                 
                 
-                <details class="link-card-group">
+                <details class="link-card-group" open>
                     <summary class="link-card">
                         <div class="summary-header">
                             <span class="material-icons">assignment</span>
@@ -542,15 +592,15 @@
                     </summary>
                     
                     <div class="sub-menu">
-                        <a href="https://drive.google.com/file/d/1Ks32Oviecc8yGwm1ossX_seXPJN2-mjJ/view?usp=drive_link" target="_blank" class="sub-link">
+                        <a href="https://drive.google.com/file/d/1Ks32Oviecc8yGwm1ossX_seXPJN2-mjJ/view?usp=drive_link" target="_blank" class="sub-link" data-label="간담회 소식지(1분기)">
                             <span class="material-icons">description</span>
                             <span class="sub-link-text">간담회 소식지(1분기)</span>
                         </a>
-                        <a href="https://drive.google.com/file/d/141Xb9H26YGe7RhLCLD7w5mEk_iOSO2VA/view?usp=drive_link" target="_blank" class="sub-link">
+                        <a href="https://drive.google.com/file/d/16k7v4qGwfraRWrxFHrDTy0Z7mQTzQx7k/view?usp=drive_link" target="_blank" class="sub-link" data-label="제1차 현장 간담회 결과 보고">
                             <span class="material-icons">description</span>
                             <span class="sub-link-text">제1차 현장 간담회 결과 보고</span>
                         </a>
-                        <a href="https://drive.google.com/file/d/1Tcf69e534HP0gdU598bCNgBrYifZd4y2/view?usp=drive_link" target="_blank" class="sub-link">
+                        <a href="https://drive.google.com/file/d/1Tcf69e534HP0gdU598bCNgBrYifZd4y2/view?usp=drive_link" target="_blank" class="sub-link" data-label="협업 시스템 종합 사용 설명서">
                             <span class="material-icons">description</span>
                             <span class="sub-link-text">협업 시스템 종합 사용 설명서</span>
                         </a>
@@ -558,15 +608,33 @@
                 </details>
                 
                 
-                <a href="#" target="_blank" class="link-card">
-                    <span class="material-icons">assignment</span>
-                    <span class="link-card-text">간담회 소식지(2분기)</span>
-                </a>
-                <a href="#" target="_blank" class="link-card">
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">assignment</span>
+                            <span class="link-card-text">간담회 소식지(2분기)</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/14qfj7dysMC0y3g0Z0zkPkORErDAyZIJT/view?usp=drive_link" target="_blank" class="sub-link" data-label="간담회 소식지(2분기)">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">간담회 소식지(2분기)</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1dqCmDocTiCE_Ncv0E5jilh01mLNSqR4w/view?usp=drive_link" target="_blank" class="sub-link" data-label="제2차 현장 간담회 결과 보고">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">제2차 현장 간담회 결과 보고</span>
+                        </a>
+                    </div>
+                </details>
+                
+                
+                <a target="_blank" class="link-card" open>
                     <span class="material-icons">assignment</span>
                     <span class="link-card-text">간담회 소식지(3분기)</span>
                 </a>
-                <details class="link-card-group">
+                <details class="link-card-group" open>
                     <summary class="link-card">
                         <div class="summary-header">
                             <span class="material-icons">insights</span>
@@ -584,7 +652,7 @@
                             <span class="material-icons">description</span>
                             <span class="sub-link-text">131 병동</span>
                         </a>
-                        <a href="https://drive.google.com/file/d/1nQEsZNsYkik7klWotT8SNQYQaqnSq1Or/view?usp=drive_link" target="_blank" class="sub-link">
+                        <a href="https://drive.google.com/file/d/1nQEsZNsYkik7klWotT8SNQYQaqnSq1Or/view?usp=drive_link" target="_blank" class="sub-link" data-label="141 병동">
                             <span class="material-icons">description</span>
                             <span class="sub-link-text">141 병동</span>
                         </a>
@@ -592,7 +660,7 @@
                             <span class="material-icons">description</span>
                             <span class="sub-link-text">141-단기항암</span>
                         </a>
-                        <a href="https://drive.google.com/file/d/1rrecCV7NWBD7t992csEFQw3HNdVPacyZ/view?usp=drive_link" target="_blank" class="sub-link">
+                        <a href="https://drive.google.com/file/d/1rrecCV7NWBD7t992csEFQw3HNdVPacyZ/view?usp=drive_link" target="_blank" class="sub-link" data-label="142 병동">
                             <span class="material-icons">description</span>
                             <span class="sub-link-text">142 병동</span>
                         </a>
@@ -603,13 +671,22 @@
         
         <div id="tab5" class="tab-content">
             <div class="details-content">
-                <a href="https://form.naver.com/response/IuBBCDK8wsxo1TMt23Clrw" target="_blank" class="link-card">
+                <a href="https://naver.me/5K6OE20Z" target="_blank" class="link-card" data-label="우리가치(WeValue) 협업 소통 실태 설문">
+                    <span class="material-icons" style="color:var(--accent-purple)">rate_review</span>
+                    <div>
+                        <span class="footer-title" style="color:var(--accent-purple)"></span>
+                        <span class="link-card-text">우리가치(WeValue) 협업 소통 실태 설문</span>
+                    </div>
+                </a>
+                <!--
+                <a href="https://form.naver.com/response/IuBBCDK8wsxo1TMt23Clrw" target="_blank" class="link-card" data-label="PA 협업 체계 사전 설문 참여">
                     <span class="material-icons" style="color:var(--accent-purple)">rate_review</span>
                     <div>
                         <span class="footer-title" style="color:var(--accent-purple)"></span>
                         <span class="link-card-text">PA 협업 체계 사전 설문 참여</span>
                     </div>
                 </a>
+                -->
             </div>
         </div>
     </div>
