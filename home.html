@@ -2,12 +2,12 @@
 <html lang="ko">
 <head>
 
-<!--    <script>
+    <script>
         if (sessionStorage.getItem('isAuthorized') !== 'true') {
             window.location.href = "index.html";
         }
     </script>
--->
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QST4T7KX86"></script>
     <script>
@@ -302,7 +302,7 @@
     <div class="list-wrap">
         <div id="tab1" class="tab-content active">
             <div class="details-content">
-                <a href="https://open.kakao.com/o/grvxNzii" target="_blank" class="link-card" data-date="2026-07-01" data-label="우리가치톡(Kakao 오픈채팅, 프로필 익명)">
+                <a href="https://open.kakao.com/o/grvxNzii" target="_blank" class="link-card" data-label="우리가치톡(Kakao 오픈채팅, 프로필 익명)">
                     <span class="material-icons">chat_bubble_outline</span>
                     <span class="link-card-text">우리가치톡(Kakao 오픈채팅, 프로필 익명)</span>
                 </a>
@@ -429,7 +429,7 @@
                                 </a>
                             </div>
                         </details>
-                    
+                    </div>
                 <details class="link-card-group" open>
                     <summary class="link-card">
                         <div class="summary-header">
@@ -724,6 +724,8 @@
     }
     
     document.addEventListener('DOMContentLoaded', () => {
+        
+        addNewBadges();
         // 클릭 이벤트 감지
         document.addEventListener('click', function(e) {
             // 클릭된 요소나 그 부모 중에 링크(.link-card, .sub-link)가 있는지 확인
