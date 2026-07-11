@@ -259,7 +259,7 @@
         <div class="profile-left">
             <div class="profile-thumb"><img src="wevalue_w.png" alt="Logo" class="header-logo"></div>
             <div class="profile-info">
-                <h1>WeValue(v1.0711.5)</h1>
+                <h1 data-date="2026-07-11">WeValue(v1.0711.5)</h1>
                 <p>협업 자료실</p>
             </div>
         </div>
@@ -752,7 +752,8 @@
 <script>
 function addNewBadges() {
     const today = new Date();
-    const targetLinks = document.querySelectorAll('.link-card, .sub-link');
+    // ?? 선택자에 h1을 추가하여 같이 탐색하도록 수정했습니다.
+    const targetLinks = document.querySelectorAll('.link-card, .sub-link, h1[data-date]');
     
     targetLinks.forEach(link => {
         const dateStr = link.getAttribute('data-date');
@@ -763,12 +764,21 @@ function addNewBadges() {
             
             // 당일 포함 최근 5일 이내일 때 배지 생성
             if (diffDays >= 0 && diffDays <= 5) {
-                const textContainer = link.querySelector('.link-card-text, .sub-link-text');
-                if (textContainer) {
-                    const badge = document.createElement('span');
-                    badge.className = 'new-badge';
-                    badge.innerText = 'New!';
-                    textContainer.after(badge); // 텍스트 엘리먼트 바로 뒤에 삽입
+                // 배지 생성
+                const badge = document.createElement('span');
+                badge.className = 'new-badge';
+                badge.innerText = 'New!';
+
+                // 태그 종류에 따른 삽입 위치 분기 처리
+                if (link.tagName === 'H1') {
+                    // ?? h1 태그인 경우 글씨 바로 뒤에 자식 요소로 추가
+                    link.appendChild(badge);
+                } else {
+                    // 기존 카드 및 서브 링크 처리 방식 유지
+                    const textContainer = link.querySelector('.link-card-text, .sub-link-text');
+                    if (textContainer) {
+                        textContainer.after(badge); // 텍스트 엘리먼트 바로 뒤에 삽입
+                    }
                 }
             }
         }
