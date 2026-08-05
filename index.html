@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WeValue 인증</title>
     <style>
-        /* 기본 스타일 초기화 */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
@@ -15,7 +14,7 @@
             align-items: center; 
             height: 100vh; 
             margin: 0; 
-            background-color: #f2f4f7; /* 부드러운 배경색 */
+            background-color: #f2f4f7;
             padding: 20px;
         }
 
@@ -29,11 +28,10 @@
             max-width: 380px;
         }
 
-        /* 타이틀 섹션 */
         .brand-title {
             font-size: 1.8rem;
             font-weight: 800;
-            color: #1a73e8; /* 브랜드 컬러 */
+            color: #1a73e8;
             margin-bottom: 8px;
             letter-spacing: -0.5px;
         }
@@ -46,10 +44,10 @@
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
-        input { 
+        input[type="password"] { 
             width: 100%; 
             padding: 18px; 
             font-size: 1.1rem; 
@@ -61,14 +59,13 @@
             transition: all 0.3s ease;
         }
 
-        input:focus { 
+        input[type="password"]:focus { 
             outline: none; 
             border-color: #1a73e8; 
             background-color: #fff;
             box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
         }
 
-        /* 비밀번호 저장 체크박스 영역 스타일 */
         .remember-me {
             display: flex;
             align-items: center;
@@ -108,7 +105,6 @@
             box-shadow: 0 4px 12px rgba(26, 115, 232, 0.2);
         }
 
-
         button:active { 
             transform: scale(0.97); 
             background-color: #1557b0; 
@@ -139,7 +135,6 @@
                autocomplete="off">
     </div>
     
-    <!-- 비밀번호 저장 체크박스 추가 -->
     <div class="remember-me">
         <input type="checkbox" id="rememberMe">
         <label for="rememberMe">로그인 상태 유지하기</label>
@@ -150,7 +145,6 @@
 </div>
 
 <script>
-    // SHA-256 해시 생성 함수
     async function sha256(message) {
         const msgBuffer = new TextEncoder().encode(message);
         const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -158,12 +152,16 @@
         return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    // 페이지 접속 시 자동 인증 상태 확인
-    window.onload = function() {
-        if (localStorage.getItem('isAuthorized') === 'true' || sessionStorage.getItem('isAuthorized') === 'true') {
-            window.location.href = "home.html";
+    // 페이지 진입 시 이미 인증되어 있다면 home.html로 이동
+    document.addEventListener("DOMContentLoaded", function() {
+        const isAuthLocal = localStorage.getItem('isAuthorized') === 'true';
+        const isAuthSession = sessionStorage.getItem('isAuthorized') === 'true';
+
+        if (isAuthLocal || isAuthSession) {
+            // location.replace를 사용하여 뒤로가기 시 인증 페이지로 돌아오는 루프 방지
+            window.location.replace("./home.html");
         }
-    };
+    });
 
     async function handleAuth() {
         const input = document.getElementById('authCode').value;
@@ -184,14 +182,17 @@
 
         const inputHash = await sha256(input);
 
-        if (inputHash == correctHash) {
-            // 체크박스 선택 여부에 따라 저장소 분기
+        if (inputHash === correctHash) {
             if (rememberMe) {
-                localStorage.setItem('isAuthorized', 'true'); // 브라우저를 닫아도 유지
+                localStorage.setItem('isAuthorized', 'true');
+                sessionStorage.removeItem('isAuthorized'); // 혼선 방지용 기존 세션 정리
             } else {
-                sessionStorage.setItem('isAuthorized', 'true'); // 브라우저 닫으면 종료
+                sessionStorage.setItem('isAuthorized', 'true');
+                localStorage.removeItem('isAuthorized'); // 기존 로컬 스토리지 정리
             }
-            window.location.href = "home.html";
+            
+            // href 대신 replace 사용 (히스토리에 남기지 않아 무한 루프 차단)
+            window.location.replace("./home.html");
         } else {
             messageDiv.innerText = "인증 번호가 일치하지 않습니다.";
             document.getElementById('authCode').value = "";
@@ -201,7 +202,6 @@
         }
     }
 
-    // 엔터키 지원
     document.getElementById('authCode').addEventListener('keypress', async (e) => {
         if (e.key === 'Enter') await handleAuth();
     });
