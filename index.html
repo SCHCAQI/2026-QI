@@ -68,6 +68,32 @@
             box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
         }
 
+        /* 비밀번호 저장 체크박스 영역 스타일 */
+        .remember-me {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+            padding-left: 4px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            accent-color: #1a73e8;
+            cursor: pointer;
+        }
+
+        .remember-me label {
+            font-size: 0.9rem;
+            color: #555;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
         button { 
             width: 100%;
             padding: 18px; 
@@ -113,6 +139,12 @@
                autocomplete="off">
     </div>
     
+    <!-- 비밀번호 저장 체크박스 추가 -->
+    <div class="remember-me">
+        <input type="checkbox" id="rememberMe">
+        <label for="rememberMe">로그인 상태 유지하기</label>
+    </div>
+    
     <button onclick="handleAuth()">인증 확인</button>
     <div id="message"></div>
 </div>
@@ -126,8 +158,16 @@
         return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
+    // 페이지 접속 시 자동 인증 상태 확인
+    window.onload = function() {
+        if (localStorage.getItem('isAuthorized') === 'true' || sessionStorage.getItem('isAuthorized') === 'true') {
+            window.location.href = "home.html";
+        }
+    };
+
     async function handleAuth() {
         const input = document.getElementById('authCode').value;
+        const rememberMe = document.getElementById('rememberMe').checked;
         const messageDiv = document.getElementById('message');
         const btn = document.querySelector('button');
         
@@ -145,7 +185,12 @@
         const inputHash = await sha256(input);
 
         if (inputHash == correctHash) {
-            sessionStorage.setItem('isAuthorized', 'true');
+            // 체크박스 선택 여부에 따라 저장소 분기
+            if (rememberMe) {
+                localStorage.setItem('isAuthorized', 'true'); // 브라우저를 닫아도 유지
+            } else {
+                sessionStorage.setItem('isAuthorized', 'true'); // 브라우저 닫으면 종료
+            }
             window.location.href = "home.html";
         } else {
             messageDiv.innerText = "인증 번호가 일치하지 않습니다.";
