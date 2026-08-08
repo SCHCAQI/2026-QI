@@ -272,19 +272,36 @@
         .footer { margin: 20px; padding: 16px; background-color: var(--footer-bg); border-radius: 12px; font-size: 13px; color: var(--text-sub); border: 1px solid var(--border-color); }
         .footer-title { font-weight: 600; color: var(--text-main); }
         
+
+
+/* 깜빡이는 빨간 점 (Red Dot) 뱃지 스타일 */
 .new-badge {
-    background-color: rgba(255, 59, 48, 0.1); /* 연한 레드 투명 배경 */
-    color: #ff3b30; /* 선명한 애플 레드 */
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 6px;
-    margin-left: 6px;
     display: inline-block;
-    vertical-align: middle;
-    letter-spacing: -0.3px;
-    /* 은은하게 깜빡이는 애니메이션 */
-    animation: fade-animation 1.8s infinite ease-in-out; 
+    width: 6px;
+    height: 6px;
+    background-color: #ff3b30; /* 애플 레드 */
+    border-radius: 50%;
+    margin-left: 5px;
+    vertical-align: super; /* 텍스트 상단에 알맞게 위치 */
+    box-shadow: 0 0 4px rgba(255, 59, 48, 0.6); /* 은은한 붉은 광원 효과 */
+    
+    /* 깜빡이는 애니메이션 */
+    animation: dot-pulse 1.5s infinite ease-in-out; 
+}
+
+@keyframes dot-pulse {
+    0% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+    100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
 }
 
 @keyframes fade-animation {
@@ -340,7 +357,7 @@
         <div class="profile-left">
             <div class="profile-thumb"><img src="wevalue_w.png" alt="Logo" class="header-logo"></div>
             <div class="profile-info">
-                <h1 data-date="2026-08-08">WeValue(v1.0808.1)</h1>
+                <h1 data-date="2026-08-08">WeValue(v1.0808.2)</h1>
                 <p>협업 자료실</p>
             </div>
         </div>
@@ -372,12 +389,12 @@
     
     <div class="tabs-container">
         <div class="tab-menu">
-            <button class="tab-btn active" onclick="openTab(event, 'tab1')" data-label="소통의 광장">소통의 광장</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab2')" data-label="업무기준">업무기준</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab3')" data-label="교육자료">교육자료</button>
-            <button class="tab-btn" onclick="openTab(event, 'tabReq')" data-label="요청">요청</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab4')" data-label="지표">지표</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab5')">설문</button>
+            <button class="tab-btn active" onclick="openTab(event, 'tab1')" data-date="2026-08-08" data-label="소통의 광장">소통의 광장</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab2')" data-date="2026-08-08" data-label="업무기준">업무기준</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab3')" data-date="2026-07-01" data-label="교육자료">교육자료</button>
+            <button class="tab-btn" onclick="openTab(event, 'tabReq')" data-date="2026-07-01" data-label="요청">요청</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab4')" data-date="2026-07-01" data-label="지표">지표</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab5')" data-date="2026-07-01" >설문</button>
         </div>
     </div>
     
@@ -998,32 +1015,49 @@
 <script>
 function addNewBadges() {
     const today = new Date();
-    // ?? 선택자에 h1을 추가하여 같이 탐색하도록 수정했습니다.
-    const targetLinks = document.querySelectorAll('.link-card, .sub-link, h1[data-date]');
     
-    targetLinks.forEach(link => {
-        const dateStr = link.getAttribute('data-date');
-        if (dateStr) {
-            const itemDate = new Date(dateStr);
-            const diffTime = today - itemDate;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            // 당일 포함 최근 5일 이내일 때 배지 생성
-            if (diffDays >= 0 && diffDays <= 5) {
-                // 배지 생성
-                const badge = document.createElement('span');
-                badge.className = 'new-badge';
-                badge.innerText = 'New!';
+    // data-date 속성이 존재하는 모든 요소 탐색
+    const targetElements = document.querySelectorAll('[data-date]');
+    
+    targetElements.forEach(el => {
+        const dateStr = el.getAttribute('data-date');
+        if (!dateStr) return;
 
-                // 태그 종류에 따른 삽입 위치 분기 처리
-                if (link.tagName === 'H1') {
-                    // ?? h1 태그인 경우 글씨 바로 뒤에 자식 요소로 추가
-                    link.appendChild(badge);
+        const itemDate = new Date(dateStr);
+        const diffTime = today - itemDate;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        // 당일 포함 최근 5일 이내인 경우에만 뱃지 생성
+        if (diffDays >= 0 && diffDays <= 5) {
+            // 중복 생성 방지
+            if (el.querySelector('.new-badge')) return;
+
+            const badge = document.createElement('span');
+            badge.className = 'new-badge';
+            badge.innerText = '';
+
+            // 1. 버튼(button.tab-btn) 및 제목(h1) 요소 처리[cite: 2]
+            if (el.tagName === 'BUTTON' || el.tagName === 'H1') {
+                el.appendChild(badge);
+            } 
+            // 2. 카드/링크(.link-card, .sub-link) 요소 처리[cite: 2]
+            else {
+                const textContainer = el.querySelector('.link-card-text, .sub-link-text'); //[cite: 2]
+                if (textContainer) {
+                    textContainer.after(badge); //[cite: 2]
                 } else {
-                    // 기존 카드 및 서브 링크 처리 방식 유지
-                    const textContainer = link.querySelector('.link-card-text, .sub-link-text');
-                    if (textContainer) {
-                        textContainer.after(badge); // 텍스트 엘리먼트 바로 뒤에 삽입
+                    el.appendChild(badge);
+                }
+
+                // 하위 콘텐츠에 New가 있을 때 해당 탭 버튼에도 연동 표시 원할 경우 유지
+                const parentTab = el.closest('.tab-content'); //[cite: 2]
+                if (parentTab && parentTab.id) {
+                    const parentBtn = document.querySelector(`button[onclick*="'${parentTab.id}'"]`);
+                    if (parentBtn && !parentBtn.querySelector('.new-badge')) {
+                        const tabBadge = document.createElement('span');
+                        tabBadge.className = 'new-badge';
+                        tabBadge.innerText = '';
+                        parentBtn.appendChild(tabBadge);
                     }
                 }
             }
