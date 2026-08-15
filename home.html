@@ -89,7 +89,11 @@
             --footer-bg: #f9f9f9;
             --logo-url: url('logo.png');
         }
-
+        
+        .emoji {
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif !important;
+        }
+        
         body.dark-mode {
             --bg-color: #000000;
             --item-bg: #121212;
@@ -102,7 +106,7 @@
         }
 
         body {
-            font-family: 'Pretendard', -apple-system, sans-serif;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0; padding: 0;
@@ -389,7 +393,8 @@
     
     <div class="tabs-container">
         <div class="tab-menu">
-            <button class="tab-btn active" onclick="openTab(event, 'tab1')" data-date="2026-07-01" data-label="소통의 광장">소통의 광장</button>
+            <button class="tab-btn active" onclick="openTab(event, 'tab0')" data-date="2026-08-15" data-label="우리가치 알림터">우리가치 알림터</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab1')" data-date="2026-07-01" data-label="소통의 광장">소통의 광장</button>
             <button class="tab-btn" onclick="openTab(event, 'tab2')" data-date="2026-07-01" data-label="업무기준">업무기준</button>
             <button class="tab-btn" onclick="openTab(event, 'tab3')" data-date="2026-07-01" data-label="교육자료">교육자료</button>
             <button class="tab-btn" onclick="openTab(event, 'tabReq')" data-date="2026-07-01" data-label="요청">요청</button>
@@ -399,7 +404,22 @@
     </div>
     
     <div class="list-wrap">
-        <div id="tab1" class="tab-content active">
+        <div id="tab0" class="tab-content active">
+            <div class="details-content">
+                <a href="https://drive.google.com/file/d/1-tSlL6ODe0Sa5neHC7EkIYnCG6rKtkCk/view?usp=drive_link" target="_blank" data-date="2026-08-15" class="link-card" data-label="[공지] '찾아가는 맞춤형 10분 교육' 상시 신청 안내">
+                    <span class="material-icons">notifications</span>
+                    <span class="link-card-text">[공지] '찾아가는 맞춤형 10분 교육' 상시 신청 안내(8/15)</span>
+                </a>
+                
+                <a href="https://drive.google.com/file/d/1LIUVDGRX__YG5pogv2A9oQ-PC7ZdMacB/view?usp=drive_link" target="_blank" data-date="2026-08-15" class="link-card" data-label="[공지협조 요청] 92(CS,MC) 131(URO) 병동 소통데이터 캡처본 제출 안내">
+                    <span class="material-icons">notifications</span>
+                    <span class="link-card-text">[공지협조 요청] 92(CS,MC) 131(URO) 병동 소통데이터 캡처본 제출 안내(8/15)</span>
+                </a>
+                
+            </div>
+        
+        </div>
+        <div id="tab1" class="tab-content">
             <div class="details-content">
                 <a href="https://open.kakao.com/o/grvxNzii" target="_blank" class="link-card" data-label="우리가치톡(Kakao 오픈채팅, 프로필 익명)">
                     <span class="material-icons">chat_bubble_outline</span>
