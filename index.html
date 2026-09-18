@@ -1,211 +1,1178 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    
+<!--    <script>
+        const isAuthLocal = localStorage.getItem('isAuthorized') === 'true';
+        const isAuthSession = sessionStorage.getItem('isAuthorized') === 'true';
+    
+        // 둘 다 없을 경우에만 index.html로 이동
+        if (!isAuthLocal && !isAuthSession) {
+            window.location.replace("index.html");
+        }
+    </script>
+-->
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QST4T7KX86"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-QST4T7KX86');
+      
+      let targetUrl = '';
+      let targetWindow = '_blank';
+      
+      function playVideoAndRedirect(event, element) {
+          // 1. 기본 링크 이동 동작 중단
+          event.preventDefault();
+      
+          // 2. 이동할 URL 및 target 저장
+          targetUrl = element.getAttribute('data-href');
+          targetWindow = element.getAttribute('target') || '_self';
+      
+          // 3. 모달 및 비디오 요소 가저오기
+          const modal = document.getElementById('videoModal');
+          const video = document.getElementById('promoVideo');
+      
+          // 4. 모달 표시 및 비디오 재생
+          modal.style.display = 'flex';
+          video.currentTime = 0; // 재생 위치 초기화
+          video.play();
+      
+          // 5. 비디오 재생이 끝났을 때 이벤트 처리
+          video.onended = function() {
+              closeModalAndRedirect();
+          };
+      }
+      
+      // 모달 닫기 및 저장된 링크로 이동
+      function closeModalAndRedirect() {
+          const modal = document.getElementById('videoModal');
+          const video = document.getElementById('promoVideo');
+      
+          // 비디오 정지 및 모달 숨기기
+          video.pause();
+          modal.style.display = 'none';
+      
+          // 저장해둔 URL로 이동
+          if (targetUrl) {
+              window.open(targetUrl, targetWindow);
+              targetUrl = ''; // 초기화
+          }
+      }
+    </script>
+    
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WeValue 인증</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeValue</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="wevalue_w.png" type="image/png">
+    <link rel="shortcut icon" href="wevalue_w.png">    
+    <link rel="apple-touch-icon" href="wevalue_w.png">    
+    <link rel="icon" sizes="192x192" href="wevalue_w.png">
+    <link rel="icon" sizes="512x512" href="wevalue_w.png">    
+    <meta name="msapplication-TileImage" content="wevalue_w.png">
+
     <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root {
+            --bg-color: #ffffff;
+            --item-bg: #f9f9f9;
+            --text-main: #191919;
+            --text-sub: #3e3e33;
+            --border-color: #f2f2f7;
+            --accent-blue: #007aff;
+            --accent-orange: #ff9500;
+            --accent-green: #34c759;
+            --accent-purple: #af52de;
+            --footer-bg: #f9f9f9;
+            --logo-url: url('logo.png');
+        }
         
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
-            background-color: #f2f4f7;
+        .emoji {
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif !important;
+        }
+        
+        body.dark-mode {
+            --bg-color: #000000;
+            --item-bg: #121212;
+            --text-main: #ffffff;
+            --text-sub: #8e8e93;
+            --border-color: #1c1c1e;
+            --accent-blue: #3586ff;
+            --footer-bg: #121212;
+            --logo-url: url('logo_black.png');
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            transition: background-color 0.2s ease;
+        }
+
+        .container { width: 100%; max-width: 600px; margin: 0 auto; padding-bottom: 30px; }
+
+        /* Header */
+        .header-profile { padding: 30px 20px 10px; display: flex; align-items: center; justify-content: space-between; }
+        .header-logo { width: 50px; height: 50px; object-fit: contain; content: var(--logo-url); }
+        .profile-left { display: flex; align-items: center; gap: 12px; }
+        .profile-info h1 { margin: 0; font-size: 20px; font-weight: 700; }
+        .profile-info p { margin: 2px 0 0; font-size: 14px; color: var(--text-sub); }
+        .theme-toggle { cursor: pointer; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--item-bg); border: 1px solid var(--border-color); }
+
+        /* Tab Control Style */
+        .tabs-container {
+            position: sticky;
+            top: 0;
+            background: var(--bg-color);
+            z-index: 10;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-menu {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 0 10px;
+            scrollbar-width: none; /* Firefox */
+        }
+        .tab-menu::-webkit-scrollbar { display: none; } /* Chrome, Safari */
+
+        .tab-btn {
+            padding: 14px 16px;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-sub);
+            border: none;
+            background: none;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-blue);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 15%;
+            width: 70%;
+            height: 3px;
+            background-color: var(--accent-blue);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-content {
+            display: none;
             padding: 20px;
+            animation: fadeIn 0.3s ease;
         }
 
-        .auth-container { 
-            background: white; 
-            padding: 40px 25px; 
-            border-radius: 24px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08); 
-            text-align: center; 
-            width: 100%;
-            max-width: 380px;
+        .tab-content.active {
+            display: block;
         }
 
-        .brand-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #1a73e8;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .brand-subtitle {
-            font-size: 0.9rem;
-            color: #888;
-            margin-bottom: 30px;
-            font-weight: 400;
-        }
-
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        input[type="password"] { 
-            width: 100%; 
-            padding: 18px; 
-            font-size: 1.1rem; 
-            text-align: center; 
-            border: 2px solid #f0f2f5; 
-            border-radius: 16px; 
-            letter-spacing: 2px;
-            background-color: #f9fafb;
-            transition: all 0.3s ease;
-        }
-
-        input[type="password"]:focus { 
-            outline: none; 
-            border-color: #1a73e8; 
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.1);
-        }
-
-        .remember-me {
+        /* Link Card Styles (기존 유지) */
+        .link-card {
+            background-color: var(--item-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            justify-content: flex-start;
-            margin-bottom: 20px;
-            padding-left: 4px;
-            cursor: pointer;
-            user-select: none;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
         }
-
-        .remember-me input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin-right: 8px;
-            accent-color: #1a73e8;
-            cursor: pointer;
-        }
-
-        .remember-me label {
-            font-size: 0.9rem;
-            color: #555;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        button { 
+        .link-card .material-icons { font-size: 22px; }
+        .link-card-text { font-size: 15px; font-weight: 500; }
+        
+        /* 그룹 컨테이너 */
+        .link-card-group {
             width: 100%;
-            padding: 18px; 
-            background-color: #1a73e8; 
-            color: white; 
-            border: none; 
-            border-radius: 16px; 
-            cursor: pointer; 
-            font-size: 1.1rem; 
-            font-weight: 700;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.2);
+            margin-bottom: 12px;
+            border: none;
+        }
+        
+        /* 요약 헤더 (클릭하는 부분) */
+        summary.link-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            list-style: none; /* 기본 화살표 제거 */
+            padding: 16px;
+            background-color: var(--item-bg); /* 변수 적용 */
+            border: 1px solid var(--border-color); /* 변수 적용 */
+            border-radius: 12px;
+            color: var(--text-main); /* 변수 적용 */
+        }
+        summary::-webkit-details-marker { display: none; }
+        
+        .summary-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 화살표 애니메이션 */
+        .arrow {
+            transition: transform 0.3s ease;
+            color: var(--text-sub); /* 변수 적용 */
+        }
+        details[open] .arrow {
+            transform: rotate(180deg);
+        }
+        
+        /* 하위 메뉴 영역 */
+        .sub-menu {
+            background-color: var(--bg-color); /* 변수 적용 */
+            margin: -8px 5px 10px 5px;
+            padding: 12px 0 8px 0;
+            border-radius: 0 0 12px 12px;
+            border: 1px solid var(--border-color); /* 변수 적용 */
+            border-top: none;
+        }
+        
+        /* 하위 링크 개별 스타일 */
+        .sub-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px 12px 45px;
+            text-decoration: none;
+            color: var(--text-main); /* 변수 적용 */
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .sub-link .material-icons {
+            font-size: 18px;
+            color: var(--text-sub); /* 변수 적용 */
+        }
+        
+        .sub-link:hover {
+            background-color: var(--item-bg);
+            color: var(--accent-blue);
+        }
+        
+        .sub-link:hover .material-icons {
+            color: var(--accent-blue);
         }
 
-        button:active { 
-            transform: scale(0.97); 
-            background-color: #1557b0; 
-        }
+        /* Footer */
+        .footer { margin: 20px; padding: 16px; background-color: var(--footer-bg); border-radius: 12px; font-size: 13px; color: var(--text-sub); border: 1px solid var(--border-color); }
+        .footer-title { font-weight: 600; color: var(--text-main); }
+        
 
-        #message { 
-            color: #d93025; 
-            margin-top: 20px; 
-            font-size: 0.85rem; 
-            font-weight: 500;
-            min-height: 1.2em; 
-        }
+
+/* 깜빡이는 빨간 점 (Red Dot) 뱃지 스타일 */
+.new-badge {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #ff3b30; /* 애플 레드 */
+    border-radius: 50%;
+    margin-left: 5px;
+    vertical-align: super; /* 텍스트 상단에 알맞게 위치 */
+    box-shadow: 0 0 4px rgba(255, 59, 48, 0.6); /* 은은한 붉은 광원 효과 */
+    
+    /* 깜빡이는 애니메이션 */
+    animation: dot-pulse 1.5s infinite ease-in-out; 
+}
+
+@keyframes dot-pulse {
+    0% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+    100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+}
+
+@keyframes fade-animation {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
+
+/* 모달 배경 */
+.video-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* 모달 콘텐츠 박스 */
+.video-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 700px;
+    background: #000;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* 닫기 버튼 */
+.close-btn {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    color: #fff;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
     </style>
+
 </head>
+
 <body>
-<div class="auth-container">
-    <div class="brand-title">WeValue</div>
-    <div class="brand-subtitle"></div>
+
+<div class="container">
+
+    <div class="header-profile">
+        <div class="profile-left">
+            <div class="profile-thumb"><img src="wevalue_w.png" alt="Logo" class="header-logo"></div>
+            <div class="profile-info">
+                <h1 data-date="2026-09-17">WeValue(v1.0918.1)</h1>
+                <p>협업 자료실</p>
+            </div>
+        </div>
+        <div class="theme-toggle" onclick="toggleTheme()">
+            <span class="material-icons" id="theme-icon">dark_mode</span>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-item">
+            <div>
+                <span class="footer-title">우리가치 (WeValue)</span><br/>우리는 서로의 전문성이 맞물릴 때 가장 안전한 [간호 환경]을 완성합니다
+            </div>
+        </div>
+        <div class="footer-item">
+            <div>
+                <span class="footer-title">활동 목표</span><br/>PA-병동 간 협업 만족도 80점 이상달성
+            </div>
+        </div>
+        <div class="footer-item">
+            <div>
+                <span class="footer-title">핵심 전략 (V.I.P)</span> <br/>
+                V (Visual): 눈으로 확인하는 실무 가이드 (QR 영상, One-cut 가이드)<br/>
+                I (Institutional): 약속된 소통 규칙 (10분 룰, 답장 문화, 4-Track 모델)<br/>
+                P (Partner): 서로를 인정하는 보상 체계 (우리가치 히어로 포상)
+            </div>
+        </div>
+    </footer>
     
-    <p style="color: #444; font-size: 1rem; margin-bottom: 20px; font-weight: 600;">보안 인증이 필요합니다</p>
-    
-    <div class="input-group">
-        <input type="password"
-               id="authCode" 
-               maxlength="10" 
-               inputmode="text" 
-               placeholder="인증 번호를 입력하세요"
-               autocomplete="off">
+    <div class="tabs-container">
+        <div class="tab-menu">
+            <button class="tab-btn active" onclick="openTab(event, 'tab0')" data-date="2026-08-15" data-label="우리가치 알림터">우리가치 알림터</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab1')" data-date="2026-07-01" data-label="소통의 광장">소통의 광장</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab2')" data-date="2026-07-01" data-label="업무기준">업무기준</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab3')" data-date="2026-07-01" data-label="교육자료">교육자료</button>
+            <button class="tab-btn" onclick="openTab(event, 'tabReq')" data-date="2026-07-01" data-label="요청">요청</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab4')" data-date="2026-07-01" data-label="지표">지표</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab5')" data-date="2026-07-01" >설문</button>
+        </div>
     </div>
     
-    <div class="remember-me">
-        <input type="checkbox" id="rememberMe">
-        <label for="rememberMe">로그인 상태 유지하기</label>
+    <div class="list-wrap">
+        <div id="tab0" class="tab-content active">
+            <div class="details-content">
+                <a href="https://drive.google.com/file/d/1-tSlL6ODe0Sa5neHC7EkIYnCG6rKtkCk/view?usp=drive_link" target="_blank" data-date="2026-08-15" class="link-card" data-label="[공지] '찾아가는 맞춤형 10분 교육' 상시 신청 안내">
+                    <span class="material-icons">notifications</span>
+                    <span class="link-card-text">[공지] '찾아가는 맞춤형 10분 교육' 상시 신청 안내(8/15)</span>
+                </a>
+                
+                <a href="https://drive.google.com/file/d/1LIUVDGRX__YG5pogv2A9oQ-PC7ZdMacB/view?usp=drive_link" target="_blank" data-date="2026-08-15" class="link-card" data-label="[공지협조 요청] 92(CS,MC) 131(URO) 병동 소통데이터 캡처본 제출 안내">
+                    <span class="material-icons">notifications</span>
+                    <span class="link-card-text">[공지협조 요청] 92(CS,MC) 131(URO) 병동 소통데이터 캡처본 제출 안내(8/15)</span>
+                </a>
+                
+                <a href="https://drive.google.com/file/d/1jqMeNDJxTNqdiyyZtanYz12nUO6d9OCf/view?usp=drive_link" target="_blank" data-date="2026-08-19" class="link-card" data-label="[공지][사전 안내 & 의견 수렴] 9월 진료지원간호팀 역량강화 교육 추진(안)">
+                    <span class="material-icons">notifications</span>
+                    <span class="link-card-text">[공지][사전 안내 & 의견 수렴] 9월 진료지원간호팀 역량강화 교육 추진(안)(8/19)</span>
+                </a>
+                
+                <a href="https://drive.google.com/file/d/1UQNh4ix8JGQPvGwhTeMjdsLCRfAJbKQ-/view?usp=drive_link" target="_blank" data-date="2026-09-16" class="link-card" data-label="진료지원간호팀 사진">
+                    <span class="material-icons">notifications</span>
+                    <span class="link-card-text">진료지원간호팀 사진</span>
+                </a>
+            </div>
+        
+        </div>
+        <div id="tab1" class="tab-content">
+            <div class="details-content">
+                <a href="https://open.kakao.com/o/grvxNzii" target="_blank" class="link-card" data-label="우리가치톡(Kakao 오픈채팅, 프로필 익명)">
+                    <span class="material-icons">chat_bubble_outline</span>
+                    <span class="link-card-text">우리가치톡(Kakao 오픈채팅, 프로필 익명)</span>
+                </a>
+                <a href="https://blab.dothome.co.kr/praise_bd/praise_bd.html" target="_blank" data-date="2026-07-01" class="link-card" data-label="칭찬 게시판">
+                    <span class="material-icons">thumb_up_off_alt</span>
+                    <span class="link-card-text">칭찬 게시판</span>
+                </a>
+                <a href="https://schcaqi.github.io/2026-QI/awards.html" target="_blank" data-date="2026-09-17" class="link-card" data-label="2026 WeValue Awards">
+                    <span class="material-icons">emoji_events</span>
+                    <span class="link-card-text">2026 WeValue Awards</span>
+                </a>
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">assignment</span>
+                            <span class="link-card-text">병동 순회활동</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1bk0DoQTLu-3bm0O8_UEBRDcyHaJEvDkl/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="병동 순회활동">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">병동 순회활동</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1ND2MKM4KWjrVHipk-obCSNkXOm2hx51d/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="14층 현장 순회 결과[4월 병동 순회 활동]">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">14층 현장 순회 결과[4월 병동 순회 활동].pdf</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/12YpKLzXlTaXCG_V4kAHM2s0vJF2YSsej/view?usp=drive_link" target="_blank" data-date="2026-08-03" class="sub-link" data-label="찾아가는 병동교육 일정">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">찾아가는 병동교육 일정</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1er1fRYA_ROaEqaUeYIQdaK6BOJDym85_/view?usp=drive_link" target="_blank" data-date="2026-08-15" class="sub-link" data-label="131병동 찾아가는 병동교육 결과 보고(8월)">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">131병동 찾아가는 병동교육 결과 보고(8월)</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1TQomS4bLCdyC_HdR5WQXQvDU_AcwGyn1/view?usp=drive_link" target="_blank" data-date="2026-08-12" class="sub-link" data-label="141.142병동 찾아가는 병동교육결과 보고(8월)">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">141.142병동 찾아가는 병동교육 결과 보고(8월)</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1nA1oO4Puk3Td-f6TiBc4CEmSodM399HW/view?usp=drive_link" target="_blank" data-date="2026-08-19" class="sub-link" data-label="92병동 찾아가는 방문 교육 결과 보고(8월)">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">92병동 찾아가는 방문 교육 결과 보고(8월)</span>
+                        </a>
+                    </div>
+                </details>
+                
+                <a href="https://drive.google.com/file/d/1IFxi4WvjVhqP3fA7ZLX08Uvp3Rb7CP0S/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="link-card" data-label="우리가치 히어로">
+                    <span class="material-icons">chat_bubble_outline</span>
+                    <span class="link-card-text">우리가치 히어로</span>
+                </a>
+                
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">assignment</span>
+                            <span class="link-card-text">소통회의록</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1X_bAk7W2EUdIHAkOdpPyz_abfHnAToCN/view?usp=drive_link" target="_blank" data-date="2026-07-16" class="sub-link" data-label="7월 진료지원간호팀 회의록">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">7월 진료지원간호팀 회의록.pdf</span>
+                        </a>
+                    </div>
+                </details>
+                
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">assignment</span>
+                            <span class="link-card-text">우리가치 레터</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1uyf63c7owMsL1b_FkWQzmNSWi-l-ngjx/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="제 1회 심포지움 초대장">
+                            <span class="material-icons">groups</span>
+                            <span class="sub-link-text">제 1회 심포지움 초대장</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1NjolhfpzakuzmmrcAlsV4rkUF-78yaY_/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="제 1회 심포지움 초대장">
+                            <span class="material-icons">groups</span>
+                            <span class="sub-link-text">2026 제 1회 진료지원간호팀 심포지움</span>
+                        </a>
+                    </div>
+                    
+                    <details class="link-card-group" open style="margin: 10px 10px 10px 30px; width: auto;">
+                        <summary class="link-card" style="padding: 10px 15px;">
+                            <div class="summary-header">
+                                <span class="material-icons" style="font-size: 18px;">folder</span>
+                                <span class="link-card-text" style="font-size: 14px;">진료지원간호팀 소식지</span>
+                            </div>
+                            <span class="material-icons arrow" style="font-size: 18px;">expand_more</span>
+                        </summary>
+                        <div class="sub-menu" style="margin: -8px 0 0 0; padding: 4px 0;">
+                            <a href="https://drive.google.com/file/d/1mLWBrkRVBqnrxbVidweCBk8vAUXf6bX2/view?usp=drive_link" target="_blank" data-date="2026-07-24" class="sub-link" style="padding-left: 25px;" data-label="6월7월 소식">
+                                <span class="material-icons">description</span>
+                                <span class="sub-link-text">6월7월 소식</span>
+                            </a>
+                        </div>
+                        <div class="sub-menu" style="margin: -8px 0 0 0; padding: 4px 0;">
+                            <a href="https://drive.google.com/file/d/1qKPdyeS7N6U0_i5ec8HJgOzVhcfXueho/view?usp=drive_link" target="_blank" data-date="2026-08-19" class="sub-link" style="padding-left: 25px;" data-label="8월 소식">
+                                <span class="material-icons">description</span>
+                                <span class="sub-link-text">8월 소식</span>
+                            </a>
+                        </div>
+                        <div class="sub-menu" style="margin: -8px 0 0 0; padding: 4px 0;">
+                            <a href="https://drive.google.com/file/d/1Qc45YkUVQ7-au0BJAaF_ynL1w-awF3hw/view?usp=drive_link" target="_blank" data-date="2026-09-13" class="sub-link" style="padding-left: 25px;" data-label="9월 소식">
+                                <span class="material-icons">description</span>
+                                <span class="sub-link-text">9월 소식</span>
+                            </a>
+                        </div>
+                    </details>
+                </details>
+            </div>
+        </div>
+
+        <div id="tab2" class="tab-content">
+            <div id="movieList" class="details-content">
+                <a href="manual_link.html" target="_blank" data-date="2026-07-01" class="link-card" data-label="1.우리가 사내 메신저를 사용해야 하는 진짜 이유">
+                    <span class="material-icons">search</span>
+                    <span class="link-card-text">매뉴얼 Quick Search</span>
+                </a>
+                <a href="https://drive.google.com/file/d/18o9QfmwbckYDerXjEUSc-fiSqgi92_yE/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="link-card" data-label="1.우리가 사내 메신저를 사용해야 하는 진짜 이유">
+                    <span class="material-icons">description</span>
+                    <span class="link-card-text">1.우리가 사내 메신저를 사용해야 하는 진짜 이유</span>
+                </a>
+                
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">groups</span>
+                            <span class="link-card-text">2.우리 가치(WeValue)] 스마트 소통</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1uA1QyzI9P7uoiRtQVLdJEo71TEZoareR/view?usp=drive_link" target="_blank" data-date="2026-07-11" class="sub-link" data-label="[URO PA 1:1 오픈채팅/직통연결]">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">우리 가치(WeValue)] 스마트 소통 실무 안내문 (v1.0)</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1gALiWzv4gLadyMq-dr83alafgIP2PqkU/view?usp=drive_link" target="_blank" data-date="2026-07-11" class="sub-link" data-label="[URO PA 1:1 오픈채팅/직통연결]">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">우리 가치(WeValue)] 스마트 소통 실무 안내문 (v2.0)</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="#" data-href="https://drive.google.com/file/d/1qnVN-Y1WLSIAZXCaZX1Z7Am36MAsigKH/view?usp=drive_link" target="_blank" data-date="2026-08-05" class="sub-link" data-label="[URO PA 1:1 오픈채팅/직통연결]" onclick="playVideoAndRedirect(event, this)">
+                            <span class="material-icons">location_on</span>
+                            <span class="sub-link-text">[명함]스마트소통 약속.pdf</span>
+                        </a>
+                    </div>
+                    <div id="videoModal" class="video-modal" style="display: none;">
+                        <div class="video-modal-content">
+                            <span class="close-btn" onclick="closeModalAndRedirect()">&times;</span>
+                            <video id="promoVideo" controls width="100%">
+                                <!-- 재생할 동영상 파일 경로 -->
+                                <!--<source src="http://blab.dothome.co.kr/mv/qr_intro.mp4" type="video/mp4">-->
+                                <source src="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/movie/qr_intro.mp4" type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1uuix0TZNFdLNc6nMMTGAikWY9vf-6BGI/view?usp=drive_link" target="_blank" data-date="2026-07-11" class="sub-link" data-label="[URO PA 1:1 오픈채팅/직통연결]">
+                            <span class="material-icons">location_on</span>
+                            <span class="sub-link-text">[명함]안전보안수칙.pdf</span>
+                        </a>
+                    </div>
+                </details>
+                
+                <a href="https://drive.google.com/file/d/1IPXunvs1y3Jn9QISMhA4kd6rjZlM-gqB/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="link-card" data-label="3.우리가치(WeValue) QI 활동 실전 핵심 요약">
+                    <span class="material-icons">description</span>
+                    <span class="link-card-text">3.우리가치(WeValue) QI 활동 실전 핵심 요약</span>
+                </a>
+                
+            </div>
+        </div>
+        
+        <div id="tab3" class="tab-content">
+            <div class="details-content">
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">groups</span>
+                            <span class="link-card-text">ENT</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://open.kakao.com/o/gwtAmOri" target="_blank" data-date="2026-07-01" class="sub-link" data-label="[ENT PA 1:1 오픈채팅/직통연결]">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">[ENT PA 1:1 오픈채팅/직통연결]</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1Di05cM9ica66xH0UTWFr_C3J9s4hITGi/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="[WeValue]Mera tube vs Tracoe.pdf">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">[WeValue]Mera tube vs Tracoe.pdf</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1PiQhvsYFK3Qrpu5MbNqDm52bLhPTqwVv/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="[WeValue]ENT dx.pdf">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">[WeValue]ENT dx.pdf</span>
+                        </a>
+                        <details class="link-card-group" open style="margin: 10px 10px 10px 30px; width: auto;">
+                            <summary class="link-card" style="padding: 10px 15px;">
+                                <div class="summary-header">
+                                    <span class="material-icons" style="font-size: 18px;">folder</span>
+                                    <span class="link-card-text" style="font-size: 14px;">[WeValue]ENT 기관절개관</span>
+                                </div>
+                                <span class="material-icons arrow" style="font-size: 18px;">expand_more</span>
+                            </summary>
+                            <div class="sub-menu" style="margin: -8px 0 0 0; padding: 4px 0;">
+                                <a href="https://drive.google.com/file/d/1N-DcMt2n89scAkMjYx_JJDU1K604dsSM/view?usp=drive_link" target="_blank" data-date="2026-07-22" class="sub-link" style="padding-left: 25px;" data-label="기관절개관(Tracheostomy tube) 응급 발관 및 재삽입 프로토콜.pdf">
+                                    <span class="material-icons">description</span>
+                                    <span class="sub-link-text">기관절개관(Tracheostomy tube) 응급 발관 및 재삽입 프로토콜.pdf</span>
+                                </a>
+                            </div>
+                            <div class="sub-menu" style="margin: -8px 0 0 0; padding: 4px 0;">
+                                <a href="https://docs.google.com/presentation/d/1nPAxdNQe0L3PkbnbkqktE5hWLu91Vc6szW8vBNl2bAU/edit?usp=sharing" target="_blank" data-date="2026-07-23" class="sub-link" style="padding-left: 25px;" data-label="[WeValue]ENT 기관절개창(Tracheostomy).pptx">
+                                    <span class="material-icons">description</span>
+                                    <span class="sub-link-text">[WeValue]ENT 기관절개창(Tracheostomy).pptx</span>
+                                </a>
+                            </div>
+                        </details>
+                        <details class="link-card-group" open style="margin: 10px 10px 10px 30px; width: auto;">
+                            <summary class="link-card" style="padding: 10px 15px;">
+                                <div class="summary-header">
+                                    <span class="material-icons" style="font-size: 18px;">folder</span>
+                                    <span class="link-card-text" style="font-size: 14px;">[WeValue]ENT 갑상선</span>
+                                </div>
+                                <span class="material-icons arrow" style="font-size: 18px;">expand_more</span>
+                            </summary>
+                            <div class="sub-menu" style="margin: -8px 0 0 0; padding: 4px 0;">
+                                <a href="https://drive.google.com/file/d/11bATKil2Pm7YI59O-wAqGOQQCWqNDnVV/view?usp=drive_link" target="_blank" data-date="2026-07-11" class="sub-link" style="padding-left: 25px;" data-label="ENT 환자 및 보호자 배포용 안내서.pdf">
+                                    <span class="material-icons">description</span>
+                                    <span class="sub-link-text">ENT 환자 및 보호자 배포용 안내서.pdf</span>
+                                </a>
+                                <a href="https://drive.google.com/file/d/1H3Ppa3K1aDE1URlaIWa936PKr6s5yAQm/view?usp=drive_link" target="_blank" data-date="2026-07-11" class="sub-link" style="padding-left: 25px;" data-label="ENT 병동 간호사 실무용 프로토콜.pdf">
+                                    <span class="material-icons">description</span>
+                                    <span class="sub-link-text">ENT 병동 간호사 실무용 프로토콜.pdf</span>
+                                </a>
+                                <a href="https://drive.google.com/file/d/1odQ7ascgkdwn7iEcSrHFbptoWrGKSBER/view?usp=drive_link" target="_blank" data-date="2026-07-11" class="sub-link" style="padding-left: 25px;" data-label="ENT 병동 간호사 실무 프로토콜 서식">
+                                    <span class="material-icons">description</span>
+                                    <span class="sub-link-text">ENT 병동 간호사 실무 프로토콜 서식.pdf</span>
+                                </a>
+                            </div>
+                        </details>
+                        <a href="https://drive.google.com/file/d/1Iu5WRyuOiP-cPgb7oomGuUjQd0GAUt0Z/view?usp=drive_link" target="_blank" data-date="2026-07-20" class="sub-link" data-label="[WeValue]찾아가는 교육 ENT_기관절개관 관리.pdf">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">[WeValue]찾아가는 교육 ENT_기관절개관 관리.pdf</span>
+                        </a>
+                        
+                    </div>
+                </details>
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">groups</span>
+                            <span class="link-card-text">CS</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://open.kakao.com/o/gveQpOri" target="_blank" data-date="2026-07-01" class="sub-link" data-label="[CS PA 1:1 오픈채팅/직통연결]">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">[CS PA 1:1 오픈채팅/직통연결]</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1a-IR00PBs4_kLb9MCBckukd9My8t_gDF/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="[WeValue]CS Thoracostomy 시술준비 물품.pdf">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">[WeValue]CS Thoracostomy 시술준비 물품.pdf</span>
+                        </a>
+                        <a href="https://docs.google.com/presentation/d/1f5s0uVm48FdtWpQYm8JEX0gLP8LoJpu27QPLXjPbZ6E/edit?usp=sharing" target="_blank" data-date="2026-07-23" class="sub-link" data-label="CS chemoport2.pptx">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">CS chemoport2.pptx</span>
+                        </a>
+                    </div>
+                </details>
+                    
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">groups</span>
+                            <span class="link-card-text">MC</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://open.kakao.com/o/glPbrOri" target="_blank" data-date="2026-07-01" class="sub-link" data-label="[MC PA 1:1 오픈채팅/직통연결]">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">[MC PA 1:1 오픈채팅/직통연결]</span>
+                        </a>
+                    </div>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1JVjtJlyvFzJulNvSKYuccw0SECeccKsF/view?usp=drive_link" target="_blank" data-date="2026-07-26" class="sub-link" data-label="심장내과_고위험약물_QI">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">심장내과_고위험약물_QI</span>
+                        </a>
+                    </div>
+                </details>
+                    
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">groups</span>
+                            <span class="link-card-text">URO</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://open.kakao.com/o/gP2KrOri" target="_blank" data-date="2026-07-01" class="sub-link" data-label="[URO PA 1:1 오픈채팅/직통연결]">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">[URO PA 1:1 오픈채팅/직통연결]</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1WxAjodmKRMIfAlGbGUJ8Zv32mtlTUPbo/view?usp=drive_link" target="_blank" data-date="2026-07-20" class="sub-link" data-label="[WeValue]찾아가는 교육URO_비뇨의학과 검사.pdf">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">[WeValue]찾아가는 교육URO_비뇨의학과 검사.pdf</span>
+                        </a>
+                    </div>
+                </details>
+                    
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">groups</span>
+                            <span class="link-card-text">MH</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://open.kakao.com/o/gDpdsOri" target="_blank" data-date="2026-07-01" class="sub-link" data-label="[MH PA 1:1 오픈채팅/직통연결]">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">[MH PA 1:1 오픈채팅/직통연결]</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/17wpo3BoxSBLQLHBY9cVsvpoOvKxLYWa9/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="[WeValue]Cytotoxic.pdf">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">[WeValue]Cytotoxic.pdf</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/14J09_A1_sVeN-YEC97vKm9VN1_YaO1PD/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="[WeValue]MH 골수 검사.pdf">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">[WeValue]MH 골수 검사.pdf</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/114dr-4jEWLG17CllLEXK6qJziVturKqy/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="[항암요법 초급편] MH 조선우.pdf">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">[항암요법 초급편] MH 조선우.pdf</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1zsqnd-OHl6ssuPQoik-ybOo9NR-jb8Hu/view?usp=drive_link" target="_blank" data-date="2026-07-17" class="sub-link" data-label="사혈 QI.pdf">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">사혈 QI.pdf</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1PyTMgw_CDpQrsbvCAvcZTFnux4aoUWuE/view?usp=drive_link" target="_blank" data-date="2026-07-17" class="sub-link" data-label="Chemoport 관리.pdf">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">Chemoport 관리.pdf</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1aY1-VxHRZUldz30oztYz77YIzRAYktpG/view?usp=drive_link" target="_blank" data-date="2026-07-17" class="sub-link" data-label="척수강내 항암요법 (ITx, Intrathecal Chemotherapy).pdf">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">척수강내 항암요법 (ITx, Intrathecal Chemotherapy).pdf</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1GJZw8rosSsyw3zKXm7sy9hcXoQxp1N_f/view?usp=drive_link" target="_blank" data-date="2026-07-17" class="sub-link" data-label="1회 미니심포지엄 (항암요법 초급편) 요약본.pdf">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">1회 미니심포지엄 (항암요법 초급편) 요약본.pdf</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/18SBrO5myn4a6wfhcoXBZaXorq6t9bM-4/view?usp=drive_link" target="_blank" data-date="2026-08-10" class="sub-link" data-label="찾아가는교육[아큐퓨저].pdf">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">찾아가는교육[아큐퓨저].pdf</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1wwyMFFBwkB-FUpDQClcBGywDhFxgxxoZ/view?usp=drive_link" target="_blank" data-date="2026-08-10" class="sub-link" data-label="[우영메디칼] Accufuser ON2 Q&A 모음집.pdf">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">[우영메디칼] Accufuser ON2 Q&A 모음집.pdf</span>
+                        </a>
+                    </div>
+                </details>
+                
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">groups</span>
+                            <span class="link-card-text">공통</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1GrWP4Xa3V5BRXrQHGpP-I352TWzuUZIv/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="기관 내 삽관 과정">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">기관 내 삽관 과정</span>
+                        </a>
+                    </div>
+                    
+                    <div class="sub-menu">
+                        <a href="https://docs.google.com/spreadsheets/d/1IXRglTHjBVwvlexPfuQbRGTeih3dLhMv/edit?usp=drive_link&ouid=108512899564460696146&rtpof=true&sd=true" target="_blank" data-date="2026-08-08" class="sub-link" data-label="ICU_medication_calculator">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">ICU_medication_calculator</span>
+                        </a>
+                    </div>
+                    
+                    <div class="sub-menu">
+                        <a href="https://docs.google.com/spreadsheets/d/19vRpvZbSg_f_ml98qt-4sotwWdXrja_q/edit?usp=drive_link&ouid=108512899564460696146&rtpof=true&sd=true" target="_blank" data-date="2026-08-08" class="sub-link" data-label="SCHC_항생제_피부반응검사_통합_요약표">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">SCHC_항생제_피부반응검사_통합_요약표</span>
+                        </a>
+                    </div>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/16vGoWz-qRCSqqTFBIjxQq0vGRyWJwea5/view?usp=drive_link" target="_blank" data-date="2026-08-10" class="sub-link" data-label="(성인) E-cart 응급의약품 및 구비 물품.pdf">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">(성인) E-cart 응급의약품 및 구비 물품.pdf</span>
+                        </a>
+                    </div>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1uy3xgxw2k0pVxfgoX7s2QH9fMXAGO99i/view?usp=drive_link" target="_blank" data-date="2026-08-15" class="sub-link" data-label="[사례분석] 진료지원간호팀 주요 환자안전사고 사례 및 재발 방지 대책.pdf">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">[사례분석] 진료지원간호팀 주요 환자안전사고 사례 및 재발 방지 대책.pdf</span>
+                        </a>
+                    </div>
+                    
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1TgApLl1gXg-dI3p2DdcS7mKXsnsztsKq/view?usp=drive_link" target="_blank" data-date="2026-09-13" class="sub-link" data-label="병동 진료지원간호사 응급 역량강화 교육.pdf">
+                            <span class="material-icons">sms</span>
+                            <span class="sub-link-text">병동 진료지원간호사 응급 역량강화 교육.pdf</span>
+                        </a>
+                    </div>
+                    
+                </details>
+                <!--
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">groups</span>
+                            <span class="link-card-text">제 1회 진료지원간호팀 미니 심포지움</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1uyf63c7owMsL1b_FkWQzmNSWi-l-ngjx/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="제 1회 심포지움 초대장">
+                            <span class="material-icons">groups</span>
+                            <span class="sub-link-text">제 1회 심포지움 초대장</span>
+                        </a>
+                    </div>
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1NjolhfpzakuzmmrcAlsV4rkUF-78yaY_/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="제 1회 심포지움 초대장">
+                            <span class="material-icons">groups</span>
+                            <span class="sub-link-text">2026 제 1회 진료지원간호팀 심포지움</span>
+                        </a>
+                    </div>
+                </details>
+                -->
+            </div>
+        </div>
+        <div id="tabReq" class="tab-content">
+            <div class="details-content">
+                <div class="link-card" style="flex-direction: column; gap: 8px;">
+                    <a href="https://github.com/SCHCAQI/2026-QI/raw/refs/heads/main/documents/%EB%B0%B0%EC%9B%80%EC%9D%98%20%EC%B0%BD%EA%B5%AC-%20%EC%98%A8%EB%94%94%EB%A7%A8%EB%93%9C%20%EA%B5%90%EC%9C%A1%20%EC%8B%A0%EC%B2%AD%20%EB%A7%A4%EB%89%B4%EC%96%BC.hwp" data-date="2026-07-01" target="_blank" style="color: var(--accent-blue);display: flex; align-items: center; gap: 12px; width: 100%;" data-label="온디맨드교육이란?">
+                        <span class="material-icons">edit_note</span>
+                        <span class="link-card-text">온디맨드교육이란?</span>
+                    </a>
+                    <a href="https://form.naver.com/response/uWZlOh24fLfOHMv2uf57tA" target="_blank" data-date="2026-07-01" class="link-card" data-label="교육 요청">
+                        <span class="link-card-text">교육 요청</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="tab4" class="tab-content">
+            <div class="details-content">
+            
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">assignment</span>
+                            <span class="link-card-text">간담회 소식지(1분기)</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/1Ks32Oviecc8yGwm1ossX_seXPJN2-mjJ/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="간담회 소식지(1분기)">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">간담회 소식지(1분기)</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/16k7v4qGwfraRWrxFHrDTy0Z7mQTzQx7k/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="제1차 현장 간담회 결과 보고">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">제1차 현장 간담회 결과 보고</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1Tcf69e534HP0gdU598bCNgBrYifZd4y2/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="협업 시스템 종합 사용 설명서">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">협업 시스템 종합 사용 설명서</span>
+                        </a>
+                    </div>
+                </details>
+                
+                
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">assignment</span>
+                            <span class="link-card-text">간담회 소식지(2분기)</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/14qfj7dysMC0y3g0Z0zkPkORErDAyZIJT/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="간담회 소식지(2분기)">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">간담회 소식지(2분기)</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1dqCmDocTiCE_Ncv0E5jilh01mLNSqR4w/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="제2차 현장 간담회 결과 보고">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">제2차 현장 간담회 결과 보고</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1sHEpXmr0QiSb41fxw-DPyvjRyMV4RzV6/view?usp=drive_link" target="_blank" data-date="2026-07-01" class="sub-link" data-label="제3차 현장 간담회 결과 보고">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">제3차 현장 간담회 결과 보고</span>
+                        </a>
+                    </div>
+                </details>
+                
+                <!--
+                <a target="_blank" class="link-card" open>
+                    <span class="material-icons">assignment</span>
+                    <span class="link-card-text">간담회 소식지(3분기)</span>
+                </a>
+                -->
+                <details class="link-card-group" open>
+                    <summary class="link-card">
+                        <div class="summary-header">
+                            <span class="material-icons">insights</span>
+                            <span class="link-card-text">메신저 소통지수(현황판)</span>
+                        </div>
+                        <span class="material-icons arrow">expand_more</span>
+                    </summary>
+                    
+                    <div class="sub-menu">
+                        <a href="https://drive.google.com/file/d/17T18l-GeQsQOuKq9H7qXlOMeyeGkQWeZ/view?usp=drive_link" target="_blank" data-date="2026-09-14" class="sub-link" data-label="92-CS">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">92-CS</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1IDpoIT4-gghbdPSzJNrde_eKaggNa5QZ/view?usp=drive_link" target="_blank" data-date="2026-09-14" class="sub-link" data-label="92-MC">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">92-MC</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1WNfg9KKNCKD5dbs_vxPNM7lpwdRUPRgh/view?usp=drive_link" target="_blank" data-date="2026-09-14" class="sub-link" data-label="131-ENT">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">131-ENT</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1U4L6_aBbOkeclsXQxByfsFnp5tsmX6eF/view?usp=drive_link" target="_blank" data-date="2026-09-14" class="sub-link" data-label="131-URO">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">131-URO</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1E82AybvHISXrLO57S0AjBGJGGIvevw-Q/view?usp=drive_link" target="_blank" data-date="2026-09-14" class="sub-link" data-label="141-단기항암">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">141-단기항암</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1VyJzMBXMTPZg4_OCrkRA_Ztx6xHAV79L/view?usp=drive_link" target="_blank" data-date="2026-09-14" class="sub-link" data-label="141-MH병동">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">141-MH병동</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/17C6hMOGg4zDq7wjRLJ_X9UwISm-BlXLT/view?usp=drive_link" target="_blank" data-date="2026-09-14" class="sub-link" data-label="142-MH병동">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">142-MH병동</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1q84uFHrgIgG_Nl44Ti6KNFhT2qqVIkrp/view?usp=drive_link" target="_blank" data-date="2026-08-12" class="sub-link" data-label="병동별 스마트 메신저 활성화 성과 분석(7월말)">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">병동별 스마트 메신저 활성화 성과 분석(7월말).pdf</span>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1buN_5trZ9rwY4IM7ZdbM-Pp-ZpHBSv6i/view?usp=drive_link" target="_blank" data-date="2026-08-16" class="sub-link" data-label="WeValue 메뉴 접속현황(월별)">
+                            <span class="material-icons">description</span>
+                            <span class="sub-link-text">WeValue 메뉴 접속현황(월별).pdf</span>
+                        </a>
+                    </div>
+                </details>
+            </div>
+        </div>
+        
+        <div id="tab5" class="tab-content">
+            <div class="details-content">
+                <a href="https://naver.me/5K6OE20Z" target="_blank" data-date="2026-07-01" class="link-card" data-label="우리가치(WeValue) 협업 소통 실태 설문">
+                    <span class="material-icons" style="color:var(--accent-purple)">rate_review</span>
+                    <div>
+                        <span class="footer-title" style="color:var(--accent-purple)"></span>
+                        <span class="link-card-text">우리가치(WeValue) 협업 소통 실태 설문</span>
+                    </div>
+                </a>
+                <a href="https://naver.me/5CCy5bvg" target="_blank" data-date="2026-07-01" class="link-card" data-label="우리가치(WeValue) 협업 소통 실태 설문">
+                    <span class="material-icons" style="color:var(--accent-purple)">rate_review</span>
+                    <div>
+                        <span class="footer-title" style="color:var(--accent-purple)"></span>
+                        <span class="link-card-text">우리가치(WeValue)협업소통실태 사후 설문</span>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
     
-    <button onclick="handleAuth()">인증 확인</button>
-    <div id="message">WeValue(v1.0805.3)</div>
+    
 </div>
 
 <script>
-    async function sha256(message) {
-        const msgBuffer = new TextEncoder().encode(message);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    const body = document.body;
+    const themeIcon = document.getElementById('theme-icon');
+
+    if (localStorage.getItem("sbar_theme") === "dark") {
+        body.classList.add("dark-mode");
+        themeIcon.innerText = 'light_mode';
     }
 
-    // 페이지 진입 시 이미 인증되어 있다면 home.html로 이동
-    document.addEventListener("DOMContentLoaded", function() {
-        const isAuthLocal = localStorage.getItem('isAuthorized') === 'true';
-        const isAuthSession = sessionStorage.getItem('isAuthorized') === 'true';
-
-        if (isAuthLocal || isAuthSession) {
-            // location.replace를 사용하여 뒤로가기 시 인증 페이지로 돌아오는 루프 방지
-            window.location.replace("./home.html");
-        }
-    });
-
-    async function handleAuth() {
-        const input = document.getElementById('authCode').value;
-        const rememberMe = document.getElementById('rememberMe').checked;
-        const messageDiv = document.getElementById('message');
-        const btn = document.querySelector('button');
-        
-        const correctHash = "034f7b198dc1cab8e07cbcfaa04680b14fe67a49daa01c100b776244d257462c"; 
-        
-        if (!input) {
-            messageDiv.innerText = "번호를 입력해 주세요.";
-            return;
+    // Tab Control Logic
+    function openTab(evt, tabName) {
+        const tabcontents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabcontents.length; i++) {
+            tabcontents[i].classList.remove("active");
         }
 
-        btn.innerText = "확인 중...";
-        btn.style.opacity = "0.7";
-        btn.disabled = true;
+        const tablinks = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
 
-        const inputHash = await sha256(input);
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+        
+        // 탭 클릭 시 부드럽게 중앙으로 스크롤 (모바일 대응)
+        evt.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
 
-        if (inputHash === correctHash) {
-            if (rememberMe) {
-                localStorage.setItem('isAuthorized', 'true');
-                sessionStorage.removeItem('isAuthorized'); // 혼선 방지용 기존 세션 정리
-            } else {
-                sessionStorage.setItem('isAuthorized', 'true');
-                localStorage.removeItem('isAuthorized'); // 기존 로컬 스토리지 정리
-            }
+    function toggleTheme() {
+        const isDark = body.classList.toggle('dark-mode');
+        themeIcon.innerText = isDark ? 'light_mode' : 'dark_mode';
+        localStorage.setItem("sbar_theme", isDark ? "dark" : "light");
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        addNewBadges();
+        // 클릭 이벤트 감지
+        document.addEventListener('click', function(e) {
+            // 클릭된 요소나 그 부모 중에 링크(.link-card, .sub-link)가 있는지 확인
+            const link = e.target.closest('.link-card, .sub-link');
             
-            // href 대신 replace 사용 (히스토리에 남기지 않아 무한 루프 차단)
-            window.location.replace("./home.html");
-        } else {
-            messageDiv.innerText = "인증 번호가 일치하지 않습니다.";
-            document.getElementById('authCode').value = "";
-            btn.innerText = "인증 확인";
-            btn.style.opacity = "1";
-            btn.disabled = false;
-        }
-    }
-
-    document.getElementById('authCode').addEventListener('keypress', async (e) => {
-        if (e.key === 'Enter') await handleAuth();
+            // 1. 링크가 존재하고, href가 실제 연결된 경우만 실행
+            if (link && link.getAttribute('href') !== '#') {
+                const textElement = link.querySelector('.link-card-text, .sub-link-text');
+                const label = textElement ? textElement.innerText.trim() : link.innerText.trim();
+                // 2. gtag 전송
+                if (typeof gtag === 'function') {
+                    gtag('event', 'click_wevalue_link', {
+                        'link_label': label || 'Unknown',
+                        'link_url': link.href,
+                        'transport_type': 'beacon'
+                    });
+                }
+            }
+        }, true); 
     });
 </script>
+
+<script>
+function addNewBadges() {
+    const today = new Date();
+    
+    // data-date 속성이 존재하는 모든 요소 탐색
+    const targetElements = document.querySelectorAll('[data-date]');
+    
+    targetElements.forEach(el => {
+        const dateStr = el.getAttribute('data-date');
+        if (!dateStr) return;
+
+        const itemDate = new Date(dateStr);
+        const diffTime = today - itemDate;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        // 당일 포함 최근 5일 이내인 경우에만 뱃지 생성
+        if (diffDays >= 0 && diffDays <= 5) {
+            // 중복 생성 방지
+            if (el.querySelector('.new-badge')) return;
+
+            const badge = document.createElement('span');
+            badge.className = 'new-badge';
+            badge.innerText = '';
+
+            // 1. 버튼(button.tab-btn) 및 제목(h1) 요소 처리[cite: 2]
+            if (el.tagName === 'BUTTON' || el.tagName === 'H1') {
+                el.appendChild(badge);
+            } 
+            // 2. 카드/링크(.link-card, .sub-link) 요소 처리[cite: 2]
+            else {
+                const textContainer = el.querySelector('.link-card-text, .sub-link-text'); //[cite: 2]
+                if (textContainer) {
+                    textContainer.after(badge); //[cite: 2]
+                } else {
+                    el.appendChild(badge);
+                }
+
+                // 하위 콘텐츠에 New가 있을 때 해당 탭 버튼에도 연동 표시 원할 경우 유지
+                const parentTab = el.closest('.tab-content'); //[cite: 2]
+                if (parentTab && parentTab.id) {
+                    const parentBtn = document.querySelector(`button[onclick*="'${parentTab.id}'"]`);
+                    if (parentBtn && !parentBtn.querySelector('.new-badge')) {
+                        const tabBadge = document.createElement('span');
+                        tabBadge.className = 'new-badge';
+                        tabBadge.innerText = '';
+                        parentBtn.appendChild(tabBadge);
+                    }
+                }
+            }
+        }
+    });
+}
+</script>
+
 
 </body>
 </html>
