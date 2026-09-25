@@ -282,11 +282,12 @@
 /* 깜빡이는 빨간 점 (Red Dot) 뱃지 스타일 */
 .new-badge {
     display: inline-block;
-    width: 12px;
-    height: 12px;
+    width: 1px;
+    height: 1px;
     background-color: #ff3b30; /* 애플 레드 */
     border-radius: 50%;
     margin-left: 5px;
+    color:#ff3b30;
     vertical-align: super; /* 텍스트 상단에 알맞게 위치 */
     box-shadow: 0 0 4px rgba(255, 59, 48, 0.6); /* 은은한 붉은 광원 효과 */
     
@@ -1141,7 +1142,7 @@ function addNewBadges() {
 
             const badge = document.createElement('span');
             badge.className = 'new-badge';
-            badge.innerText = '';
+            badge.innerText = 'new';
 
             // 1. 버튼(button.tab-btn) 및 제목(h1) 요소 처리[cite: 2]
             if (el.tagName === 'BUTTON' || el.tagName === 'H1') {
@@ -1163,7 +1164,7 @@ function addNewBadges() {
                     if (parentBtn && !parentBtn.querySelector('.new-badge')) {
                         const tabBadge = document.createElement('span');
                         tabBadge.className = 'new-badge';
-                        tabBadge.innerText = '';
+                        tabBadge.innerText = 'new';
                         parentBtn.appendChild(tabBadge);
                     }
                 }
