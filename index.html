@@ -281,18 +281,14 @@
 
 /* 깜빡이는 빨간 점 (Red Dot) 뱃지 스타일 */
 .new-badge {
-    display: inline-block;
-    width: 1px;
-    height: 1px;
-    background-color: #ff3b30; /* 애플 레드 */
-    border-radius: 50%;
+    display: inline-block; 
     margin-left: 5px;
+    font-size:12px;
+    font-weight:bold;
     color:#ff3b30;
-    vertical-align: super; /* 텍스트 상단에 알맞게 위치 */
-    box-shadow: 0 0 4px rgba(255, 59, 48, 0.6); /* 은은한 붉은 광원 효과 */
     
     /* 깜빡이는 애니메이션 */
-    animation: dot-pulse 1.5s infinite ease-in-out;
+    animation: bounce 2s infinite;
 }
 
 @keyframes dot-pulse {
@@ -308,6 +304,19 @@
         opacity: 0.3;
         transform: scale(0.8);
     }
+}
+
+/* 투명도를 조절하는 깜빡임 키프레임 추가 */
+@keyframes blink {
+    0%, 100% { opacity: 1; }   /* 완전 선명함 */
+    50% { opacity: 0.2; }      /* 흐려짐 (0으로 갈수록 투명) */
+}
+
+/* 통통 튀는 키프레임 추가 (필수) */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-5px); } /* 뱃지 크기에 맞춰 튀는 높이를 -5px로 줄임 */
+    60% { transform: translateY(-3px); }
 }
 
 @keyframes fade-animation {
@@ -1142,7 +1151,7 @@ function addNewBadges() {
 
             const badge = document.createElement('span');
             badge.className = 'new-badge';
-            badge.innerText = 'new';
+            badge.innerText = 'New!';
 
             // 1. 버튼(button.tab-btn) 및 제목(h1) 요소 처리[cite: 2]
             if (el.tagName === 'BUTTON' || el.tagName === 'H1') {
@@ -1164,7 +1173,7 @@ function addNewBadges() {
                     if (parentBtn && !parentBtn.querySelector('.new-badge')) {
                         const tabBadge = document.createElement('span');
                         tabBadge.className = 'new-badge';
-                        tabBadge.innerText = 'new';
+                        tabBadge.innerText = 'New!';
                         parentBtn.appendChild(tabBadge);
                     }
                 }
